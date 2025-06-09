@@ -28,11 +28,11 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   };
   
   const colorClasses = {
-    primary: 'bg-primary',
-    secondary: 'bg-secondary',
-    success: 'bg-success',
-    warning: 'bg-warning',
-    error: 'bg-error',
+    primary: 'bg-[rgb(var(--color-primary))]',
+    secondary: 'bg-[rgb(var(--color-secondary))]',
+    success: 'bg-[rgb(var(--color-success))]',
+    warning: 'bg-[rgb(var(--color-warning))]',
+    error: 'bg-[rgb(var(--color-error))]',
   };
   
   return (

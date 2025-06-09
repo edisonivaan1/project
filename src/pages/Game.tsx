@@ -29,6 +29,9 @@ const Game: React.FC = () => {
   const [attempts, setAttempts] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [isGameCompleted, setIsGameCompleted] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
   
   const topic = grammarTopics.find(t => t.id === topicId);
   
@@ -49,6 +52,23 @@ const Game: React.FC = () => {
   const questions = getQuestions();
   const currentQuestion = questions[currentQuestionIndex];
   
+  // Función para mezclar las opciones
+  const shuffleOptions = (options: string[]) => {
+    const shuffled = [...options];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
+  // Efecto para mezclar las opciones cuando cambia la pregunta
+  useEffect(() => {
+    if (currentQuestion && currentQuestion.options) {
+      setShuffledOptions(shuffleOptions(currentQuestion.options));
+    }
+  }, [currentQuestion]);
+  
   // Check if two attempts have been made to show hint automatically
   useEffect(() => {
     if (attempts >= 2 && !showHint && !isAnswerSubmitted) {
@@ -59,6 +79,15 @@ const Game: React.FC = () => {
   const handleAnswerSelect = (answer: string) => {
     if (!isAnswerSubmitted) {
       setSelectedAnswer(answer);
+      setIsAnswerSubmitted(true);
+      
+      if (answer === currentQuestion.correctAnswer) {
+        setScore(score + 1);
+        setIsCorrect(true);
+      } else {
+        setAttempts(attempts + 1);
+        setIsCorrect(false);
+      }
     }
   };
   
@@ -69,8 +98,10 @@ const Game: React.FC = () => {
     
     if (selectedAnswer === currentQuestion.correctAnswer) {
       setScore(score + 1);
+      setIsCorrect(true);
     } else {
       setAttempts(attempts + 1);
+      setIsCorrect(false);
     }
   };
   
@@ -139,23 +170,26 @@ const Game: React.FC = () => {
             </div>
             
             <div className="text-center">
-              <h3 className="font-bold mb-3">What's Next?</h3>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button 
+              <h2 className="text-2xl font-bold mb-4">Game Completed!</h2>
+              <p className="text-lg mb-6">
+                Your score: {score} out of {questions.length}
+              </p>
+              <div className="flex justify-center gap-4">
+                <Button
                   variant="outline"
-                  icon={<RefreshCw />}
                   onClick={handleRestartGame}
-                  fullWidth
+                  className="h-[40px] w-[225px] border-2 border-black flex items-center justify-center"
                 >
+                  <RefreshCw className="h-5 w-5 mr-2" />
                   Try Again
                 </Button>
-                <Button 
-                  variant="primary"
-                  icon={<Home />}
+                <Button
+                  variant="outline"
                   onClick={() => navigate('/')}
-                  fullWidth
+                  className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000] flex items-center justify-center"
                 >
-                  Back to Topics
+                  <Home className="h-5 w-5 mr-2 text-white" />
+                  BACK TO HOME
                 </Button>
               </div>
             </div>
@@ -199,13 +233,14 @@ const Game: React.FC = () => {
             <div className="mb-6">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm font-medium">Question {currentQuestionIndex + 1} of {questions.length}</span>
-                <span className="text-sm font-medium">{Math.round(((currentQuestionIndex + 1) / questions.length) * 100)}% Complete</span>
+                <span className="text-sm font-medium">{Math.round((currentQuestionIndex / questions.length) * 100)}% Complete</span>
               </div>
               <ProgressBar 
-                value={currentQuestionIndex + 1} 
+                value={currentQuestionIndex} 
                 max={questions.length}
                 size="md"
                 color="primary"
+                className="transition-all duration-300"
               />
             </div>
             
@@ -223,9 +258,9 @@ const Game: React.FC = () => {
               </div>
             </div>
             
-            {/* Answer Options */}
+            {/* Options */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-              {currentQuestion.options?.map((option, index) => {
+              {shuffledOptions.map((option, index) => {
                 const isCorrect = option === currentQuestion.correctAnswer;
                 const isSelected = option === selectedAnswer;
                 
@@ -278,11 +313,24 @@ const Game: React.FC = () => {
             
             {/* Explanation (shown after answer is submitted) */}
             {isAnswerSubmitted && (
-              <div className={`bg-${selectedAnswer === currentQuestion.correctAnswer ? 'success' : 'error'}/10 border border-${selectedAnswer === currentQuestion.correctAnswer ? 'success' : 'error'}/30 p-4 rounded-lg mb-6`}>
-                <h3 className={`font-bold text-${selectedAnswer === currentQuestion.correctAnswer ? 'success' : 'error'} mb-2`}>
-                  {selectedAnswer === currentQuestion.correctAnswer ? 'Correct!' : 'Not quite right'}
-                </h3>
-                <p>{currentQuestion.explanation}</p>
+              <div className="space-y-4">
+                <div className={`bg-${selectedAnswer === currentQuestion.correctAnswer ? 'success' : 'error'}/10 border border-${selectedAnswer === currentQuestion.correctAnswer ? 'success' : 'error'}/30 p-4 rounded-lg`}>
+                  <h3 className={`font-bold text-${selectedAnswer === currentQuestion.correctAnswer ? 'success' : 'error'} mb-2`}>
+                    {selectedAnswer === currentQuestion.correctAnswer ? 'Correct!' : 'Not quite right'}
+                  </h3>
+                  <p>{currentQuestion.explanation}</p>
+                </div>
+                <div className="flex justify-end">
+                  <Button
+                    variant="primary"
+                    icon={<ChevronRight />}
+                    iconPosition="right"
+                    onClick={handleNextQuestion}
+                    className="bg-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-primary))/0.9] text-white px-6 py-2 rounded-lg transition-colors duration-200"
+                  >
+                    {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'See Results'}
+                  </Button>
+                </div>
               </div>
             )}
             
@@ -298,27 +346,6 @@ const Game: React.FC = () => {
                   >
                     <HintIcon />
                     {showHint ? 'Hide Hint' : 'Show hint'}
-                  </Button>
-                )}
-              </div>
-              
-              <div>
-                {!isAnswerSubmitted ? (
-                  <Button
-                    variant="primary"
-                    onClick={handleSubmitAnswer}
-                    disabled={!selectedAnswer}
-                  >
-                    Check Answer
-                  </Button>
-                ) : (
-                  <Button
-                    variant="primary"
-                    icon={<ChevronRight />}
-                    iconPosition="right"
-                    onClick={handleNextQuestion}
-                  >
-                    {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'See Results'}
                   </Button>
                 )}
               </div>

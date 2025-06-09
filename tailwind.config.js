@@ -18,6 +18,8 @@ export default {
         backgroundCard: 'rgb(var(--color-background-card) / <alpha-value>)',
         backgroundHint: 'rgb(var(--color-background-hint) / <alpha-value>)',
         secondaryButton: 'rgb(var(--color-secondary-button) / <alpha-value>)',
+        correctOption: 'rgb(var(--color-correct-option) / <alpha-value>)',
+        incorrectOption: 'rgb(var(--color-incorrect-option) / <alpha-value>)',
       },
       fontFamily: {
         sans: ['Inter var', 'system-ui', 'sans-serif'],

@@ -18,6 +18,8 @@
     --color-background-card: 248, 253, 255;
     --color-background-hint:248, 254, 161;
     --color-secondary-button: 228, 233, 255;
+    --color-correct-option: 21, 255, 0;
+    --color-incorrect-option: 255, 0, 0;
   }
 
   body {
