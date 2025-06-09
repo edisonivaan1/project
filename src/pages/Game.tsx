@@ -268,16 +268,16 @@ const Game: React.FC = () => {
                 
                 if (isAnswerSubmitted) {
                   if (isCorrect) {
-                    optionClass += " border-success bg-success/10 text-success";
+                    optionClass += " border-[rgb(var(--color-correct-option))] bg-[rgb(var(--color-correct-option)/0.1)] text-[rgb(var(--color-correct-option))]";
                   } else if (isSelected) {
-                    optionClass += " border-error bg-error/10 text-error";
+                    optionClass += " border-[rgb(var(--color-incorrect-option))] bg-[rgb(var(--color-incorrect-option)/0.45)] text-[rgb(var(--color-incorrect-option))]";
                   } else {
                     optionClass += " border-gray-200 opacity-60";
                   }
                 } else {
                   optionClass += isSelected 
-                    ? " border-primary bg-primary/5" 
-                    : " border-gray-200 hover:border-primary/50";
+                    ? " border-[rgb(var(--color-primary))] bg-[rgb(var(--color-primary)/0.1)]" 
+                    : " border-gray-200 hover:border-[rgb(var(--color-primary)/0.5)]";
                 }
                 
                 return (
@@ -322,11 +322,11 @@ const Game: React.FC = () => {
                 </div>
                 <div className="flex justify-end">
                   <Button
-                    variant="primary"
-                    icon={<ChevronRight />}
+                    variant="outline"
+                    icon={<ChevronRight className="text-white" />}
                     iconPosition="right"
                     onClick={handleNextQuestion}
-                    className="bg-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-primary))/0.9] text-white px-6 py-2 rounded-lg transition-colors duration-200"
+                    className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000]"
                   >
                     {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'See Results'}
                   </Button>

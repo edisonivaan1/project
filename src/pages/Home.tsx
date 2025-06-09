@@ -8,21 +8,24 @@ import IconButton from '../components/UI/IconButton';
 import PlayIcon from '../components/UI/icons/PlayIcon';
 import { grammarTopics } from '../data/grammarTopics';
 
-const difficultyColors: Record<string, { bg: string; text: string; border: string }> = {
+const difficultyColors: Record<string, { bg: string; text: string; border: string; button: string }> = {
   easy: {
     bg: 'bg-emerald-50',
     text: 'text-emerald-700',
-    border: 'border-emerald-200'
+    border: 'border-emerald-200',
+    button: 'bg-emerald-500 hover:bg-emerald-600 text-white'
   },
   medium: {
     bg: 'bg-blue-50',
     text: 'text-blue-700',
-    border: 'border-blue-200'
+    border: 'border-blue-200',
+    button: 'bg-blue-500 hover:bg-blue-600 text-white'
   },
   hard: {
     bg: 'bg-fuchsia-50',
     text: 'text-fuchsia-700',
-    border: 'border-fuchsia-200'
+    border: 'border-fuchsia-200',
+    button: 'bg-fuchsia-500 hover:bg-fuchsia-600 text-white'
   }
 };
 
@@ -113,7 +116,7 @@ const Home: React.FC = () => {
                     <Button 
                       variant="primary" 
                       size="lg" 
-                      className={`w-full ${difficultyColors[topic.difficulty].text} ${difficultyColors[topic.difficulty].bg} hover:opacity-90 transition-opacity`}
+                      className={`w-full ${difficultyColors[topic.difficulty].button} transition-colors duration-200 font-semibold`}
                       onClick={(e) => {
                         e.stopPropagation();
                         navigate(`/game/${topic.id}`);
