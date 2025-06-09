@@ -4,11 +4,13 @@ import { QuestionType } from '../types';
 export const presentTensesQuestions: QuestionType[] = [
   {
     id: 'pt-1',
-    text: 'She usually _ _ _ _ _ coffee in the morning.',
+    text: 'He usually _ _ _ _ _ coffee in the morning.',
     options: ['drink', 'drinks', 'is drinking', 'has drunk'],
     correctAnswer: 'drinks',
-    explanation: 'We Use Present Simple For Habits. With Third-Person Singular, We Add “-s” To The Verb.',
-    hint: 'It Is A Daily Routine. She drinks coffee in the morning.',
+    explanation: 'We Use Present Simple For Habits. With Third-Person Singular, We Add "-s" To The Verb.',
+    hint: 'It Is A Daily Routine. He drinks coffee in the morning.',
+    image: 'questions/presentTense/present_tense_question1_coffee_morning.png',
+    alt: 'Una persona tomando café por la mañana'
   },
   {
     id: 'pt-2',
@@ -17,22 +19,28 @@ export const presentTensesQuestions: QuestionType[] = [
     correctAnswer: 'am looking',
     explanation: 'Present Continuous Describes Actions Happening At The Moment Of Speaking.',
     hint: 'The Action Is In Progress Now. I am looking for my keys.',
+    image: '/images/questions/presentTense/looking_keys.png',
+    alt: 'Una persona buscando sus llaves'
   },
   {
     id: 'pt-3',
     text: 'They _____ in London since 2018.',
     options: ['live', 'are living', 'have lived', 'lived'],
     correctAnswer: 'have lived',
-    explanation: 'Present Perfect Links Past To Present (“Since 2018”).',
+    explanation: 'Present Perfect Links Past To Present ("Since 2018").',
     hint: 'Use Have/Has + Past Participle For Time Up To Now. They have lived in London since 2018.',
+    image: 'questions/presentTense/present_tense_question3_london_city.png',
+    alt: 'London city'
   },
   {
     id: 'pt-4',
     text: 'Listen! The birds _____ loudly.',
     options: ['sing', 'are singing', 'have sung', 'sings'],
     correctAnswer: 'are singing',
-    explanation: 'Present Continuous Is Used With “Listen!” To Show An Action Happening Now.',
+    explanation: 'Present Continuous Is Used With "Listen!" To Show An Action Happening Now.',
     hint: 'Action In Progress. The birds are singing.',
+    image: 'questions/presentTense/present_tense_question4_singing_birds.png',
+    alt: 'Unos pájaros cantando'
   },
   {
     id: 'pt-5',
@@ -41,14 +49,18 @@ export const presentTensesQuestions: QuestionType[] = [
     correctAnswer: 'boils',
     explanation: 'We Use Present Simple For Scientific Facts And General Truths.',
     hint: 'General Truths Take Present Simple. Water boils at 100 °C.',
+    image: 'boiling_water.png',
+    alt: 'Agua hirviendo en una olla'
   },
   {
     id: 'pt-6',
     text: 'How often _____ you _____ to the gym?',
     options: ['do / go', 'are / going', 'have / gone', 'does / go'],
     correctAnswer: 'do / go',
-    explanation: 'Present Simple + Auxiliary “Do” Is Used To Ask About Routines.',
+    explanation: 'Present Simple + Auxiliary "Do" Is Used To Ask About Routines.',
     hint: 'Frequency Questions Use Do/Does + Base Verb. How often do you go?',
+    image: 'gym_workout.png',
+    alt: 'Un hombre haciendo ejercicio en el gimnasio'
   },
   {
     id: 'pt-7',
@@ -57,6 +69,8 @@ export const presentTensesQuestions: QuestionType[] = [
     correctAnswer: 'study',
     explanation: 'Regular Schedules Take Present Simple.',
     hint: 'Routine On Fixed Days. I study English every Monday and Wednesday.',
+    image: 'studying_english.png',
+    alt: 'Un hombre estudiando inglés'
   },
   {
     id: 'pt-8',
@@ -65,6 +79,8 @@ export const presentTensesQuestions: QuestionType[] = [
     correctAnswer: 'has finished',
     explanation: 'Present Perfect Shows A Recently Completed Action Relevant Now.',
     hint: 'Use Have/Has + Past Participle. She has finished her homework.',
+    image: 'homework_done.png',
+    alt: 'Un estudiante terminando su tarea'
   },
   {
     id: 'pt-9',
@@ -73,6 +89,8 @@ export const presentTensesQuestions: QuestionType[] = [
     correctAnswer: 'rises',
     explanation: 'Facts And Universal Truths Use Present Simple.',
     hint: 'General Truth. The sun rises in the east.',
+    image: 'sunrise.png',
+    alt: 'El sol saliendo en el horizonte'
   },
   {
     id: 'pt-10',
@@ -80,7 +98,9 @@ export const presentTensesQuestions: QuestionType[] = [
     options: ['play', 'plays', 'are playing', 'have played'],
     correctAnswer: 'are playing',
     explanation: 'Present Continuous For An Action Happening Right Now.',
-    hint: '“Look!” Signals Something In Progress. The children are playing.',
+    hint: '"Look!" Signals Something In Progress. The children are playing.',
+    image: 'children_playing.png',
+    alt: 'Unos niños jugando en el parque'
   },
 ];
 
@@ -93,6 +113,8 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'had left',
     explanation: 'Past Perfect Describes An Earlier Past Action Completed Before Another Past Action.',
     hint: 'First They Left, Then I Arrived. Everyone had left.',
+    image: 'empty_party.png',
+    alt: 'Una fiesta vacía'
   },
   {
     id: 'past-2',
@@ -101,6 +123,8 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'was cooking',
     explanation: 'Past Continuous For An Action In Progress Interrupted By A Past Simple Event.',
     hint: 'Cooking Was Ongoing. I was cooking when the phone rang.',
+    image: 'cooking_phone.png',
+    alt: 'Un hombre cocinando mientras el teléfono suena'
   },
   {
     id: 'past-3',
@@ -109,6 +133,8 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'played',
     explanation: 'Past Simple For Repeated Actions In The Past.',
     hint: 'Childhood Habit → Past Simple. I played tennis every Sunday.',
+    image: 'child_tennis.png',
+    alt: 'Un niño jugando tenis'
   },
   {
     id: 'past-4',
@@ -117,6 +143,8 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'had written',
     explanation: 'Past Perfect Highlights The Earlier Past Action (Writing).',
     hint: 'First Write, Then Feel Relieved. She had written the letter.',
+    image: 'writing_letter.png',
+    alt: 'Una persona escribiendo una carta'
   },
   {
     id: 'past-5',
@@ -125,6 +153,8 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'were watching',
     explanation: 'Past Continuous For An Ongoing Past Action Interrupted.',
     hint: 'Action In Progress → Past Continuous. They were watching TV.',
+    image: 'watching_tv.png',
+    alt: 'Unos adultos viendo televisión'
   },
   {
     id: 'past-6',
@@ -133,14 +163,18 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'had found',
     explanation: 'Past Perfect Shows Completion Before Another Past Event.',
     hint: 'Seat Finding Happened Earlier. We had found our seats.',
+    image: 'movie_seats.png',
+    alt: 'Unos adultos buscando sus asientos en una sala de cine'
   },
   {
     id: 'past-7',
     text: 'He _____ in Berlin last year.',
     options: ['lived', 'was living', 'had lived', 'has lived'],
     correctAnswer: 'lived',
-    explanation: 'Past Simple For A Finished Past Situation With A Specific Time (“Last Year”).',
+    explanation: 'Past Simple For A Finished Past Situation With A Specific Time ("Last Year").',
     hint: 'Specific Past Time → Past Simple. He lived in Berlin last year.',
+    image: 'berlin_city.png',
+    alt: 'Una ciudad con edificios y una torre'
   },
   {
     id: 'past-8',
@@ -149,6 +183,8 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'were / doing',
     explanation: 'Past Continuous Describes The Activity In Progress During The Interruption.',
     hint: 'Focus On Ongoing Action. What were you doing?',
+    image: 'phone_call.png',
+    alt: 'Un teléfono sonando'
   },
   {
     id: 'past-9',
@@ -157,14 +193,18 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'had worked',
     explanation: 'Past Perfect Explains The Reason For A Past State.',
     hint: 'Work Finished Before Feeling Tired. She had worked all day.',
+    image: 'tired_worker.png',
+    alt: 'Un trabajador cansado'
   },
   {
     id: 'past-10',
     text: 'We _____ to the beach yesterday.',
     options: ['went', 'were going', 'had gone', 'have gone'],
     correctAnswer: 'went',
-    explanation: 'Past Simple Is Used With Finished Time Adverbs Like “Yesterday”.',
+    explanation: 'Past Simple Is Used With Finished Time Adverbs Like "Yesterday".',
     hint: 'Completed Trip. We went to the beach yesterday.',
+    image: 'beach_day.png',
+    alt: 'Unos adultos en la playa'
   },
 ];
 
@@ -175,16 +215,20 @@ export const conditionalsQuestions: QuestionType[] = [
     text: 'If it _____ tomorrow, we will cancel the picnic.',
     options: ['will rain', 'rains', 'would rain', 'had rained'],
     correctAnswer: 'rains',
-    explanation: 'First Conditional Uses Present Simple In The If-Clause And “Will” In The Result Clause.',
+    explanation: 'First Conditional Uses Present Simple In The If-Clause And "Will" In The Result Clause.',
     hint: 'Possible Future Condition. If it rains, we will cancel.',
+    image: 'rainy_day.png',
+    alt: 'Un día lluvioso'
   },
   {
     id: 'cond-2',
     text: 'If I _____ rich, I would travel around the world.',
     options: ['am', 'was', 'were', 'had been'],
     correctAnswer: 'were',
-    explanation: 'Second Conditional Uses “Were” For All Persons In Hypothetical Present Situations.',
+    explanation: 'Second Conditional Uses "Were" For All Persons In Hypothetical Present Situations.',
     hint: 'Imaginary Situation → If I were rich, I would travel.',
+    image: 'world_travel.png',
+    alt: 'Un hombre viajando alrededor del mundo'
   },
   {
     id: 'cond-3',
@@ -193,14 +237,18 @@ export const conditionalsQuestions: QuestionType[] = [
     correctAnswer: 'would have told',
     explanation: 'Third Conditional For Past Hypotheticals: If + Past Perfect → Would Have + PP.',
     hint: 'Regret About The Past. She would have told me.',
+    image: 'thinking_person.png',
+    alt: 'Una persona pensando'
   },
   {
     id: 'cond-4',
     text: 'If you study hard, you _____ the exam.',
     options: ['pass', 'will pass', 'would pass', 'would have passed'],
     correctAnswer: 'will pass',
-    explanation: 'First Conditional Result Uses “Will” + Base Verb.',
+    explanation: 'First Conditional Result Uses "Will" + Base Verb.',
     hint: 'Real Possibility. You will pass.',
+    image: 'studying_exam.png',
+    alt: 'Un estudiante estudiando para un examen'
   },
   {
     id: 'cond-5',
@@ -209,14 +257,18 @@ export const conditionalsQuestions: QuestionType[] = [
     correctAnswer: 'would have caught',
     explanation: 'Third Conditional Describes A Missed Past Possibility.',
     hint: 'Past Regret. I would have caught the train.',
+    image: 'missed_train.png',
+    alt: 'Un hombre perdiendo un tren'
   },
   {
     id: 'cond-6',
     text: 'If they _____ here now, we could start.',
     options: ['are', 'were', 'had been', 'will be'],
     correctAnswer: 'were',
-    explanation: 'Second Conditional Uses Past Simple (“Were”) For Hypothetical Present.',
+    explanation: 'Second Conditional Uses Past Simple ("Were") For Hypothetical Present.',
     hint: 'They Are Not Here → Hypothetical. If they were here.',
+    image: 'waiting_people.png',
+    alt: 'Unos adultos esperando'
   },
   {
     id: 'cond-7',
@@ -225,30 +277,38 @@ export const conditionalsQuestions: QuestionType[] = [
     correctAnswer: 'freezes',
     explanation: 'Zero Conditional Expresses Scientific Facts: If + Present Simple → Present Simple.',
     hint: 'General Truth. It freezes.',
+    image: 'ice_water.png',
+    alt: 'Agua congelada'
   },
   {
     id: 'cond-8',
     text: 'What _____ you do if you lost your wallet?',
     options: ['will', 'would', 'did', 'had'],
     correctAnswer: 'would',
-    explanation: 'Second Conditional Question Uses “Would” + Base Verb.',
+    explanation: 'Second Conditional Question Uses "Would" + Base Verb.',
     hint: 'Hypothetical Question. What would you do?',
+    image: 'lost_wallet.png',
+    alt: 'Una persona perdiendo su billetera'
   },
   {
     id: 'cond-9',
-    text: 'If I _____ you, I wouldn’t do that.',
+    text: 'If I _____ you, I wouldn\'t do that.',
     options: ['am', 'was', 'were', 'had been'],
     correctAnswer: 'were',
-    explanation: 'Fixed Expression In Second Conditional: “If I Were You”.',
+    explanation: 'Fixed Expression In Second Conditional: "If I Were You".',
     hint: 'Advice Formula → If I were you.',
+    image: 'advice_giving.png',
+    alt: 'Un hombre dando consejos'
   },
   {
     id: 'cond-10',
     text: 'You can stay with us, _____ you help with the chores.',
     options: ['if', 'unless', 'provided', 'in case'],
     correctAnswer: 'provided',
-    explanation: '“Provided (That)” Introduces A Conditional Meaning “Only If”.',
-    hint: 'Conditional Word Synonym For “If”. Provided you help.',
+    explanation: '"Provided (That)" Introduces A Conditional Meaning "Only If".',
+    hint: 'Conditional Word Synonym For "If". Provided you help.',
+    image: 'house_chores.png',
+    alt: 'Unos adultos ayudando en la casa'
   },
 ];
 
@@ -259,80 +319,100 @@ export const prepositionsQuestions: QuestionType[] = [
     text: 'We will meet _____ Monday.',
     options: ['in', 'on', 'at', 'by'],
     correctAnswer: 'on',
-    explanation: 'Use “On” With Days Of The Week.',
+    explanation: 'Use "On" With Days Of The Week.',
     hint: 'Day Of The Week → on Monday.',
+    image: 'questions/prepositions/calendar_monday.png',
+    alt: 'Un calendario mostrando el lunes'
   },
   {
     id: 'prep-2',
     text: 'The cat is _____ the table.',
     options: ['on', 'under', 'between', 'behind'],
     correctAnswer: 'under',
-    explanation: '“Under” Shows A Lower Position Directly Beneath Something.',
+    explanation: '"Under" Shows A Lower Position Directly Beneath Something.',
     hint: 'Below The Surface. The cat is under the table.',
+    image: 'questions/prepositions/cat_under_table.png',
+    alt: 'Un gato debajo de una mesa'
   },
   {
     id: 'prep-3',
     text: 'He was born _____ 1999.',
     options: ['in', 'on', 'at', 'to'],
     correctAnswer: 'in',
-    explanation: 'Use “In” With Years, Months, Seasons.',
+    explanation: 'Use "In" With Years, Months, Seasons.',
     hint: 'Year → in 1999.',
+    image: 'questions/prepositions/birth_year.png',
+    alt: 'Un hombre nacido en 1999'
   },
   {
     id: 'prep-4',
-    text: 'Let’s meet _____ noon.',
+    text: 'Let\'s meet _____ noon.',
     options: ['in', 'on', 'at', 'by'],
     correctAnswer: 'at',
-    explanation: 'Use “At” For Precise Times.',
+    explanation: 'Use "At" For Precise Times.',
     hint: 'Exact Clock Time → at noon.',
+    image: 'questions/prepositions/clock_noon.png',
+    alt: 'Un reloj mostrando la hora de la mañana'
   },
   {
     id: 'prep-5',
     text: 'She walked _____ the bridge.',
     options: ['over', 'across', 'through', 'behind'],
     correctAnswer: 'across',
-    explanation: '“Across” Indicates Movement From One Side To The Other Side Of Something Flat.',
+    explanation: '"Across" Indicates Movement From One Side To The Other Side Of Something Flat.',
     hint: 'Side-To-Side Movement. She walked across the bridge.',
+    image: 'questions/prepositions/walking_bridge.png',
+    alt: 'Una persona caminando sobre un puente'
   },
   {
     id: 'prep-6',
     text: 'The library is _____ the bank and the post office.',
     options: ['between', 'among', 'behind', 'next'],
     correctAnswer: 'between',
-    explanation: '“Between” Is Used With Two Distinct Points.',
+    explanation: '"Between" Is Used With Two Distinct Points.',
     hint: 'Two Places → between A and B.',
+    image: 'questions/prepositions/library_location.png',
+    alt: 'Una biblioteca entre un banco y un despacho de correos'
   },
   {
     id: 'prep-7',
     text: 'We drove _____ the tunnel.',
     options: ['along', 'through', 'over', 'into'],
     correctAnswer: 'through',
-    explanation: '“Through” Describes Movement Inside And Out The Other Side Of An Enclosed Space.',
+    explanation: '"Through" Describes Movement Inside And Out The Other Side Of An Enclosed Space.',
     hint: 'Inside Then Out. Drove through the tunnel.',
+    image: 'questions/prepositions/tunnel_drive.png',
+    alt: 'Un coche pasando por un túnel'
   },
   {
     id: 'prep-8',
     text: 'There is a picture _____ the wall.',
     options: ['in', 'on', 'at', 'over'],
     correctAnswer: 'on',
-    explanation: '“On” Is Used For Surfaces.',
+    explanation: '"On" Is Used For Surfaces.',
     hint: 'Attached To A Vertical Surface → on the wall.',
+    image: 'questions/prepositions/wall_picture.png',
+    alt: 'Un cuadro colgado en la pared'
   },
   {
     id: 'prep-9',
     text: 'He arrived _____ the airport just in time.',
     options: ['to', 'in', 'at', 'on'],
     correctAnswer: 'at',
-    explanation: 'Use “At” With Specific Public Places (Airport, Station).',
+    explanation: 'Use "At" With Specific Public Places (Airport, Station).',
     hint: 'Specific Point → at the airport.',
+    image: 'questions/prepositions/airport_arrival.png',
+    alt: 'Un hombre llegando a un aeropuerto'
   },
   {
     id: 'prep-10',
     text: 'The kids are playing _____ the garden.',
     options: ['in', 'on', 'at', 'under'],
     correctAnswer: 'in',
-    explanation: '“In” Indicates Being Inside A Three-Dimensional Space (Garden, Room, City).',
+    explanation: '"In" Indicates Being Inside A Three-Dimensional Space (Garden, Room, City).',
     hint: 'Enclosed Area → in the garden.',
+    image: 'questions/prepositions/garden_play.png',
+    alt: 'Unos niños jugando en el jardín'
   },
 ];
 
@@ -343,24 +423,30 @@ export const articlesQuestions: QuestionType[] = [
     text: 'He is _____ engineer.',
     options: ['a', 'an', 'the', '—'],
     correctAnswer: 'an',
-    explanation: 'Use “An” Before Vowel Sounds.',
+    explanation: 'Use "An" Before Vowel Sounds.',
     hint: 'Engineer Starts With A Vowel Sound. He is an engineer.',
+    image: 'questions/articles/engineer_work.png',
+    alt: 'Un hombre trabajando como ingeniero'
   },
   {
     id: 'art-2',
     text: 'Can you pass me _____ salt, please?',
     options: ['a', 'an', 'the', '—'],
     correctAnswer: 'the',
-    explanation: 'Definite Article “The” For Something Both Speaker And Listener Know.',
+    explanation: 'Definite Article "The" For Something Both Speaker And Listener Know.',
     hint: 'Specific Salt On The Table → the salt.',
+    image: 'questions/articles/salt_shaker.png',
+    alt: 'Un shaker de sal'
   },
   {
     id: 'art-3',
     text: 'Paris is _____ capital of France.',
     options: ['a', 'an', 'the', '—'],
     correctAnswer: 'the',
-    explanation: 'Use “The” With Unique Things (Only One).',
+    explanation: 'Use "The" With Unique Things (Only One).',
     hint: 'Only One Capital → the capital.',
+    image: 'questions/articles/paris_city.png',
+    alt: 'Una ciudad con edificios y una torre'
   },
   {
     id: 'art-4',
@@ -369,22 +455,28 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'a',
     explanation: 'Indefinite Article Introduces A Singular, Unspecified Item.',
     hint: 'First Mention. I bought a new phone.',
+    image: 'questions/articles/new_phone.png',
+    alt: 'Un teléfono nuevo'
   },
   {
     id: 'art-5',
     text: 'Mount Everest is _____ highest mountain in the world.',
     options: ['a', 'an', 'the', '—'],
     correctAnswer: 'the',
-    explanation: 'Superlatives Always Take “The”.',
-    hint: '“Highest” = Superlative. the highest mountain.',
+    explanation: 'Superlatives Always Take "The".',
+    hint: '"Highest" = Superlative. the highest mountain.',
+    image: 'mount_everest.png',
+    alt: 'El monte Everest'
   },
   {
     id: 'art-6',
     text: 'She plays _____ piano very well.',
     options: ['a', 'an', 'the', '—'],
     correctAnswer: 'the',
-    explanation: 'Musical Instruments Generally Use “The”.',
+    explanation: 'Musical Instruments Generally Use "The".',
     hint: 'Instrument Rule. She plays the piano.',
+    image: 'piano_player.png',
+    alt: 'Una persona tocando el piano'
   },
   {
     id: 'art-7',
@@ -393,30 +485,38 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: '—',
     explanation: 'Uncountable Nouns Used Generally Take No Article.',
     hint: 'Coffee In General → No Article.',
+    image: 'coffee_cup.png',
+    alt: 'Una taza de café'
   },
   {
     id: 'art-8',
     text: 'We visited _____ Netherlands last summer.',
     options: ['a', 'an', 'the', '—'],
     correctAnswer: 'the',
-    explanation: 'Countries With Plural Names Take “The”.',
+    explanation: 'Countries With Plural Names Take "The".',
     hint: 'Plural Country Name. the Netherlands.',
+    image: 'netherlands.png',
+    alt: 'Una ciudad con edificios y una torre'
   },
   {
     id: 'art-9',
     text: 'She looked at _____ sky full of stars.',
     options: ['a', 'an', 'the', '—'],
     correctAnswer: 'the',
-    explanation: 'Context Makes “Sky” Specific → Use “The”.',
+    explanation: 'Context Makes "Sky" Specific → Use "The".',
     hint: 'Specific Object Overhead → the sky.',
+    image: 'starry_sky.png',
+    alt: 'Un cielo estrellado'
   },
   {
     id: 'art-10',
     text: 'He goes to _____ school near his house.',
     options: ['a', 'an', 'the', '—'],
     correctAnswer: '—',
-    explanation: 'Institution Use (“Go To School”) Takes Zero Article.',
+    explanation: 'Institution Use ("Go To School") Takes Zero Article.',
     hint: 'Generic Purpose Of The Institution → No Article.',
+    image: 'school_building.png',
+    alt: 'Un edificio de escuela'
   },
 ];
 
@@ -427,79 +527,99 @@ export const modalVerbsQuestions: QuestionType[] = [
     text: 'She _____ swim when she was five.',
     options: ['can', 'could', 'may', 'must'],
     correctAnswer: 'could',
-    explanation: '“Could” Expresses Past Ability.',
+    explanation: '"Could" Expresses Past Ability.',
     hint: 'Past Ability → could swim.',
+    image: 'child_swimming.png',
+    alt: 'Un niño nadando'
   },
   {
     id: 'mod-2',
-    text: 'You _____ park here. It’s forbidden.',
-    options: ['can', 'could', 'mustn’t', 'might'],
-    correctAnswer: 'mustn’t',
-    explanation: '“Mustn’t” Expresses Prohibition.',
-    hint: 'Not Allowed At All. You mustn’t park here.',
+    text: 'You _____ park here. It\'s forbidden.',
+    options: ['can', 'could', 'mustn\'t', 'might'],
+    correctAnswer: 'mustn\'t',
+    explanation: '"Mustn\'t" Expresses Prohibition.',
+    hint: 'Not Allowed At All. You mustn\'t park here.',
+    image: 'no_parking.png',
+    alt: 'Un letrero de no estacionar'
   },
   {
     id: 'mod-3',
     text: '_____ I open the window?',
     options: ['Must', 'Should', 'May', 'Have to'],
     correctAnswer: 'May',
-    explanation: '“May” Or “Could” Are Polite Requests For Permission.',
+    explanation: '"May" Or "Could" Are Polite Requests For Permission.',
     hint: 'Polite Permission. May I open the window?',
+    image: 'window_open.png',
+    alt: 'Una ventana abierta'
   },
   {
     id: 'mod-4',
     text: 'It _____ rain later, so take an umbrella.',
     options: ['can', 'must', 'might', 'should'],
     correctAnswer: 'might',
-    explanation: '“Might” Expresses Weak Possibility.',
+    explanation: '"Might" Expresses Weak Possibility.',
     hint: 'Uncertain Forecast → might rain.',
+    image: 'rain_umbrella.png',
+    alt: 'Un paraguas'
   },
   {
     id: 'mod-5',
     text: 'Students _____ submit the assignment by Friday.',
     options: ['should', 'could', 'might', 'would'],
     correctAnswer: 'should',
-    explanation: '“Should” Gives Advice/Obligation That Is Not Strict.',
+    explanation: '"Should" Gives Advice/Obligation That Is Not Strict.',
     hint: 'Strong Recommendation. Students should submit.',
+    image: 'student_assignment.png',
+    alt: 'Un estudiante entregando una tarea'
   },
   {
     id: 'mod-6',
     text: 'He _____ be at home; the lights are on.',
     options: ['can', 'must', 'could', 'may'],
     correctAnswer: 'must',
-    explanation: '“Must” For Logical Deduction (High Certainty).',
+    explanation: '"Must" For Logical Deduction (High Certainty).',
     hint: 'Evidence-Based Conclusion. He must be at home.',
+    image: 'house_lights.png',
+    alt: 'Unas luces encendidas en una casa'
   },
   {
     id: 'mod-7',
     text: 'I _____ speak three languages.',
     options: ['can', 'must', 'should', 'might'],
     correctAnswer: 'can',
-    explanation: '“Can” Shows Present Ability.',
+    explanation: '"Can" Shows Present Ability.',
     hint: 'Current Capability. I can speak three languages.',
+    image: 'speaking_languages.png',
+    alt: 'Una persona hablando en tres idiomas'
   },
   {
     id: 'mod-8',
     text: 'We _____ leave early tomorrow; the boss insisted.',
     options: ['have to', 'could', 'may', 'might'],
     correctAnswer: 'have to',
-    explanation: '“Have To” Expresses External Obligation.',
+    explanation: '"Have To" Expresses External Obligation.',
     hint: 'Outside Requirement. We have to leave early.',
+    image: 'boss_meeting.png',
+    alt: 'Unos jefes en una reunión'
   },
   {
     id: 'mod-9',
     text: 'You _____ see a doctor if the pain continues.',
     options: ['must', 'should', 'can', 'might'],
     correctAnswer: 'should',
-    explanation: '“Should” Offers Advice.',
+    explanation: '"Should" Offers Advice.',
     hint: 'Recommendation → should see a doctor.',
+    image: 'doctor_visit.png',
+    alt: 'Un paciente visitando a un doctor'
   },
   {
     id: 'mod-10',
-    text: 'Visitors _____ smoke in this area—it’s allowed.',
+    text: 'Visitors _____ smoke in this area—it\'s allowed.',
     options: ['can', 'must', 'should', 'may not'],
     correctAnswer: 'can',
-    explanation: '“Can” States General Permission.',
+    explanation: '"Can" States General Permission.',
     hint: 'Allowed Action. Visitors can smoke here.',
+    image: 'smoking_area.png',
+    alt: 'Un área de fumadores'
   },
 ];

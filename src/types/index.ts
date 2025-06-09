@@ -30,4 +30,6 @@ export type QuestionType = {
   correctAnswer: string | string[];
   explanation: string;
   hint: string;
+  image?: string;
+  alt?: string;
 };

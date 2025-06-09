@@ -8,8 +8,24 @@ import Button from '../components/UI/Button';
 import IconButton from '../components/UI/IconButton';
 import ProgressBar from '../components/UI/ProgressBar';
 import { grammarTopics } from '../data/grammarTopics';
-import { presentTensesQuestions, pastTensesQuestions, conditionalsQuestions } from '../data/sampleQuestions';
+import { 
+  presentTensesQuestions, 
+  pastTensesQuestions, 
+  conditionalsQuestions,
+  prepositionsQuestions,
+  articlesQuestions,
+  modalVerbsQuestions 
+} from '../data/sampleQuestions';
 import { QuestionType } from '../types';
+
+// Importar todas las imágenes
+const images = import.meta.glob('../assets/questions/**/*.png', { eager: true });
+
+// Función para obtener la imagen
+const getImage = (imagePath: string) => {
+  const path = `../assets/${imagePath}`;
+  return images[path] as { default: string } | undefined;
+};
 
 const HintIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 45 46" fill="none" className="mr-2">
@@ -44,6 +60,12 @@ const Game: React.FC = () => {
         return pastTensesQuestions;
       case 'conditionals':
         return conditionalsQuestions;
+      case 'prepositions':
+        return prepositionsQuestions;
+      case 'articles':
+        return articlesQuestions;
+      case 'modal-verbs':
+        return modalVerbsQuestions;
       default:
         return presentTensesQuestions; // Default to present tenses questions
     }
@@ -257,6 +279,26 @@ const Game: React.FC = () => {
                 />
               </div>
             </div>
+
+            {/* Question Image */}
+            {currentQuestion.image && (
+              <div className="flex justify-center mb-6">
+                <img 
+                  src={getImage(currentQuestion.image)?.default}
+                  alt={currentQuestion.alt || "Question illustration"}
+                  className="rounded-lg shadow-md"
+                  style={{
+                    width: '300px',
+                    height: '300px',
+                    objectFit: 'cover'
+                  }}
+                  onError={(e) => {
+                    console.error('Error loading image:', currentQuestion.image);
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              </div>
+            )}
             
             {/* Options */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
