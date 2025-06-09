@@ -19,26 +19,26 @@ export const presentTensesQuestions: QuestionType[] = [
     correctAnswer: 'am looking',
     explanation: 'Present Continuous Describes Actions Happening At The Moment Of Speaking.',
     hint: 'The Action Is In Progress Now. I am looking for my keys.',
-    image: '/images/questions/presentTense/looking_keys.png',
+    image: '',
     alt: 'Una persona buscando sus llaves'
   },
   {
     id: 'pt-3',
-    text: 'They _____ in London since 2018.',
+    text: 'They _____ in London.',
     options: ['live', 'are living', 'have lived', 'lived'],
-    correctAnswer: 'have lived',
-    explanation: 'Present Perfect Links Past To Present ("Since 2018").',
-    hint: 'Use Have/Has + Past Participle For Time Up To Now. They have lived in London since 2018.',
+    correctAnswer: 'live',
+    explanation: 'Present simple indicates a current fact or habitual situation: they currently live in London.',
+    hint: 'Use the base form for a current state: They live in London.',
     image: 'questions/presentTense/present_tense_question3_london_city.png',
     alt: 'London city'
   },
   {
     id: 'pt-4',
-    text: 'Listen! The birds _____ loudly.',
+    text: 'The birds _____ loudly.',
     options: ['sing', 'are singing', 'have sung', 'sings'],
-    correctAnswer: 'are singing',
-    explanation: 'Present Continuous Is Used With "Listen!" To Show An Action Happening Now.',
-    hint: 'Action In Progress. The birds are singing.',
+    correctAnswer: 'sing',
+    explanation: 'Present Simple indicates a habitual or general truth: the birds habitually sing loudly.',
+    hint: 'Use the base form for a plural subject to express a habitual action: The birds sing loudly.',
     image: 'questions/presentTense/present_tense_question4_singing_birds.png',
     alt: 'Unos pájaros cantando'
   },
@@ -49,7 +49,7 @@ export const presentTensesQuestions: QuestionType[] = [
     correctAnswer: 'boils',
     explanation: 'We Use Present Simple For Scientific Facts And General Truths.',
     hint: 'General Truths Take Present Simple. Water boils at 100 °C.',
-    image: 'boiling_water.png',
+    image: 'questions/presentTense/present_tense_question5_boiling_water.png',
     alt: 'Agua hirviendo en una olla'
   },
   {
@@ -59,7 +59,7 @@ export const presentTensesQuestions: QuestionType[] = [
     correctAnswer: 'do / go',
     explanation: 'Present Simple + Auxiliary "Do" Is Used To Ask About Routines.',
     hint: 'Frequency Questions Use Do/Does + Base Verb. How often do you go?',
-    image: 'gym_workout.png',
+    image: 'questions/presentTense/present_tense_question6_gym_workout.png',
     alt: 'Un hombre haciendo ejercicio en el gimnasio'
   },
   {
@@ -69,7 +69,7 @@ export const presentTensesQuestions: QuestionType[] = [
     correctAnswer: 'study',
     explanation: 'Regular Schedules Take Present Simple.',
     hint: 'Routine On Fixed Days. I study English every Monday and Wednesday.',
-    image: 'studying_english.png',
+    image: 'questions/presentTense/present_tense_question7_studying_english.png',
     alt: 'Un hombre estudiando inglés'
   },
   {
@@ -79,7 +79,7 @@ export const presentTensesQuestions: QuestionType[] = [
     correctAnswer: 'has finished',
     explanation: 'Present Perfect Shows A Recently Completed Action Relevant Now.',
     hint: 'Use Have/Has + Past Participle. She has finished her homework.',
-    image: 'homework_done.png',
+    image: 'questions/presentTense/present_tense_question8_homework_done.png',
     alt: 'Un estudiante terminando su tarea'
   },
   {
@@ -89,7 +89,7 @@ export const presentTensesQuestions: QuestionType[] = [
     correctAnswer: 'rises',
     explanation: 'Facts And Universal Truths Use Present Simple.',
     hint: 'General Truth. The sun rises in the east.',
-    image: 'sunrise.png',
+    image: 'questions/presentTense/present_tense_question9_sunrise.png',
     alt: 'El sol saliendo en el horizonte'
   },
   {
@@ -99,7 +99,7 @@ export const presentTensesQuestions: QuestionType[] = [
     correctAnswer: 'are playing',
     explanation: 'Present Continuous For An Action Happening Right Now.',
     hint: '"Look!" Signals Something In Progress. The children are playing.',
-    image: 'children_playing.png',
+    image: '',
     alt: 'Unos niños jugando en el parque'
   },
 ];
@@ -113,7 +113,7 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'had left',
     explanation: 'Past Perfect Describes An Earlier Past Action Completed Before Another Past Action.',
     hint: 'First They Left, Then I Arrived. Everyone had left.',
-    image: 'empty_party.png',
+    image: 'questions/pastTense/past_tense_question1_empty_party.png',
     alt: 'Una fiesta vacía'
   },
   {
@@ -123,18 +123,18 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'was cooking',
     explanation: 'Past Continuous For An Action In Progress Interrupted By A Past Simple Event.',
     hint: 'Cooking Was Ongoing. I was cooking when the phone rang.',
-    image: 'cooking_phone.png',
+    image: 'questions/pastTense/past_tense_question2_cooking_phone.png',
     alt: 'Un hombre cocinando mientras el teléfono suena'
   },
   {
     id: 'past-3',
-    text: 'I _____ tennis every Sunday when I was a child.',
+    text: 'I _____ soccer every Sunday when I was a child.',
     options: ['played', 'was playing', 'had played', 'have played'],
     correctAnswer: 'played',
     explanation: 'Past Simple For Repeated Actions In The Past.',
-    hint: 'Childhood Habit → Past Simple. I played tennis every Sunday.',
-    image: 'child_tennis.png',
-    alt: 'Un niño jugando tenis'
+    hint: 'Childhood Habit → Past Simple. I played soccer every Sunday.',
+    image: 'questions/pastTense/past_tense_question3_child_soccer.png',
+    alt: 'Un niño jugando fútbol'
   },
   {
     id: 'past-4',
@@ -143,7 +143,7 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'had written',
     explanation: 'Past Perfect Highlights The Earlier Past Action (Writing).',
     hint: 'First Write, Then Feel Relieved. She had written the letter.',
-    image: 'writing_letter.png',
+    image: 'questions/pastTense/past_tense_question4_writing_letter.png',
     alt: 'Una persona escribiendo una carta'
   },
   {
@@ -163,7 +163,7 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'had found',
     explanation: 'Past Perfect Shows Completion Before Another Past Event.',
     hint: 'Seat Finding Happened Earlier. We had found our seats.',
-    image: 'movie_seats.png',
+    image: 'questions/pastTense/past_tense_question6_movie_seats.png',
     alt: 'Unos adultos buscando sus asientos en una sala de cine'
   },
   {
@@ -173,7 +173,7 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'lived',
     explanation: 'Past Simple For A Finished Past Situation With A Specific Time ("Last Year").',
     hint: 'Specific Past Time → Past Simple. He lived in Berlin last year.',
-    image: 'berlin_city.png',
+    image: 'questions/pastTense/past_tense_question7_berlin_city.png',
     alt: 'Una ciudad con edificios y una torre'
   },
   {
@@ -193,7 +193,7 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'had worked',
     explanation: 'Past Perfect Explains The Reason For A Past State.',
     hint: 'Work Finished Before Feeling Tired. She had worked all day.',
-    image: 'tired_worker.png',
+    image: 'questions/pastTense/past_tense_question9_tired_worker.png',
     alt: 'Un trabajador cansado'
   },
   {
