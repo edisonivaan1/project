@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Volume2, VolumeX, Maximize, MinusCircle, PlusCircle, Save, ArrowLeft } from 'lucide-react';
+import { Volume2, VolumeX, Maximize, MinusCircle, PlusCircle, ArrowLeft } from 'lucide-react';
 import Card, { CardHeader, CardBody, CardFooter } from '../components/UI/Card';
 import Button from '../components/UI/Button';
 import { useAudio } from '../contexts/AudioContext';
@@ -14,10 +14,19 @@ const Settings: React.FC = () => {
     toggleSoundEffects 
   } = useAudio();
   
-  const [settings, setSettings] = React.useState({
-    fullscreenMode: false,
-    textSize: 'medium' as const,
+  const [settings, setSettings] = React.useState(() => {
+    // Cargar configuración guardada del localStorage
+    const savedSettings = localStorage.getItem('gameSettings');
+    return savedSettings ? JSON.parse(savedSettings) : {
+      fullscreenMode: false,
+      textSize: 'medium' as const,
+    };
   });
+
+  // Guardar configuración cuando cambie
+  useEffect(() => {
+    localStorage.setItem('gameSettings', JSON.stringify(settings));
+  }, [settings]);
   
   const toggleSetting = (key: keyof typeof settings, value?: any) => {
     setSettings(prev => ({
@@ -26,16 +35,29 @@ const Settings: React.FC = () => {
     }));
   };
   
-  const handleSave = () => {
-    // In a real app, this would save settings to localStorage or a backend
-    navigate(-1); // Go back to previous screen
-  };
-  
   const textSizeOptions = {
     small: 'Small',
     medium: 'Medium',
     large: 'Large',
   };
+
+  // Aplicar configuración de texto
+  useEffect(() => {
+    document.documentElement.style.fontSize = 
+      settings.textSize === 'small' ? '14px' : 
+      settings.textSize === 'large' ? '18px' : '16px';
+  }, [settings.textSize]);
+
+  // Aplicar configuración de pantalla completa
+  useEffect(() => {
+    if (settings.fullscreenMode) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.error('Error al intentar pantalla completa:', err);
+      });
+    } else if (document.fullscreenElement) {
+      document.exitFullscreen();
+    }
+  }, [settings.fullscreenMode]);
   
   return (
     <div className="max-w-2xl mx-auto py-8 animate-fade-in">
@@ -163,14 +185,7 @@ const Settings: React.FC = () => {
           </div>
         </CardBody>
         
-        <CardFooter className="flex justify-center gap-4">
-          <Button
-            variant="outline"
-            onClick={() => navigate(-1)}
-            className="h-[40px] w-[225px] bg-[rgb(var(--color-secondary-button))] hover:bg-[rgb(var(--color-secondary-button))/0.8] text-[rgb(var(--color-text-white))] border-2 border-black"
-          >
-            Cancel
-          </Button>
+        <CardFooter className="flex justify-center">
           <Button
             variant="outline"
             icon={<ArrowLeft className="text-white" />}
