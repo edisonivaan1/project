@@ -529,7 +529,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     correctAnswer: 'could',
     explanation: '"Could" Expresses Past Ability.',
     hint: 'Past Ability → could swim.',
-    image: 'child_swimming.png',
+    image: 'questions/modalVerbs/modal_question1_child_swimming.png',
     alt: 'Un niño nadando'
   },
   {
@@ -539,7 +539,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     correctAnswer: 'mustn\'t',
     explanation: '"Mustn\'t" Expresses Prohibition.',
     hint: 'Not Allowed At All. You mustn\'t park here.',
-    image: 'no_parking.png',
+    image: 'questions/modalVerbs/modal_question2_no_parking.png',
     alt: 'Un letrero de no estacionar'
   },
   {
@@ -549,7 +549,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     correctAnswer: 'May',
     explanation: '"May" Or "Could" Are Polite Requests For Permission.',
     hint: 'Polite Permission. May I open the window?',
-    image: 'window_open.png',
+    image: 'questions/modalVerbs/modal_question3_window_open.png',
     alt: 'Una ventana abierta'
   },
   {
@@ -559,7 +559,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     correctAnswer: 'might',
     explanation: '"Might" Expresses Weak Possibility.',
     hint: 'Uncertain Forecast → might rain.',
-    image: 'rain_umbrella.png',
+    image: 'questions/modalVerbs/modal_question4_rain_umbrella.png',
     alt: 'Un paraguas'
   },
   {
@@ -569,7 +569,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     correctAnswer: 'should',
     explanation: '"Should" Gives Advice/Obligation That Is Not Strict.',
     hint: 'Strong Recommendation. Students should submit.',
-    image: 'student_assignment.png',
+    image: 'questions/modalVerbs/modal_question5_student_assignment.png',
     alt: 'Un estudiante entregando una tarea'
   },
   {
@@ -579,7 +579,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     correctAnswer: 'must',
     explanation: '"Must" For Logical Deduction (High Certainty).',
     hint: 'Evidence-Based Conclusion. He must be at home.',
-    image: 'house_lights.png',
+    image: 'questions/modalVerbs/modal_question6_house_lights.png',
     alt: 'Unas luces encendidas en una casa'
   },
   {
@@ -589,7 +589,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     correctAnswer: 'can',
     explanation: '"Can" Shows Present Ability.',
     hint: 'Current Capability. I can speak three languages.',
-    image: 'speaking_languages.png',
+    image: 'questions/modalVerbs/modal_question7_speak_languages.png',
     alt: 'Una persona hablando en tres idiomas'
   },
   {
@@ -599,7 +599,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     correctAnswer: 'have to',
     explanation: '"Have To" Expresses External Obligation.',
     hint: 'Outside Requirement. We have to leave early.',
-    image: 'boss_meeting.png',
+    image: 'questions/modalVerbs/modal_question8_boss_meeting.png',
     alt: 'Unos jefes en una reunión'
   },
   {
@@ -609,7 +609,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     correctAnswer: 'should',
     explanation: '"Should" Offers Advice.',
     hint: 'Recommendation → should see a doctor.',
-    image: 'doctor_visit.png',
+    image: 'questions/modalVerbs/modal_question9_doctor_visit.png',
     alt: 'Un paciente visitando a un doctor'
   },
   {
@@ -619,7 +619,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     correctAnswer: 'can',
     explanation: '"Can" States General Permission.',
     hint: 'Allowed Action. Visitors can smoke here.',
-    image: 'smoking_area.png',
+    image: 'questions/modalVerbs/modal_question10_smoking_area.png',
     alt: 'Un área de fumadores'
   },
 ];
