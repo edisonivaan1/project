@@ -425,7 +425,7 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'an',
     explanation: 'Use "An" Before Vowel Sounds.',
     hint: 'Engineer Starts With A Vowel Sound. He is an engineer.',
-    image: 'questions/articles/engineer_work.png',
+    image: 'questions/articles/articles_question1_engineer.png',
     alt: 'Un hombre trabajando como ingeniero'
   },
   {
@@ -435,7 +435,7 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'the',
     explanation: 'Definite Article "The" For Something Both Speaker And Listener Know.',
     hint: 'Specific Salt On The Table → the salt.',
-    image: 'questions/articles/salt_shaker.png',
+    image: 'questions/articles/articles_question2_salt_shaker.png',
     alt: 'Un shaker de sal'
   },
   {
@@ -445,8 +445,8 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'the',
     explanation: 'Use "The" With Unique Things (Only One).',
     hint: 'Only One Capital → the capital.',
-    image: 'questions/articles/paris_city.png',
-    alt: 'Una ciudad con edificios y una torre'
+    image: 'questions/articles/articles_question3_paris_city.png',
+    alt: 'Paris city'
   },
   {
     id: 'art-4',
@@ -455,7 +455,7 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'a',
     explanation: 'Indefinite Article Introduces A Singular, Unspecified Item.',
     hint: 'First Mention. I bought a new phone.',
-    image: 'questions/articles/new_phone.png',
+    image: 'questions/articles/articles_question4_new_phone.png',
     alt: 'Un teléfono nuevo'
   },
   {
@@ -465,7 +465,7 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'the',
     explanation: 'Superlatives Always Take "The".',
     hint: '"Highest" = Superlative. the highest mountain.',
-    image: 'mount_everest.png',
+    image: 'questions/articles/articles_question5_mount_everest.png',
     alt: 'El monte Everest'
   },
   {
@@ -475,7 +475,7 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'the',
     explanation: 'Musical Instruments Generally Use "The".',
     hint: 'Instrument Rule. She plays the piano.',
-    image: 'piano_player.png',
+    image: 'questions/articles/articles_question6_piano_player.png',
     alt: 'Una persona tocando el piano'
   },
   {
@@ -485,7 +485,7 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: '—',
     explanation: 'Uncountable Nouns Used Generally Take No Article.',
     hint: 'Coffee In General → No Article.',
-    image: 'coffee_cup.png',
+    image: 'questions/articles/articles_question7_coffee.png',
     alt: 'Una taza de café'
   },
   {
@@ -495,7 +495,7 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'the',
     explanation: 'Countries With Plural Names Take "The".',
     hint: 'Plural Country Name. the Netherlands.',
-    image: 'netherlands.png',
+    image: 'questions/articles/articles_question8_netherlands.png',
     alt: 'Una ciudad con edificios y una torre'
   },
   {
@@ -505,7 +505,7 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'the',
     explanation: 'Context Makes "Sky" Specific → Use "The".',
     hint: 'Specific Object Overhead → the sky.',
-    image: 'starry_sky.png',
+    image: 'questions/articles/articles_question9_starry_sky.png',
     alt: 'Un cielo estrellado'
   },
   {
@@ -515,7 +515,7 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: '—',
     explanation: 'Institution Use ("Go To School") Takes Zero Article.',
     hint: 'Generic Purpose Of The Institution → No Article.',
-    image: 'school_building.png',
+    image: 'questions/articles/articles_question10_school.png',
     alt: 'Un edificio de escuela'
   },
 ];
