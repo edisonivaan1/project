@@ -17,6 +17,7 @@ import {
   modalVerbsQuestions 
 } from '../data/sampleQuestions';
 import { QuestionType } from '../types';
+import { useProgress } from '../contexts/ProgressContext';
 
 // Importar todas las imágenes
 const images = import.meta.glob('../assets/questions/**/*.png', { eager: true });
@@ -36,6 +37,7 @@ const HintIcon = () => (
 const Game: React.FC = () => {
   const { topicId } = useParams<{ topicId: string }>();
   const navigate = useNavigate();
+  const { setProgress, getLastQuestionIndex, setLastQuestionIndex } = useProgress();
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -74,6 +76,24 @@ const Game: React.FC = () => {
   const questions = getQuestions();
   const currentQuestion = questions[currentQuestionIndex];
   
+  // Cargar el último índice de pregunta al iniciar
+  useEffect(() => {
+    if (topicId) {
+      const lastIndex = getLastQuestionIndex(topicId);
+      if (lastIndex > 0) {
+        setCurrentQuestionIndex(lastIndex);
+      }
+    }
+  }, [topicId]);
+
+  // Actualizar progreso cuando cambie el índice de la pregunta
+  useEffect(() => {
+    if (topicId) {
+      setProgress(topicId, currentQuestionIndex);
+      setLastQuestionIndex(topicId, currentQuestionIndex);
+    }
+  }, [currentQuestionIndex, topicId]);
+  
   // Función para mezclar las opciones
   const shuffleOptions = (options: string[]) => {
     const shuffled = [...options];
@@ -103,12 +123,20 @@ const Game: React.FC = () => {
       setSelectedAnswer(answer);
       setIsAnswerSubmitted(true);
       
-      if (answer === currentQuestion.correctAnswer) {
-        setScore(score + 1);
-        setIsCorrect(true);
+      const isAnswerCorrect = answer === currentQuestion.correctAnswer;
+      setIsCorrect(isAnswerCorrect);
+      
+      if (isAnswerCorrect) {
+        setScore(prev => prev + 1);
       } else {
-        setAttempts(attempts + 1);
-        setIsCorrect(false);
+        setAttempts(prev => prev + 1);
+      }
+
+      // Actualizar el progreso inmediatamente al responder
+      if (topicId) {
+        const nextQuestionIndex = currentQuestionIndex + 1;
+        setProgress(topicId, nextQuestionIndex);
+        setLastQuestionIndex(topicId, nextQuestionIndex);
       }
     }
   };
@@ -129,7 +157,7 @@ const Game: React.FC = () => {
   
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setCurrentQuestionIndex(prev => prev + 1);
       setSelectedAnswer(null);
       setIsAnswerSubmitted(false);
       setShowHint(false);
@@ -237,7 +265,10 @@ const Game: React.FC = () => {
                 <IconButton
                   icon={<ArrowLeft />}
                   variant="ghost"
-                  onClick={() => navigate('/')}
+                  onClick={() => {
+                    // Ya no necesitamos guardar el progreso aquí porque se guarda al responder
+                    navigate('/');
+                  }}
                   tooltip="Back to Home"
                   aria-label="Back to Home"
                   className="flex items-center"

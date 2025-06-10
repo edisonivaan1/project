@@ -8,23 +8,26 @@ import Results from './pages/Results';
 import Settings from './pages/Settings';
 import Help from './pages/Help';
 import { GameProvider } from './contexts/GameContext';
+import { ProgressProvider } from './contexts/ProgressContext';
 
 function App() {
   return (
-    <GameProvider>
-      <Router>
-        <MainLayout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/tutorial/:topicId" element={<Tutorial />} />
-            <Route path="/game/:topicId" element={<Game />} />
-            <Route path="/results/:topicId" element={<Results />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/help" element={<Help />} />
-          </Routes>
-        </MainLayout>
-      </Router>
-    </GameProvider>
+    <ProgressProvider>
+      <GameProvider>
+        <Router>
+          <MainLayout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/tutorial/:topicId" element={<Tutorial />} />
+              <Route path="/game/:topicId" element={<Game />} />
+              <Route path="/results/:topicId" element={<Results />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/help" element={<Help />} />
+            </Routes>
+          </MainLayout>
+        </Router>
+      </GameProvider>
+    </ProgressProvider>
   );
 }
 
