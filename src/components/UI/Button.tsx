@@ -21,11 +21,11 @@ const Button: React.FC<ButtonProps> = ({
   const baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-300 focus:outline-none';
   
   const variantClasses = {
-    primary: 'bg-primary text-white hover:bg-primary/90 focus:ring-2 focus:ring-primary/50',
-    secondary: 'bg-secondary text-white hover:bg-secondary/90 focus:ring-2 focus:ring-secondary/50',
-    accent: 'bg-accent text-text hover:bg-accent/90 focus:ring-2 focus:ring-accent/50',
-    outline: 'border-2 border-primary text-primary hover:bg-primary/10 focus:ring-2 focus:ring-primary/50',
-    ghost: 'text-primary hover:bg-primary/10 focus:ring-2 focus:ring-primary/50',
+    primary: 'bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-2 border-black',
+    secondary: 'bg-[rgb(var(--color-secondary-button))] hover:bg-[rgb(var(--color-secondary-button))/0.8] text-[rgb(var(--color-text-white))] border-2 border-black',
+    accent: 'bg-[rgb(var(--color-accent))] hover:bg-[rgb(var(--color-accent))/0.8] text-[rgb(var(--color-text))] border-2 border-black',
+    outline: 'border-2 border-[rgb(var(--color-button))] text-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.1]',
+    ghost: 'text-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.1]',
     custom: '', // Variante vacía para permitir estilos personalizados
   };
   

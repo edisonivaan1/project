@@ -57,15 +57,15 @@
   }
 
   .btn-primary {
-    @apply btn bg-primary hover:bg-primary/90 focus:ring-2 focus:ring-primary/50 focus:outline-none;
+    @apply btn bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-2 border-black;
   }
 
   .btn-secondary {
-    @apply btn bg-secondary hover:bg-secondary/90 focus:ring-2 focus:ring-secondary/50 focus:outline-none;
+    @apply btn bg-[rgb(var(--color-secondary-button))] hover:bg-[rgb(var(--color-secondary-button))/0.8] text-[rgb(var(--color-text-white))] border-2 border-black;
   }
 
   .btn-accent {
-    @apply btn bg-accent hover:bg-accent/90 focus:ring-2 focus:ring-accent/50 focus:outline-none text-text;
+    @apply btn bg-[rgb(var(--color-accent))] hover:bg-[rgb(var(--color-accent))/0.8] text-[rgb(var(--color-text))] border-2 border-black;
   }
 
   .card {
