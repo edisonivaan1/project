@@ -8,6 +8,7 @@ import IconButton from '../components/UI/IconButton';
 import PlayIcon from '../components/UI/icons/PlayIcon';
 import { grammarTopics } from '../data/grammarTopics';
 import { useProgress } from '../contexts/ProgressContext';
+import { useAttempt } from '../contexts/AttemptContext';
 
 const difficultyColors: Record<string, { bg: string; text: string; border: string; button: string }> = {
   easy: {
@@ -33,6 +34,7 @@ const difficultyColors: Record<string, { bg: string; text: string; border: strin
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { getProgress } = useProgress();
+  const { hasInProgressAttempt, hasCompletedAttempt } = useAttempt();
   
   // Agrupar temas por dificultad
   const topicsByDifficulty = grammarTopics.reduce((acc, topic) => {
@@ -43,9 +45,23 @@ const Home: React.FC = () => {
     return acc;
   }, {} as Record<string, typeof grammarTopics>);
 
-  const handleStartPractice = (e: React.MouseEvent, topicId: string) => {
+  const getButtonText = (topicId: string) => {
+    if (hasCompletedAttempt(topicId)) {
+      return 'VIEW RESULTS';
+    }
+    if (hasInProgressAttempt(topicId)) {
+      return 'CONTINUE ATTEMPT';
+    }
+    return 'START PRACTICE';
+  };
+
+  const handleButtonClick = (e: React.MouseEvent, topicId: string) => {
     e.stopPropagation();
-    navigate(`/game/${topicId}`);
+    if (hasCompletedAttempt(topicId)) {
+      navigate(`/results/${topicId}`);
+    } else {
+      navigate(`/game/${topicId}`);
+    }
   };
 
   return (
@@ -126,12 +142,9 @@ const Home: React.FC = () => {
                         variant="primary" 
                         size="lg" 
                         className={`w-full ${difficultyColors[topic.difficulty].button} transition-colors duration-200 font-semibold`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/game/${topic.id}`);
-                        }}
+                        onClick={(e) => handleButtonClick(e, topic.id)}
                       >
-                        START PRACTICE
+                        {getButtonText(topic.id)}
                       </Button>
                     </div>
                   </CardBody>

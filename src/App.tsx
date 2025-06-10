@@ -10,24 +10,27 @@ import Help from './pages/Help';
 import { GameProvider } from './contexts/GameContext';
 import { ProgressProvider } from './contexts/ProgressContext';
 import { QuestionStatusProvider } from './contexts/QuestionStatusContext';
+import { AttemptProvider } from './contexts/AttemptContext';
 
 function App() {
   return (
     <ProgressProvider>
       <GameProvider>
         <QuestionStatusProvider>
-          <Router>
-            <MainLayout>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/tutorial/:topicId" element={<Tutorial />} />
-                <Route path="/game/:topicId" element={<Game />} />
-                <Route path="/results/:topicId" element={<Results />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/help" element={<Help />} />
-              </Routes>
-            </MainLayout>
-          </Router>
+          <AttemptProvider>
+            <Router>
+              <MainLayout>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/tutorial/:topicId" element={<Tutorial />} />
+                  <Route path="/game/:topicId" element={<Game />} />
+                  <Route path="/results/:topicId" element={<Results />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/help" element={<Help />} />
+                </Routes>
+              </MainLayout>
+            </Router>
+          </AttemptProvider>
         </QuestionStatusProvider>
       </GameProvider>
     </ProgressProvider>

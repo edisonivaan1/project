@@ -20,6 +20,7 @@ import {
 import { QuestionType } from '../types';
 import { useProgress } from '../contexts/ProgressContext';
 import { useQuestionStatus } from '../contexts/QuestionStatusContext';
+import { useAttempt } from '../contexts/AttemptContext';
 
 // Importar todas las imágenes
 const images = import.meta.glob('../assets/questions/**/*.png', { eager: true });
@@ -41,6 +42,7 @@ const Game: React.FC = () => {
   const navigate = useNavigate();
   const { setProgress, getLastQuestionIndex, setLastQuestionIndex } = useProgress();
   const { updateQuestionStatus, getQuestionStatus } = useQuestionStatus();
+  const { getCurrentAttempt, startNewAttempt, submitAnswer, completeAttempt, hasInProgressAttempt } = useAttempt();
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -56,6 +58,37 @@ const Game: React.FC = () => {
   
   const topic = grammarTopics.find(t => t.id === topicId);
   
+  // Initialize attempt if needed
+  useEffect(() => {
+    if (topicId && !hasInProgressAttempt(topicId)) {
+      startNewAttempt(topicId);
+    }
+  }, [topicId]);
+
+  // Load attempt state
+  useEffect(() => {
+    if (topicId) {
+      const attempt = getCurrentAttempt(topicId);
+      if (attempt) {
+        // Restore answers
+        Object.entries(attempt.answers).forEach(([index, answer]) => {
+          const questionIndex = parseInt(index);
+          if (answer === questions[questionIndex].correctAnswer) {
+            updateQuestionStatus(topicId, questionIndex, 'correct');
+          } else {
+            updateQuestionStatus(topicId, questionIndex, 'incorrect');
+          }
+        });
+
+        // Set current question to first unanswered question
+        const firstUnansweredIndex = questions.findIndex((_, index) => !attempt.answers[index]);
+        if (firstUnansweredIndex !== -1) {
+          setCurrentQuestionIndex(firstUnansweredIndex);
+        }
+      }
+    }
+  }, [topicId]);
+
   // Get questions based on topic ID
   const getQuestions = (): QuestionType[] => {
     switch (topicId) {
@@ -78,24 +111,6 @@ const Game: React.FC = () => {
   
   const questions = getQuestions();
   const currentQuestion = questions[currentQuestionIndex];
-  
-  // Cargar el último índice de pregunta al iniciar
-  useEffect(() => {
-    if (topicId) {
-      const lastIndex = getLastQuestionIndex(topicId);
-      if (lastIndex > 0) {
-        setCurrentQuestionIndex(lastIndex);
-      }
-    }
-  }, [topicId]);
-
-  // Actualizar progreso cuando cambie el índice de la pregunta
-  useEffect(() => {
-    if (topicId) {
-      setProgress(topicId, currentQuestionIndex);
-      setLastQuestionIndex(topicId, currentQuestionIndex);
-    }
-  }, [currentQuestionIndex, topicId]);
   
   // Función para mezclar las opciones
   const shuffleOptions = (options: string[]) => {
@@ -121,8 +136,30 @@ const Game: React.FC = () => {
     }
   }, [attempts, showHint, isAnswerSubmitted]);
   
+  const handleQuestionSelect = (index: number) => {
+    if (index !== currentQuestionIndex) {
+      setCurrentQuestionIndex(index);
+      // If the question has already been answered, only allow viewing
+      const status = getQuestionStatus(topicId!, index);
+      if (status === 'unanswered') {
+        setSelectedAnswer(null);
+        setIsAnswerSubmitted(false);
+        setShowHint(false);
+        setAttempts(0);
+      } else {
+        // If already answered, maintain answer state
+        setIsAnswerSubmitted(true);
+        const attempt = getCurrentAttempt(topicId!);
+        if (attempt) {
+          setSelectedAnswer(attempt.answers[index] || null);
+          setIsCorrect(status === 'correct');
+        }
+      }
+    }
+  };
+  
   const handleAnswerSelect = (answer: string) => {
-    if (!isAnswerSubmitted) {
+    if (!isAnswerSubmitted && topicId) {
       setSelectedAnswer(answer);
       setIsAnswerSubmitted(true);
       
@@ -131,18 +168,19 @@ const Game: React.FC = () => {
       
       if (isAnswerCorrect) {
         setScore(prev => prev + 1);
-        updateQuestionStatus(topicId!, currentQuestionIndex, 'correct');
+        updateQuestionStatus(topicId, currentQuestionIndex, 'correct');
       } else {
         setAttempts(prev => prev + 1);
-        updateQuestionStatus(topicId!, currentQuestionIndex, 'incorrect');
+        updateQuestionStatus(topicId, currentQuestionIndex, 'incorrect');
       }
 
-      // Actualizar el progreso inmediatamente al responder
-      if (topicId) {
-        const nextQuestionIndex = currentQuestionIndex + 1;
-        setProgress(topicId, nextQuestionIndex);
-        setLastQuestionIndex(topicId, nextQuestionIndex);
-      }
+      // Save answer to attempt
+      submitAnswer(topicId, currentQuestionIndex, answer);
+
+      // Update progress
+      const nextQuestionIndex = currentQuestionIndex + 1;
+      setProgress(topicId, nextQuestionIndex);
+      setLastQuestionIndex(topicId, nextQuestionIndex);
     }
   };
   
@@ -164,10 +202,13 @@ const Game: React.FC = () => {
     const answeredQuestions = questions.filter((_, index) => getQuestionStatus(topicId!, index) !== 'unanswered').length;
     
     if (answeredQuestions === questions.length) {
-      // Si todas las preguntas están respondidas, mostrar resultados
+      // If all questions are answered, complete the attempt
+      if (topicId) {
+        completeAttempt(topicId);
+      }
       setIsGameCompleted(true);
     } else if (currentQuestionIndex < questions.length - 1) {
-      // Si no es la última pregunta, ir a la siguiente
+      // If not the last question, go to next
       setCurrentQuestionIndex(prev => prev + 1);
       setSelectedAnswer(null);
       setIsAnswerSubmitted(false);
@@ -291,33 +332,13 @@ const Game: React.FC = () => {
             </div>
 
             {/* Question Navigator */}
-            <div className="mb-6">
-              <QuestionNavigator
-                topicId={topicId!}
-                totalQuestions={questions.length}
-                currentQuestionIndex={currentQuestionIndex}
-                onQuestionSelect={(index) => {
-                  if (index !== currentQuestionIndex) {
-                    setCurrentQuestionIndex(index);
-                    // Si la pregunta ya fue respondida, solo permitimos visualización
-                    const status = getQuestionStatus(topicId!, index);
-                    if (status === 'unanswered') {
-                      setSelectedAnswer(null);
-                      setIsAnswerSubmitted(false);
-                      setShowHint(false);
-                      setAttempts(0);
-                    } else {
-                      // Si ya fue respondida, mantenemos el estado de respuesta
-                      setIsAnswerSubmitted(true);
-                      const correctAnswer = questions[index].correctAnswer;
-                      setSelectedAnswer(correctAnswer);
-                      setIsCorrect(status === 'correct');
-                    }
-                  }
-                }}
-                className="mb-4"
-              />
-            </div>
+            <QuestionNavigator
+              topicId={topicId!}
+              totalQuestions={questions.length}
+              currentQuestionIndex={currentQuestionIndex}
+              onQuestionSelect={handleQuestionSelect}
+              className="mb-4"
+            />
 
             {/* Progress Bar */}
             <div className="mb-6">

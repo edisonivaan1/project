@@ -1,48 +1,48 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Trophy, RefreshCw, Home, ArrowRight } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Home, RefreshCw } from 'lucide-react';
 import Card, { CardBody, CardFooter } from '../components/UI/Card';
 import Button from '../components/UI/Button';
 import ProgressBar from '../components/UI/ProgressBar';
 import { grammarTopics } from '../data/grammarTopics';
+import { useAttempt } from '../contexts/AttemptContext';
+import { useQuestionStatus } from '../contexts/QuestionStatusContext';
 
-interface ResultsProps {
-  score?: number;
-  totalQuestions?: number;
-}
-
-const Results: React.FC<ResultsProps> = ({ 
-  score = 7,  // Default values for demonstration
-  totalQuestions = 10 
-}) => {
-  const navigate = useNavigate();
+const Results: React.FC = () => {
   const { topicId } = useParams<{ topicId: string }>();
-  
-  const percentage = Math.round((score / totalQuestions) * 100);
+  const navigate = useNavigate();
+  const { getCurrentAttempt } = useAttempt();
+  const { getQuestionStatus } = useQuestionStatus();
+
   const topic = grammarTopics.find(t => t.id === topicId);
-  
-  // Find related topics to suggest
-  const relatedTopics = grammarTopics
-    .filter(t => t.id !== topicId)
-    .sort(() => 0.5 - Math.random())
-    .slice(0, 2);
-  
+  const attempt = topicId ? getCurrentAttempt(topicId) : null;
+
+  if (!topic || !attempt) {
+    return (
+      <div className="text-center py-12">
+        <h2 className="text-2xl font-bold mb-4">Results not found</h2>
+        <Button onClick={() => navigate('/')}>Return to Home</Button>
+      </div>
+    );
+  }
+
+  // Calculate score
+  const totalQuestions = Object.keys(attempt.answers).length;
+  const correctAnswers = Object.entries(attempt.answers).filter(([index, answer]) => {
+    const questionIndex = parseInt(index);
+    return getQuestionStatus(topicId!, questionIndex) === 'correct';
+  }).length;
+
+  const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+
   return (
-    <div className="max-w-3xl mx-auto py-8 animate-fade-in">
+    <div className="max-w-3xl mx-auto animate-fade-in">
+      <h1 className="text-3xl font-bold mb-6 text-center">{topic.title} - Results</h1>
+      
       <Card>
         <CardBody>
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center h-20 w-20 rounded-full bg-primary/10 text-primary mb-4">
-              <Trophy className="h-10 w-10" />
-            </div>
-            <h1 className="text-3xl font-bold mb-2">Results</h1>
-            <p className="text-gray-600">{topic?.title || 'Grammar Practice'}</p>
-          </div>
-          
-          <div className="text-center mb-8">
-            <div className="text-5xl font-bold mb-4">
-              {score}/{totalQuestions}
-            </div>
+            <div className="text-6xl font-bold mb-2 text-primary">{correctAnswers}/{totalQuestions}</div>
             <ProgressBar 
               value={percentage} 
               max={100}
@@ -50,91 +50,49 @@ const Results: React.FC<ResultsProps> = ({
               color={percentage >= 70 ? 'success' : percentage >= 40 ? 'warning' : 'error'}
               className="mb-2"
             />
-            <p className="text-lg font-medium">{percentage}% Correct</p>
+            <p className="text-lg">{percentage}% Correct</p>
           </div>
           
-          <div className="bg-gray-50 rounded-lg p-6 mb-8">
-            <h2 className="text-xl font-bold mb-4">Performance Analysis</h2>
-            <div className="space-y-4">
-              <div>
-                <div className="flex justify-between mb-1">
-                  <span className="font-medium">Accuracy</span>
-                  <span>{percentage}%</span>
-                </div>
-                <ProgressBar 
-                  value={percentage} 
-                  max={100}
-                  size="sm"
-                  color={percentage >= 70 ? 'success' : percentage >= 40 ? 'warning' : 'error'}
-                />
-              </div>
-              
-              <div>
-                <div className="flex justify-between mb-1">
-                  <span className="font-medium">Completion Time</span>
-                  <span>2:45</span>
-                </div>
-                <ProgressBar 
-                  value={70} 
-                  max={100}
-                  size="sm"
-                  color="secondary"
-                />
-              </div>
-              
-              <div>
-                <div className="flex justify-between mb-1">
-                  <span className="font-medium">Hints Used</span>
-                  <span>2/5</span>
-                </div>
-                <ProgressBar 
-                  value={40} 
-                  max={100}
-                  size="sm"
-                  color="accent"
-                />
-              </div>
-            </div>
+          <div className="bg-gray-50 rounded-lg p-4 mb-6">
+            <h3 className="font-bold mb-2">Performance Summary:</h3>
+            <p>
+              {percentage >= 80 
+                ? "Excellent job! You've mastered this topic!" 
+                : percentage >= 60 
+                ? "Good work! You're on the right track." 
+                : "Keep practicing! You'll improve with more attempts."}
+            </p>
           </div>
-          
-          {percentage < 70 && (
-            <div className="bg-warning/10 border border-warning/30 p-4 rounded-lg mb-8">
-              <h3 className="font-bold text-warning mb-2">Areas to Improve</h3>
-              <p>
-                You might need more practice with {topic?.title.toLowerCase() || 'this topic'}. 
-                Try reviewing the tutorial and attempting the exercises again.
-              </p>
-            </div>
-          )}
-          
-          <div>
-            <h2 className="text-xl font-bold mb-4">Suggested Next Activities</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {relatedTopics.map((relatedTopic) => (
-                <Card 
-                  key={relatedTopic.id}
-                  className="cursor-pointer"
-                  onClick={() => navigate(`/tutorial/${relatedTopic.id}`)}
+
+          <div className="space-y-4">
+            <h3 className="font-bold mb-4">Question Review:</h3>
+            {Object.entries(attempt.answers).map(([index, answer]) => {
+              const questionIndex = parseInt(index);
+              const status = getQuestionStatus(topicId!, questionIndex);
+              const isCorrect = status === 'correct';
+
+              return (
+                <div 
+                  key={index}
+                  className={`p-4 rounded-lg border-2 ${
+                    isCorrect 
+                      ? 'border-success bg-success/10' 
+                      : 'border-error bg-error/10'
+                  }`}
                 >
-                  <CardBody className="p-4">
-                    <h3 className="font-bold mb-1">{relatedTopic.title}</h3>
-                    <p className="text-sm text-gray-600 mb-2">{relatedTopic.description}</p>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      icon={<ArrowRight />}
-                      iconPosition="right"
-                      className="w-full"
-                    >
-                      Start
-                    </Button>
-                  </CardBody>
-                </Card>
-              ))}
-            </div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-medium">Question {parseInt(index) + 1}</span>
+                    <span className={`font-medium ${isCorrect ? 'text-success' : 'text-error'}`}>
+                      {isCorrect ? 'Correct' : 'Incorrect'}
+                    </span>
+                  </div>
+                  <p className="text-gray-700">Your answer: {answer}</p>
+                </div>
+              );
+            })}
           </div>
         </CardBody>
-        
+
         <CardFooter className="flex flex-wrap gap-4 justify-center">
           <Button
             variant="outline"
