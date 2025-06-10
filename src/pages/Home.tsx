@@ -109,26 +109,31 @@ const Home: React.FC = () => {
                       <div className="h-24">
                         <p className="text-gray-600 text-base leading-relaxed text-center line-clamp-3">{topic.description}</p>
                       </div>
-                      <div className="mb-4">
-                        <ProgressBar 
-                          value={progress} 
-                          max={100}
-                          size="md"
-                          color={topic.difficulty === 'easy' ? 'success' : topic.difficulty === 'medium' ? 'warning' : 'error'}
-                          label="Progress"
-                          showPercentage
-                          className="h-2"
-                        />
-                      </div>
+                      {topic.completedPercentage !== undefined && (
+                        <div className="mb-6">
+                          <ProgressBar 
+                            value={topic.completedPercentage} 
+                            max={100}
+                            size="md"
+                            color={topic.difficulty === 'easy' ? 'success' : topic.difficulty === 'medium' ? 'warning' : 'error'}
+                            label="Progress"
+                            showPercentage
+                            className="h-2"
+                          />
+                        </div>
+                      )}
                     </div>
-                    <div className="mt-auto">
+                    <div className="mt-6">
                       <Button 
                         variant="primary" 
                         size="lg" 
                         className={`w-full ${difficultyColors[topic.difficulty].button} transition-colors duration-200 font-semibold`}
-                        onClick={(e) => handleStartPractice(e, topic.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/game/${topic.id}`);
+                        }}
                       >
-                        {hasProgress ? 'CONTINUE PRACTICE' : 'START PRACTICE'}
+                        START PRACTICE
                       </Button>
                     </div>
                   </CardBody>
