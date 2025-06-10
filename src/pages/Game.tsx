@@ -161,14 +161,18 @@ const Game: React.FC = () => {
   };
   
   const handleNextQuestion = () => {
-    if (currentQuestionIndex < questions.length - 1) {
+    const answeredQuestions = questions.filter((_, index) => getQuestionStatus(topicId!, index) !== 'unanswered').length;
+    
+    if (answeredQuestions === questions.length) {
+      // Si todas las preguntas están respondidas, mostrar resultados
+      setIsGameCompleted(true);
+    } else if (currentQuestionIndex < questions.length - 1) {
+      // Si no es la última pregunta, ir a la siguiente
       setCurrentQuestionIndex(prev => prev + 1);
       setSelectedAnswer(null);
       setIsAnswerSubmitted(false);
       setShowHint(false);
       setAttempts(0);
-    } else {
-      setIsGameCompleted(true);
     }
   };
   
@@ -317,17 +321,30 @@ const Game: React.FC = () => {
 
             {/* Progress Bar */}
             <div className="mb-6">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium">Question {currentQuestionIndex + 1} of {questions.length}</span>
-                <span className="text-sm font-medium">{Math.round((currentQuestionIndex / questions.length) * 100)}% Complete</span>
-              </div>
-              <ProgressBar 
-                value={currentQuestionIndex} 
-                max={questions.length}
-                size="md"
-                color="primary"
-                className="transition-all duration-300"
-              />
+              {(() => {
+                const answeredQuestions = questions.filter((_, index) => getQuestionStatus(topicId!, index) !== 'unanswered').length;
+                const percentage = Math.round((answeredQuestions / questions.length) * 100);
+                
+                return (
+                  <>
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-medium">
+                        {answeredQuestions} de {questions.length} preguntas respondidas
+                      </span>
+                      <span className="text-sm font-medium">
+                        {percentage}% Completado
+                      </span>
+                    </div>
+                    <ProgressBar 
+                      value={answeredQuestions} 
+                      max={questions.length}
+                      size="md"
+                      color="primary"
+                      className="transition-all duration-300"
+                    />
+                  </>
+                );
+              })()}
             </div>
             
             {/* Question and Controls */}
@@ -434,7 +451,10 @@ const Game: React.FC = () => {
                     onClick={handleNextQuestion}
                     className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000]"
                   >
-                    {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'See Results'}
+                    {(() => {
+                      const answeredQuestions = questions.filter((_, index) => getQuestionStatus(topicId!, index) !== 'unanswered').length;
+                      return answeredQuestions === questions.length ? 'See Results' : 'Next Question';
+                    })()}
                   </Button>
                 </div>
               </div>
