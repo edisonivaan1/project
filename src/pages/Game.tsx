@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, Lightbulb, Volume2, VolumeX, RefreshCw, Home, 
-  ChevronRight, CheckCircle, XCircle 
+  ChevronRight, CheckCircle, XCircle, Play, Pause
 } from 'lucide-react';
 import Button from '../components/UI/Button';
 import IconButton from '../components/UI/IconButton';
@@ -21,6 +21,7 @@ import { QuestionType } from '../types';
 import { useProgress } from '../contexts/ProgressContext';
 import { useQuestionStatus } from '../contexts/QuestionStatusContext';
 import { useAttempt } from '../contexts/AttemptContext';
+import { useAudio } from '../contexts/AudioContext';
 
 // Importar todas las imágenes
 const images = import.meta.glob('../assets/questions/**/*.png', { eager: true });
@@ -51,6 +52,7 @@ const Game: React.FC = () => {
     recordHintUsage,
     getUsedHints
   } = useAttempt();
+  const { playBackgroundMusic, stopBackgroundMusic } = useAudio();
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -63,6 +65,8 @@ const Game: React.FC = () => {
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   
   const topic = grammarTopics.find(t => t.id === topicId);
   
@@ -79,6 +83,7 @@ const Game: React.FC = () => {
         setShowHint(false);
         setIsAnswerSubmitted(false);
         setSelectedAnswer(null);
+        setIsPlaying(false);
       }
     }
   }, [topicId]);
@@ -259,6 +264,81 @@ const Game: React.FC = () => {
     setIsGameCompleted(false);
   };
   
+  // Efecto para manejar la reproducción de música
+  useEffect(() => {
+    if (isPlaying) {
+      playBackgroundMusic();
+    } else {
+      stopBackgroundMusic();
+    }
+  }, [isPlaying]);
+
+  // Efecto para manejar la reproducción de audio de la pregunta
+  useEffect(() => {
+    if (currentQuestion?.audio) {
+      // Detener y limpiar el audio anterior si existe
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+      
+      // Crear nuevo elemento de audio
+      const audio = new Audio();
+      audio.src = currentQuestion.audio;
+      audio.volume = 0.7;
+      
+      // Agregar manejadores de eventos
+      audio.addEventListener('ended', () => {
+        setIsPlaying(false);
+      });
+      
+      audio.addEventListener('error', (e) => {
+        console.error('Error loading audio:', e);
+        setIsPlaying(false);
+      });
+      
+      audioRef.current = audio;
+
+      // Limpiar al desmontar
+      return () => {
+        if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
+          audio.removeEventListener('ended', () => {});
+          audio.removeEventListener('error', () => {});
+        }
+      };
+    }
+  }, [currentQuestion]);
+
+  // Efecto para manejar el estado de reproducción
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.error('Error playing audio:', error);
+            setIsPlaying(false);
+          });
+        }
+      } else {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    }
+  }, [isPlaying]);
+
+  const togglePlayPause = () => {
+    if (currentQuestion?.audio) {
+      setIsPlaying(!isPlaying);
+    }
+  };
+  
+  const toggleSound = () => {
+    setSoundEnabled(!soundEnabled);
+  };
+  
   if (!topic || !currentQuestion) {
     return (
       <div className="text-center py-12">
@@ -401,132 +481,143 @@ const Game: React.FC = () => {
             </div>
             
             {/* Question and Controls */}
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold flex-1">{currentQuestion.text}</h2>
-              <div className="flex items-center space-x-2 ml-4">
-                <IconButton
-                  icon={soundEnabled ? <Volume2 /> : <VolumeX />}
-                  variant="ghost"
-                  onClick={() => setSoundEnabled(!soundEnabled)}
-                  tooltip={soundEnabled ? "Mute Sound" : "Enable Sound"}
-                  aria-label={soundEnabled ? "Mute Sound" : "Enable Sound"}
-                />
+            <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold flex-1">{currentQuestion.text}</h2>
+                <div className="flex items-center gap-2 ml-4">
+                  <IconButton
+                    icon={soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
+                    onClick={toggleSound}
+                    tooltip={soundEnabled ? "Mute Sound" : "Unmute Sound"}
+                    aria-label={soundEnabled ? "Mute Sound" : "Unmute Sound"}
+                    variant="ghost"
+                  />
+                  {currentQuestion?.audio && (
+                    <IconButton
+                      icon={isPlaying ? <Pause size={20} /> : <Play size={20} />}
+                      onClick={togglePlayPause}
+                      tooltip={isPlaying ? "Stop Audio" : "Play Audio"}
+                      aria-label={isPlaying ? "Stop Audio" : "Play Audio"}
+                      variant="ghost"
+                    />
+                  )}
+                </div>
               </div>
-            </div>
 
-            {/* Question Image */}
-            {currentQuestion.image && (
-              <div className="flex justify-center mb-6">
-                <img 
-                  src={getImage(currentQuestion.image)?.default}
-                  alt={currentQuestion.alt || "Question illustration"}
-                  className="rounded-lg shadow-md"
-                  style={{
-                    width: '300px',
-                    height: '300px',
-                    objectFit: 'cover'
-                  }}
-                  onError={(e) => {
-                    console.error('Error loading image:', currentQuestion.image);
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
-              </div>
-            )}
-            
-            {/* Options */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-              {shuffledOptions.map((option, index) => {
-                const isCorrect = option === currentQuestion.correctAnswer;
-                const isSelected = option === selectedAnswer;
-                
-                let optionClass = "p-4 rounded-lg border-2 transition-all duration-300 flex justify-center items-center";
-                
-                if (isAnswerSubmitted) {
-                  if (isCorrect) {
-                    optionClass += " border-[rgb(var(--color-correct-option))] bg-[rgb(var(--color-correct-option)/0.1)] text-[rgb(var(--color-correct-option))]";
-                  } else if (isSelected) {
-                    optionClass += " border-[rgb(var(--color-incorrect-option))] bg-[rgb(var(--color-incorrect-option)/0.45)] text-[rgb(var(--color-incorrect-option))]";
+              {/* Question Image */}
+              {currentQuestion.image && (
+                <div className="flex justify-center mb-6">
+                  <img 
+                    src={getImage(currentQuestion.image)?.default}
+                    alt={currentQuestion.alt || "Question illustration"}
+                    className="rounded-lg shadow-md"
+                    style={{
+                      width: '300px',
+                      height: '300px',
+                      objectFit: 'cover'
+                    }}
+                    onError={(e) => {
+                      console.error('Error loading image:', currentQuestion.image);
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                </div>
+              )}
+              
+              {/* Options */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                {shuffledOptions.map((option, index) => {
+                  const isCorrect = option === currentQuestion.correctAnswer;
+                  const isSelected = option === selectedAnswer;
+                  
+                  let optionClass = "p-4 rounded-lg border-2 transition-all duration-300 flex justify-center items-center";
+                  
+                  if (isAnswerSubmitted) {
+                    if (isCorrect) {
+                      optionClass += " border-[rgb(var(--color-correct-option))] bg-[rgb(var(--color-correct-option)/0.1)] text-[rgb(var(--color-correct-option))]";
+                    } else if (isSelected) {
+                      optionClass += " border-[rgb(var(--color-incorrect-option))] bg-[rgb(var(--color-incorrect-option)/0.45)] text-[rgb(var(--color-incorrect-option))]";
+                    } else {
+                      optionClass += " border-gray-200 opacity-60";
+                    }
                   } else {
-                    optionClass += " border-gray-200 opacity-60";
+                    optionClass += isSelected 
+                      ? " border-[rgb(var(--color-primary))] bg-[rgb(var(--color-primary)/0.1)]" 
+                      : " border-gray-200 hover:border-[rgb(var(--color-primary)/0.5)]";
                   }
-                } else {
-                  optionClass += isSelected 
-                    ? " border-[rgb(var(--color-primary))] bg-[rgb(var(--color-primary)/0.1)]" 
-                    : " border-gray-200 hover:border-[rgb(var(--color-primary)/0.5)]";
-                }
-                
-                return (
-                  <button
-                    key={index}
-                    className={optionClass}
-                    onClick={() => handleAnswerSelect(option)}
-                    disabled={isAnswerSubmitted}
-                    style={{ height: '40px' }}
-                  >
-                    <span className="text-center">{option}</span>
-                    {isAnswerSubmitted && isCorrect && (
-                      <CheckCircle className="h-5 w-5 text-success ml-2" />
-                    )}
-                    {isAnswerSubmitted && isSelected && !isCorrect && (
-                      <XCircle className="h-5 w-5 text-error ml-2" />
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-            
-            {/* Hint Section */}
-            {showHint && (
-              <div className="mt-4 p-4 rounded-lg bg-[rgb(var(--color-background-hint))] border-2 border-black">
-                <div className="flex items-center gap-2 mb-2">
-                  <HintIcon />
-                  <span className="font-medium">Hint:</span>
-                </div>
-                <p>{currentQuestion.hint}</p>
+                  
+                  return (
+                    <button
+                      key={index}
+                      className={optionClass}
+                      onClick={() => handleAnswerSelect(option)}
+                      disabled={isAnswerSubmitted}
+                      style={{ height: '40px' }}
+                    >
+                      <span className="text-center">{option}</span>
+                      {isAnswerSubmitted && isCorrect && (
+                        <CheckCircle className="h-5 w-5 text-success ml-2" />
+                      )}
+                      {isAnswerSubmitted && isSelected && !isCorrect && (
+                        <XCircle className="h-5 w-5 text-error ml-2" />
+                      )}
+                    </button>
+                  );
+                })}
               </div>
-            )}
-            
-            {/* Explanation (shown after answer is submitted) */}
-            {isAnswerSubmitted && (
-              <div className="space-y-4">
-                <div className={`bg-${selectedAnswer === currentQuestion.correctAnswer ? 'success' : 'error'}/10 border border-${selectedAnswer === currentQuestion.correctAnswer ? 'success' : 'error'}/30 p-4 rounded-lg`}>
-                  <h3 className={`font-bold text-${selectedAnswer === currentQuestion.correctAnswer ? 'success' : 'error'} mb-2`}>
-                    {selectedAnswer === currentQuestion.correctAnswer ? 'Correct!' : 'Not quite right'}
-                  </h3>
-                  <p>{currentQuestion.explanation}</p>
-                </div>
-                <div className="flex justify-end">
-                  <Button
-                    variant="outline"
-                    icon={<ChevronRight className="text-white" />}
-                    iconPosition="right"
-                    onClick={handleNextQuestion}
-                    className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000]"
-                  >
-                    {(() => {
-                      const answeredQuestions = questions.filter((_, index) => getQuestionStatus(topicId!, index) !== 'unanswered').length;
-                      return answeredQuestions === questions.length ? 'See Results' : 'Next Question';
-                    })()}
-                  </Button>
-                </div>
-              </div>
-            )}
-            
-            {/* Action Buttons */}
-            <div className="flex justify-between mt-6">
-              <div>
-                {!showHint && !isAnswerSubmitted && (
-                  <Button
-                    variant="outline"
-                    onClick={handleShowHint}
-                    className="bg-[rgb(var(--color-background-hint))] hover:bg-[rgb(var(--color-background-hint))/0.8] text-text border-2 border-black w-[323px]"
-                    style={{ height: '40px', width: '225px' }}
-                  >
+              
+              {/* Hint Section */}
+              {showHint && (
+                <div className="mt-4 p-4 rounded-lg bg-[rgb(var(--color-background-hint))] border-2 border-black">
+                  <div className="flex items-center gap-2 mb-2">
                     <HintIcon />
-                    {showHint ? 'Hide Hint' : 'Show hint'}
-                  </Button>
-                )}
+                    <span className="font-medium">Hint:</span>
+                  </div>
+                  <p>{currentQuestion.hint}</p>
+                </div>
+              )}
+              
+              {/* Explanation (shown after answer is submitted) */}
+              {isAnswerSubmitted && (
+                <div className="space-y-4">
+                  <div className={`bg-${selectedAnswer === currentQuestion.correctAnswer ? 'success' : 'error'}/10 border border-${selectedAnswer === currentQuestion.correctAnswer ? 'success' : 'error'}/30 p-4 rounded-lg`}>
+                    <h3 className={`font-bold text-${selectedAnswer === currentQuestion.correctAnswer ? 'success' : 'error'} mb-2`}>
+                      {selectedAnswer === currentQuestion.correctAnswer ? 'Correct!' : 'Not quite right'}
+                    </h3>
+                    <p>{currentQuestion.explanation}</p>
+                  </div>
+                  <div className="flex justify-end">
+                    <Button
+                      variant="outline"
+                      icon={<ChevronRight className="text-white" />}
+                      iconPosition="right"
+                      onClick={handleNextQuestion}
+                      className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000]"
+                    >
+                      {(() => {
+                        const answeredQuestions = questions.filter((_, index) => getQuestionStatus(topicId!, index) !== 'unanswered').length;
+                        return answeredQuestions === questions.length ? 'See Results' : 'Next Question';
+                      })()}
+                    </Button>
+                  </div>
+                </div>
+              )}
+              
+              {/* Action Buttons */}
+              <div className="flex justify-between mt-6">
+                <div>
+                  {!showHint && !isAnswerSubmitted && (
+                    <Button
+                      variant="outline"
+                      onClick={handleShowHint}
+                      className="bg-[rgb(var(--color-background-hint))] hover:bg-[rgb(var(--color-background-hint))/0.8] text-text border-2 border-black w-[323px]"
+                      style={{ height: '40px', width: '225px' }}
+                    >
+                      <HintIcon />
+                      {showHint ? 'Hide Hint' : 'Show hint'}
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </div>

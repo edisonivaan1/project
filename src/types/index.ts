@@ -32,4 +32,5 @@ export type QuestionType = {
   hint: string;
   image?: string;
   alt?: string;
+  audio?: string;
 };

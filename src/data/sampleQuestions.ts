@@ -10,7 +10,8 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'We Use Present Simple For Habits. With Third-Person Singular, We Add "-s" To The Verb.',
     hint: 'It Is A Daily Routine. He drinks coffee in the morning.',
     image: 'questions/presentTense/present_tense_question1_coffee_morning.png',
-    alt: 'Una persona tomando café por la mañana'
+    alt: 'Una persona tomando café por la mañana',
+    audio: '/src/assets/audio_questions/present_question1_audio.mp3'
   },
   {
     id: 'pt-2',
@@ -20,7 +21,8 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'Present Continuous Describes Actions Happening At The Moment Of Speaking.',
     hint: 'The Action Is In Progress Now. I am looking for my keys.',
     image: '',
-    alt: 'Una persona buscando sus llaves'
+    alt: 'Una persona buscando sus llaves',
+    audio: '/src/assets/audio_questions/present_question2_audio.mp3'
   },
   {
     id: 'pt-3',
@@ -30,7 +32,8 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'Present simple indicates a current fact or habitual situation: they currently live in London.',
     hint: 'Use the base form for a current state: They live in London.',
     image: 'questions/presentTense/present_tense_question3_london_city.png',
-    alt: 'London city'
+    alt: 'London city',
+    audio: '/src/assets/audio_questions/present_question3_audio.mp3'
   },
   {
     id: 'pt-4',
@@ -40,7 +43,8 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'Present Simple indicates a habitual or general truth: the birds habitually sing loudly.',
     hint: 'Use the base form for a plural subject to express a habitual action: The birds sing loudly.',
     image: 'questions/presentTense/present_tense_question4_singing_birds.png',
-    alt: 'Unos pájaros cantando'
+    alt: 'Unos pájaros cantando',
+    audio: '/src/assets/audio_questions/present_question4_audio.mp3'
   },
   {
     id: 'pt-5',
@@ -50,7 +54,8 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'We Use Present Simple For Scientific Facts And General Truths.',
     hint: 'General Truths Take Present Simple. Water boils at 100 °C.',
     image: 'questions/presentTense/present_tense_question5_boiling_water.png',
-    alt: 'Agua hirviendo en una olla'
+    alt: 'Agua hirviendo en una olla',
+    audio: '/src/assets/audio_questions/present_question5_audio.mp3'
   },
   {
     id: 'pt-6',
@@ -60,7 +65,8 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'Present Simple + Auxiliary "Do" Is Used To Ask About Routines.',
     hint: 'Frequency Questions Use Do/Does + Base Verb. How often do you go?',
     image: 'questions/presentTense/present_tense_question6_gym_workout.png',
-    alt: 'Un hombre haciendo ejercicio en el gimnasio'
+    alt: 'Un hombre haciendo ejercicio en el gimnasio',
+    audio: '/src/assets/audio_questions/present_question6_audio.mp3'
   },
   {
     id: 'pt-7',
@@ -70,7 +76,8 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'Regular Schedules Take Present Simple.',
     hint: 'Routine On Fixed Days. I study English every Monday and Wednesday.',
     image: 'questions/presentTense/present_tense_question7_studying_english.png',
-    alt: 'Un hombre estudiando inglés'
+    alt: 'Un hombre estudiando inglés',
+    audio: '/src/assets/audio_questions/present_question7_audio.mp3'
   },
   {
     id: 'pt-8',
@@ -80,7 +87,8 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'Present Perfect Shows A Recently Completed Action Relevant Now.',
     hint: 'Use Have/Has + Past Participle. She has finished her homework.',
     image: 'questions/presentTense/present_tense_question8_homework_done.png',
-    alt: 'Un estudiante terminando su tarea'
+    alt: 'Un estudiante terminando su tarea',
+    audio: '/src/assets/audio_questions/present_question8_audio.mp3'
   },
   {
     id: 'pt-9',
@@ -90,7 +98,8 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'Facts And Universal Truths Use Present Simple.',
     hint: 'General Truth. The sun rises in the east.',
     image: 'questions/presentTense/present_tense_question9_sunrise.png',
-    alt: 'El sol saliendo en el horizonte'
+    alt: 'El sol saliendo en el horizonte',
+    audio: '/src/assets/audio_questions/present_question9_audio.mp3'
   },
   {
     id: 'pt-10',
@@ -100,7 +109,8 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'Present Continuous For An Action Happening Right Now.',
     hint: '"Look!" Signals Something In Progress. The children are playing.',
     image: '',
-    alt: 'Unos niños jugando en el parque'
+    alt: 'Unos niños jugando en el parque',
+    audio: '/src/assets/audio_questions/present_question10_audio.mp3'
   },
 ];
 
@@ -114,7 +124,8 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Perfect Describes An Earlier Past Action Completed Before Another Past Action.',
     hint: 'First They Left, Then I Arrived. Everyone had left.',
     image: 'questions/pastTense/past_tense_question1_empty_party.png',
-    alt: 'Una fiesta vacía'
+    alt: 'Una fiesta vacía',
+    audio: '/src/assets/audio_questions/past_question1_audio.mp3'
   },
   {
     id: 'past-2',
@@ -124,7 +135,8 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Continuous For An Action In Progress Interrupted By A Past Simple Event.',
     hint: 'Cooking Was Ongoing. I was cooking when the phone rang.',
     image: 'questions/pastTense/past_tense_question2_cooking_phone.png',
-    alt: 'Un hombre cocinando mientras el teléfono suena'
+    alt: 'Un hombre cocinando mientras el teléfono suena',
+    audio: '/src/assets/audio_questions/past_question2_audio.mp3'
   },
   {
     id: 'past-3',
@@ -135,6 +147,7 @@ export const pastTensesQuestions: QuestionType[] = [
     hint: 'Childhood Habit → Past Simple. I played soccer every Sunday.',
     image: 'questions/pastTense/past_tense_question3_child_soccer.png',
     alt: 'Un niño jugando fútbol'
+    
   },
   {
     id: 'past-4',
@@ -620,6 +633,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     explanation: '"Can" States General Permission.',
     hint: 'Allowed Action. Visitors can smoke here.',
     image: 'questions/modalVerbs/modal_question10_smoking_area.png',
-    alt: 'Un área de fumadores'
+    alt: 'Un área de fumadores',
+    audio: 'src/assets/audio_questions/question1_audio.mpeg'
   },
 ];

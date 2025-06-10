@@ -25,9 +25,12 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     music.volume = 0.5;
     setBackgroundMusic(music);
 
+    // Limpiar al desmontar
     return () => {
-      music.pause();
-      music.currentTime = 0;
+      if (music) {
+        music.pause();
+        music.currentTime = 0;
+      }
     };
   }, []);
 
@@ -36,7 +39,9 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       const newValue = !prev;
       if (backgroundMusic) {
         if (newValue) {
-          backgroundMusic.play();
+          backgroundMusic.play().catch(error => {
+            console.error('Error playing background music:', error);
+          });
         } else {
           backgroundMusic.pause();
         }
@@ -66,7 +71,7 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const playSoundEffect = (effect: string) => {
     if (isSoundEffectsEnabled) {
-      const sound = new Audio(`/assets/audio/${effect}.mp3`);
+      const sound = new Audio(`/src/assets/audio/${effect}.mp3`);
       sound.volume = 0.7;
       sound.play().catch(error => {
         console.error('Error playing sound effect:', error);
