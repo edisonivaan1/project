@@ -11,6 +11,7 @@ import { GameProvider } from './contexts/GameContext';
 import { ProgressProvider } from './contexts/ProgressContext';
 import { QuestionStatusProvider } from './contexts/QuestionStatusContext';
 import { AttemptProvider } from './contexts/AttemptContext';
+import { AudioProvider } from './contexts/AudioContext';
 
 function App() {
   return (
@@ -18,18 +19,20 @@ function App() {
       <GameProvider>
         <QuestionStatusProvider>
           <AttemptProvider>
-            <Router>
-              <MainLayout>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/tutorial/:topicId" element={<Tutorial />} />
-                  <Route path="/game/:topicId" element={<Game />} />
-                  <Route path="/results/:topicId" element={<Results />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="/help" element={<Help />} />
-                </Routes>
-              </MainLayout>
-            </Router>
+            <AudioProvider>
+              <Router>
+                <MainLayout>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/tutorial/:topicId" element={<Tutorial />} />
+                    <Route path="/game/:topicId" element={<Game />} />
+                    <Route path="/results/:topicId" element={<Results />} />
+                    <Route path="/settings" element={<Settings />} />
+                    <Route path="/help" element={<Help />} />
+                  </Routes>
+                </MainLayout>
+              </Router>
+            </AudioProvider>
           </AttemptProvider>
         </QuestionStatusProvider>
       </GameProvider>

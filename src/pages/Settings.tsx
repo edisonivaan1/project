@@ -1,24 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Volume2, VolumeX, Maximize, MinusCircle, PlusCircle, Save, ArrowLeft } from 'lucide-react';
 import Card, { CardHeader, CardBody, CardFooter } from '../components/UI/Card';
 import Button from '../components/UI/Button';
-import { UserSettings } from '../types';
+import { useAudio } from '../contexts/AudioContext';
 
 const Settings: React.FC = () => {
   const navigate = useNavigate();
+  const { 
+    isMusicEnabled, 
+    isSoundEffectsEnabled, 
+    toggleMusic, 
+    toggleSoundEffects 
+  } = useAudio();
   
-  const [settings, setSettings] = useState<UserSettings>({
-    musicEnabled: true,
-    soundEffectsEnabled: true,
+  const [settings, setSettings] = React.useState({
     fullscreenMode: false,
-    textSize: 'medium',
+    textSize: 'medium' as const,
   });
   
-  const toggleSetting = (key: keyof UserSettings, value?: any) => {
+  const toggleSetting = (key: keyof typeof settings, value?: any) => {
     setSettings(prev => ({
       ...prev,
-      [key]: value !== undefined ? value : !prev[key as keyof typeof prev],
+      [key]: value !== undefined ? value : !prev[key],
     }));
   };
   
@@ -54,11 +58,11 @@ const Settings: React.FC = () => {
                   <span>Background Music</span>
                 </div>
                 <div 
-                  className={`w-12 h-6 rounded-full p-1 transition-colors ${settings.musicEnabled ? 'bg-primary' : 'bg-gray-300'}`}
-                  onClick={() => toggleSetting('musicEnabled')}
+                  className={`w-12 h-6 rounded-full p-1 transition-colors ${isMusicEnabled ? 'bg-primary' : 'bg-gray-300'}`}
+                  onClick={toggleMusic}
                 >
                   <div 
-                    className={`bg-white h-4 w-4 rounded-full shadow-md transform transition-transform ${settings.musicEnabled ? 'translate-x-6' : 'translate-x-0'}`} 
+                    className={`bg-white h-4 w-4 rounded-full shadow-md transform transition-transform ${isMusicEnabled ? 'translate-x-6' : 'translate-x-0'}`} 
                   />
                 </div>
               </div>
@@ -69,11 +73,11 @@ const Settings: React.FC = () => {
                   <span>Sound Effects</span>
                 </div>
                 <div 
-                  className={`w-12 h-6 rounded-full p-1 transition-colors ${settings.soundEffectsEnabled ? 'bg-primary' : 'bg-gray-300'}`}
-                  onClick={() => toggleSetting('soundEffectsEnabled')}
+                  className={`w-12 h-6 rounded-full p-1 transition-colors ${isSoundEffectsEnabled ? 'bg-primary' : 'bg-gray-300'}`}
+                  onClick={toggleSoundEffects}
                 >
                   <div 
-                    className={`bg-white h-4 w-4 rounded-full shadow-md transform transition-transform ${settings.soundEffectsEnabled ? 'translate-x-6' : 'translate-x-0'}`} 
+                    className={`bg-white h-4 w-4 rounded-full shadow-md transform transition-transform ${isSoundEffectsEnabled ? 'translate-x-6' : 'translate-x-0'}`} 
                   />
                 </div>
               </div>
