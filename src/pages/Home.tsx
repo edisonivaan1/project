@@ -34,9 +34,9 @@ const difficultyColors: Record<string, { bg: string; text: string; border: strin
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { getProgress } = useProgress();
-  const { hasInProgressAttempt, hasCompletedAttempt } = useAttempt();
+  const { hasInProgressAttempt, hasCompletedAttempt, getAttemptScore } = useAttempt();
   
-  // Agrupar temas por dificultad
+  // Group topics by difficulty
   const topicsByDifficulty = grammarTopics.reduce((acc, topic) => {
     if (!acc[topic.difficulty]) {
       acc[topic.difficulty] = [];
@@ -103,6 +103,7 @@ const Home: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {topics.map((topic) => {
               const progress = getProgress(topic.id);
+              const score = getAttemptScore(topic.id);
               const hasProgress = progress > 0;
               
               return (
@@ -131,7 +132,7 @@ const Home: React.FC = () => {
                           max={100}
                           size="md"
                           color={topic.difficulty === 'easy' ? 'success' : topic.difficulty === 'medium' ? 'warning' : 'error'}
-                          label="Progress"
+                          label={hasProgress ? `Best Score: ${score.correct}/${score.total}` : 'Not Started'}
                           showPercentage
                           className="h-2"
                         />

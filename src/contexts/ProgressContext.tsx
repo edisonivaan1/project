@@ -3,9 +3,10 @@ import { grammarTopics } from '../data/grammarTopics';
 
 interface ProgressContextType {
   getProgress: (topicId: string) => number;
-  setProgress: (topicId: string, questionCount: number) => void;
+  setProgress: (topicId: string, correctAnswers: number, totalQuestions: number) => void;
   getLastQuestionIndex: (topicId: string) => number;
   setLastQuestionIndex: (topicId: string, index: number) => void;
+  getHighestScore: (topicId: string) => { correct: number; total: number };
 }
 
 const ProgressContext = createContext<ProgressContextType | undefined>(undefined);
@@ -13,11 +14,13 @@ const ProgressContext = createContext<ProgressContextType | undefined>(undefined
 export const ProgressProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [progressMap, setProgressMap] = useState<Record<string, number>>({});
   const [lastQuestionMap, setLastQuestionMap] = useState<Record<string, number>>({});
+  const [highestScores, setHighestScores] = useState<Record<string, { correct: number; total: number }>>({});
 
-  // Cargar progreso guardado al iniciar
+  // Load saved data on mount
   useEffect(() => {
     const savedProgress = localStorage.getItem('topicProgress');
     const savedLastQuestions = localStorage.getItem('lastQuestions');
+    const savedHighestScores = localStorage.getItem('highestScores');
     
     if (savedProgress) {
       setProgressMap(JSON.parse(savedProgress));
@@ -25,33 +28,50 @@ export const ProgressProvider: React.FC<{ children: ReactNode }> = ({ children }
     if (savedLastQuestions) {
       setLastQuestionMap(JSON.parse(savedLastQuestions));
     }
+    if (savedHighestScores) {
+      setHighestScores(JSON.parse(savedHighestScores));
+    }
   }, []);
 
-  // Guardar progreso cuando cambie
+  // Save data when it changes
   useEffect(() => {
     localStorage.setItem('topicProgress', JSON.stringify(progressMap));
   }, [progressMap]);
 
-  // Guardar última pregunta cuando cambie
   useEffect(() => {
     localStorage.setItem('lastQuestions', JSON.stringify(lastQuestionMap));
   }, [lastQuestionMap]);
+
+  useEffect(() => {
+    localStorage.setItem('highestScores', JSON.stringify(highestScores));
+  }, [highestScores]);
 
   const getProgress = (topicId: string): number => {
     return progressMap[topicId] || 0;
   };
 
-  const setProgress = (topicId: string, questionCount: number) => {
-    const percentage = Math.min(Math.round((questionCount / 10) * 100), 100);
-    setProgressMap(prev => ({
-      ...prev,
-      [topicId]: percentage
-    }));
+  const setProgress = (topicId: string, correctAnswers: number, totalQuestions: number) => {
+    const currentHighest = highestScores[topicId] || { correct: 0, total: totalQuestions };
+    
+    // Only update if this attempt has more correct answers
+    if (correctAnswers > currentHighest.correct) {
+      const percentage = Math.min(Math.round((correctAnswers / totalQuestions) * 100), 100);
+      
+      setProgressMap(prev => ({
+        ...prev,
+        [topicId]: percentage
+      }));
 
-    // Actualizar también el progreso en grammarTopics para sincronización inmediata
-    const topicIndex = grammarTopics.findIndex(t => t.id === topicId);
-    if (topicIndex !== -1) {
-      grammarTopics[topicIndex].completedPercentage = percentage;
+      setHighestScores(prev => ({
+        ...prev,
+        [topicId]: { correct: correctAnswers, total: totalQuestions }
+      }));
+
+      // Update grammarTopics for immediate sync
+      const topicIndex = grammarTopics.findIndex(t => t.id === topicId);
+      if (topicIndex !== -1) {
+        grammarTopics[topicIndex].completedPercentage = percentage;
+      }
     }
   };
 
@@ -66,13 +86,18 @@ export const ProgressProvider: React.FC<{ children: ReactNode }> = ({ children }
     }));
   };
 
+  const getHighestScore = (topicId: string) => {
+    return highestScores[topicId] || { correct: 0, total: 10 };
+  };
+
   return (
     <ProgressContext.Provider
       value={{
         getProgress,
         setProgress,
         getLastQuestionIndex,
-        setLastQuestionIndex
+        setLastQuestionIndex,
+        getHighestScore
       }}
     >
       {children}

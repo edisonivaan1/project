@@ -6,6 +6,7 @@ interface QuestionStatusContextType {
   questionStatuses: Record<string, Record<number, QuestionStatus>>;
   updateQuestionStatus: (topicId: string, questionIndex: number, status: QuestionStatus) => void;
   getQuestionStatus: (topicId: string, questionIndex: number) => QuestionStatus;
+  resetQuestionStatuses: (topicId: string) => void;
 }
 
 const QuestionStatusContext = createContext<QuestionStatusContextType | undefined>(undefined);
@@ -40,8 +41,15 @@ export const QuestionStatusProvider: React.FC<{ children: React.ReactNode }> = (
     return questionStatuses[topicId]?.[questionIndex] || 'unanswered';
   };
 
+  const resetQuestionStatuses = (topicId: string) => {
+    setQuestionStatuses(prev => {
+      const { [topicId]: _, ...rest } = prev;
+      return rest;
+    });
+  };
+
   return (
-    <QuestionStatusContext.Provider value={{ questionStatuses, updateQuestionStatus, getQuestionStatus }}>
+    <QuestionStatusContext.Provider value={{ questionStatuses, updateQuestionStatus, getQuestionStatus, resetQuestionStatuses }}>
       {children}
     </QuestionStatusContext.Provider>
   );

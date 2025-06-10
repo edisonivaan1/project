@@ -6,34 +6,57 @@ interface Attempt {
   startTime: number;
   answers: Record<number, string>;
   isCompleted: boolean;
+  score: number;
+  totalQuestions: number;
+  correctAnswers: number;
+  usedHints: number[];
+}
+
+interface AttemptHistory {
+  attemptNumber: number;
+  score: number;
+  totalQuestions: number;
+  correctAnswers: number;
+  timestamp: number;
 }
 
 interface AttemptContextType {
   getCurrentAttempt: (topicId: string) => Attempt | null;
   startNewAttempt: (topicId: string) => void;
   submitAnswer: (topicId: string, questionIndex: number, answer: string) => void;
-  completeAttempt: (topicId: string) => void;
+  completeAttempt: (topicId: string, correctAnswers: number, totalQuestions: number) => void;
   hasInProgressAttempt: (topicId: string) => boolean;
   hasCompletedAttempt: (topicId: string) => boolean;
+  getAttemptHistory: (topicId: string) => AttemptHistory[];
+  resetAttempt: (topicId: string) => void;
+  getAttemptScore: (topicId: string) => { correct: number; total: number };
+  recordHintUsage: (topicId: string, questionIndex: number) => void;
+  getUsedHints: (topicId: string) => number[];
 }
 
 const AttemptContext = createContext<AttemptContextType | undefined>(undefined);
 
 export const AttemptProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [attempts, setAttempts] = useState<Record<string, Attempt>>({});
+  const [attemptHistory, setAttemptHistory] = useState<Record<string, AttemptHistory[]>>({});
 
-  // Load attempts from localStorage on mount
+  // Load attempts and attempt history from localStorage on mount
   useEffect(() => {
     const savedAttempts = localStorage.getItem('topicAttempts');
+    const savedHistory = localStorage.getItem('attemptHistory');
     if (savedAttempts) {
       setAttempts(JSON.parse(savedAttempts));
     }
+    if (savedHistory) {
+      setAttemptHistory(JSON.parse(savedHistory));
+    }
   }, []);
 
-  // Save attempts to localStorage when they change
+  // Save attempts and attempt history to localStorage when they change
   useEffect(() => {
     localStorage.setItem('topicAttempts', JSON.stringify(attempts));
-  }, [attempts]);
+    localStorage.setItem('attemptHistory', JSON.stringify(attemptHistory));
+  }, [attempts, attemptHistory]);
 
   const getCurrentAttempt = (topicId: string): Attempt | null => {
     return attempts[topicId] || null;
@@ -45,7 +68,11 @@ export const AttemptProvider: React.FC<{ children: ReactNode }> = ({ children })
       topicId,
       startTime: Date.now(),
       answers: {},
-      isCompleted: false
+      isCompleted: false,
+      score: 0,
+      totalQuestions: 10, // Set default total questions
+      correctAnswers: 0,
+      usedHints: []
     };
 
     setAttempts(prev => ({
@@ -72,7 +99,7 @@ export const AttemptProvider: React.FC<{ children: ReactNode }> = ({ children })
     });
   };
 
-  const completeAttempt = (topicId: string) => {
+  const recordHintUsage = (topicId: string, questionIndex: number) => {
     setAttempts(prev => {
       const currentAttempt = prev[topicId];
       if (!currentAttempt) return prev;
@@ -81,8 +108,48 @@ export const AttemptProvider: React.FC<{ children: ReactNode }> = ({ children })
         ...prev,
         [topicId]: {
           ...currentAttempt,
-          isCompleted: true
+          usedHints: [...currentAttempt.usedHints, questionIndex]
         }
+      };
+    });
+  };
+
+  const getUsedHints = (topicId: string): number[] => {
+    return attempts[topicId]?.usedHints || [];
+  };
+
+  const completeAttempt = (topicId: string, correctAnswers: number, totalQuestions: number) => {
+    setAttempts(prev => {
+      const currentAttempt = prev[topicId];
+      if (!currentAttempt) return prev;
+
+      const completedAttempt = {
+        ...currentAttempt,
+        isCompleted: true,
+        score: Math.round((correctAnswers / totalQuestions) * 100),
+        totalQuestions,
+        correctAnswers
+      };
+
+      // Add to attempt history (only summary data)
+      const history = attemptHistory[topicId] || [];
+      const attemptNumber = history.length + 1;
+      const newHistoryEntry: AttemptHistory = {
+        attemptNumber,
+        score: completedAttempt.score,
+        totalQuestions,
+        correctAnswers,
+        timestamp: Date.now()
+      };
+
+      setAttemptHistory(prev => ({
+        ...prev,
+        [topicId]: [newHistoryEntry, ...history]
+      }));
+
+      return {
+        ...prev,
+        [topicId]: completedAttempt
       };
     });
   };
@@ -97,6 +164,27 @@ export const AttemptProvider: React.FC<{ children: ReactNode }> = ({ children })
     return attempt !== undefined && attempt.isCompleted;
   };
 
+  const getAttemptHistory = (topicId: string): AttemptHistory[] => {
+    return attemptHistory[topicId] || [];
+  };
+
+  const resetAttempt = (topicId: string) => {
+    // Remove the current attempt completely
+    setAttempts(prev => {
+      const { [topicId]: _, ...rest } = prev;
+      return rest;
+    });
+  };
+
+  const getAttemptScore = (topicId: string) => {
+    const attempt = attempts[topicId];
+    if (!attempt) return { correct: 0, total: 10 }; // Default to 10 questions if no attempt
+    return { 
+      correct: attempt.correctAnswers, 
+      total: attempt.totalQuestions || 10 
+    };
+  };
+
   return (
     <AttemptContext.Provider
       value={{
@@ -105,7 +193,12 @@ export const AttemptProvider: React.FC<{ children: ReactNode }> = ({ children })
         submitAnswer,
         completeAttempt,
         hasInProgressAttempt,
-        hasCompletedAttempt
+        hasCompletedAttempt,
+        getAttemptHistory,
+        resetAttempt,
+        getAttemptScore,
+        recordHintUsage,
+        getUsedHints
       }}
     >
       {children}

@@ -41,8 +41,16 @@ const Game: React.FC = () => {
   const { topicId } = useParams<{ topicId: string }>();
   const navigate = useNavigate();
   const { setProgress, getLastQuestionIndex, setLastQuestionIndex } = useProgress();
-  const { updateQuestionStatus, getQuestionStatus } = useQuestionStatus();
-  const { getCurrentAttempt, startNewAttempt, submitAnswer, completeAttempt, hasInProgressAttempt } = useAttempt();
+  const { updateQuestionStatus, getQuestionStatus, resetQuestionStatuses } = useQuestionStatus();
+  const { 
+    getCurrentAttempt, 
+    startNewAttempt, 
+    submitAnswer, 
+    completeAttempt, 
+    hasInProgressAttempt,
+    recordHintUsage,
+    getUsedHints
+  } = useAttempt();
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -60,8 +68,18 @@ const Game: React.FC = () => {
   
   // Initialize attempt if needed
   useEffect(() => {
-    if (topicId && !hasInProgressAttempt(topicId)) {
-      startNewAttempt(topicId);
+    if (topicId) {
+      if (!hasInProgressAttempt(topicId)) {
+        // Reset all states for a new attempt
+        resetQuestionStatuses(topicId);
+        startNewAttempt(topicId);
+        setCurrentQuestionIndex(0);
+        setScore(0);
+        setAttempts(0);
+        setShowHint(false);
+        setIsAnswerSubmitted(false);
+        setSelectedAnswer(null);
+      }
     }
   }, [topicId]);
 
@@ -70,7 +88,7 @@ const Game: React.FC = () => {
     if (topicId) {
       const attempt = getCurrentAttempt(topicId);
       if (attempt) {
-        // Restore answers
+        // Restore answers and hints
         Object.entries(attempt.answers).forEach(([index, answer]) => {
           const questionIndex = parseInt(index);
           if (answer === questions[questionIndex].correctAnswer) {
@@ -84,6 +102,12 @@ const Game: React.FC = () => {
         const firstUnansweredIndex = questions.findIndex((_, index) => !attempt.answers[index]);
         if (firstUnansweredIndex !== -1) {
           setCurrentQuestionIndex(firstUnansweredIndex);
+        }
+
+        // Restore hint states
+        const usedHints = getUsedHints(topicId);
+        if (usedHints.includes(currentQuestionIndex)) {
+          setShowHint(true);
         }
       }
     }
@@ -158,6 +182,13 @@ const Game: React.FC = () => {
     }
   };
   
+  const handleShowHint = () => {
+    if (topicId && !showHint) {
+      setShowHint(true);
+      recordHintUsage(topicId, currentQuestionIndex);
+    }
+  };
+  
   const handleAnswerSelect = (answer: string) => {
     if (!isAnswerSubmitted && topicId) {
       setSelectedAnswer(answer);
@@ -177,9 +208,10 @@ const Game: React.FC = () => {
       // Save answer to attempt
       submitAnswer(topicId, currentQuestionIndex, answer);
 
-      // Update progress
+      // Update progress with current score
       const nextQuestionIndex = currentQuestionIndex + 1;
-      setProgress(topicId, nextQuestionIndex);
+      const newScore = score + (isAnswerCorrect ? 1 : 0);
+      setProgress(topicId, newScore, questions.length);
       setLastQuestionIndex(topicId, nextQuestionIndex);
     }
   };
@@ -204,7 +236,7 @@ const Game: React.FC = () => {
     if (answeredQuestions === questions.length) {
       // If all questions are answered, complete the attempt
       if (topicId) {
-        completeAttempt(topicId);
+        completeAttempt(topicId, score, questions.length);
       }
       setIsGameCompleted(true);
     } else if (currentQuestionIndex < questions.length - 1) {
@@ -487,7 +519,7 @@ const Game: React.FC = () => {
                 {!showHint && !isAnswerSubmitted && (
                   <Button
                     variant="outline"
-                    onClick={() => setShowHint(!showHint)}
+                    onClick={handleShowHint}
                     className="bg-[rgb(var(--color-background-hint))] hover:bg-[rgb(var(--color-background-hint))/0.8] text-text border-2 border-black w-[323px]"
                     style={{ height: '40px', width: '225px' }}
                   >
