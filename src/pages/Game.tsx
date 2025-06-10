@@ -7,6 +7,7 @@ import {
 import Button from '../components/UI/Button';
 import IconButton from '../components/UI/IconButton';
 import ProgressBar from '../components/UI/ProgressBar';
+import QuestionNavigator from '../components/UI/QuestionNavigator';
 import { grammarTopics } from '../data/grammarTopics';
 import { 
   presentTensesQuestions, 
@@ -18,6 +19,7 @@ import {
 } from '../data/sampleQuestions';
 import { QuestionType } from '../types';
 import { useProgress } from '../contexts/ProgressContext';
+import { useQuestionStatus } from '../contexts/QuestionStatusContext';
 
 // Importar todas las imágenes
 const images = import.meta.glob('../assets/questions/**/*.png', { eager: true });
@@ -38,6 +40,7 @@ const Game: React.FC = () => {
   const { topicId } = useParams<{ topicId: string }>();
   const navigate = useNavigate();
   const { setProgress, getLastQuestionIndex, setLastQuestionIndex } = useProgress();
+  const { updateQuestionStatus, getQuestionStatus } = useQuestionStatus();
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -128,8 +131,10 @@ const Game: React.FC = () => {
       
       if (isAnswerCorrect) {
         setScore(prev => prev + 1);
+        updateQuestionStatus(topicId!, currentQuestionIndex, 'correct');
       } else {
         setAttempts(prev => prev + 1);
+        updateQuestionStatus(topicId!, currentQuestionIndex, 'incorrect');
       }
 
       // Actualizar el progreso inmediatamente al responder
@@ -266,7 +271,6 @@ const Game: React.FC = () => {
                   icon={<ArrowLeft />}
                   variant="ghost"
                   onClick={() => {
-                    // Ya no necesitamos guardar el progreso aquí porque se guarda al responder
                     navigate('/');
                   }}
                   tooltip="Back to Home"
@@ -280,6 +284,35 @@ const Game: React.FC = () => {
                 <div className="flex justify-between items-center mb-2">
                 </div>
               </div>
+            </div>
+
+            {/* Question Navigator */}
+            <div className="mb-6">
+              <QuestionNavigator
+                topicId={topicId!}
+                totalQuestions={questions.length}
+                currentQuestionIndex={currentQuestionIndex}
+                onQuestionSelect={(index) => {
+                  if (index !== currentQuestionIndex) {
+                    setCurrentQuestionIndex(index);
+                    // Si la pregunta ya fue respondida, solo permitimos visualización
+                    const status = getQuestionStatus(topicId!, index);
+                    if (status === 'unanswered') {
+                      setSelectedAnswer(null);
+                      setIsAnswerSubmitted(false);
+                      setShowHint(false);
+                      setAttempts(0);
+                    } else {
+                      // Si ya fue respondida, mantenemos el estado de respuesta
+                      setIsAnswerSubmitted(true);
+                      const correctAnswer = questions[index].correctAnswer;
+                      setSelectedAnswer(correctAnswer);
+                      setIsCorrect(status === 'correct');
+                    }
+                  }
+                }}
+                className="mb-4"
+              />
             </div>
 
             {/* Progress Bar */}
