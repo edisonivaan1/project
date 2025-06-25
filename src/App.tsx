@@ -15,26 +15,16 @@ import { ProgressProvider } from './contexts/ProgressContext';
 import { QuestionStatusProvider } from './contexts/QuestionStatusContext';
 import { AttemptProvider } from './contexts/AttemptContext';
 import { AudioProvider } from './contexts/AudioContext';
-import { AuthProvider } from './contexts/AuthContext';
-
-// Componente para rutas protegidas
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-  return <>{children}</>;
-};
 
 function App() {
   return (
-    <AuthProvider>
-      <ProgressProvider>
-        <GameProvider>
-          <QuestionStatusProvider>
-            <AttemptProvider>
-              <AudioProvider>
-                <Router>
+    <ProgressProvider>
+      <GameProvider>
+        <QuestionStatusProvider>
+          <AttemptProvider>
+            <AudioProvider>
+              <Router>
+                <MainLayout>
                   <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<LoginPage />} />
@@ -47,13 +37,13 @@ function App() {
                     <Route path="/help" element={<Help />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                   </Routes>
-                </Router>
-              </AudioProvider>
-            </AttemptProvider>
-          </QuestionStatusProvider>
-        </GameProvider>
-      </ProgressProvider>
-    </AuthProvider>
+                </MainLayout>
+              </Router>
+            </AudioProvider>
+          </AttemptProvider>
+        </QuestionStatusProvider>
+      </GameProvider>
+    </ProgressProvider>
   );
 }
 
