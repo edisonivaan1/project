@@ -8,6 +8,8 @@ import Game from './pages/Game';
 import Results from './pages/Results';
 import Settings from './pages/Settings';
 import Help from './pages/Help';
+import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignUpPage';
 import { GameProvider } from './contexts/GameContext';
 import { ProgressProvider } from './contexts/ProgressContext';
 import { QuestionStatusProvider } from './contexts/QuestionStatusContext';
@@ -25,6 +27,8 @@ function App() {
                 <MainLayout>
                   <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={<SignUpPage />} />
                     <Route path="/topics" element={<TopicsPage />} />
                     <Route path="/tutorial/:topicId" element={<Tutorial />} />
                     <Route path="/game/:topicId" element={<Game />} />
