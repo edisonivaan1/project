@@ -1,15 +1,44 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Settings, HelpCircle, Home } from 'lucide-react';
 import logo from '../../Assets/logo_GrammarMasterPro.png';
 
 const Header: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const isHomePage = location.pathname === '/';
   
   const isActive = (path: string) => {
     return location.pathname === path;
   };
   
+  // Estilo para el botón de login
+  const loginButton = (
+    <button 
+      onClick={() => navigate('/login')}
+      className="px-6 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 transition-colors font-medium"
+    >
+      LOGIN
+    </button>
+  );
+  
+  // Si estamos en la página de inicio, mostramos solo el logo y el botón de login
+  if (isHomePage) {
+    return (
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <Link to="/" className="flex items-center">
+              <img src={logo} alt="Grammar Master Pro Logo" className="h-16 w-auto" />
+            </Link>
+            {loginButton}
+          </div>
+        </div>
+      </header>
+    );
+  }
+  
+  // Para las demás páginas, mostramos la navegación completa
   return (
     <header className="bg-white shadow-sm">
       <div className="container-custom py-4">

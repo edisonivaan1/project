@@ -1,7 +1,8 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './components/Layout/MainLayout';
 import Home from './pages/Home';
+import TopicsPage from './pages/TopicsPage';
 import Tutorial from './pages/Tutorial';
 import Game from './pages/Game';
 import Results from './pages/Results';
@@ -24,11 +25,13 @@ function App() {
                 <MainLayout>
                   <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/topics" element={<TopicsPage />} />
                     <Route path="/tutorial/:topicId" element={<Tutorial />} />
                     <Route path="/game/:topicId" element={<Game />} />
                     <Route path="/results/:topicId" element={<Results />} />
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/help" element={<Help />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
                   </Routes>
                 </MainLayout>
               </Router>

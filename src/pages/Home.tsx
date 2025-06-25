@@ -1,160 +1,103 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HelpCircle, Info, Volume2 } from 'lucide-react';
-import Card, { CardBody } from '../components/UI/Card';
+import { ArrowRight, BookOpen, BarChart2, Users } from 'lucide-react';
 import Button from '../components/UI/Button';
-import ProgressBar from '../components/UI/ProgressBar';
-import IconButton from '../components/UI/IconButton';
-import PlayIcon from '../components/UI/icons/PlayIcon';
-import { grammarTopics } from '../data/grammarTopics';
-import { useProgress } from '../contexts/ProgressContext';
-import { useAttempt } from '../contexts/AttemptContext';
-
-const difficultyColors: Record<string, { bg: string; text: string; border: string; button: string }> = {
-  easy: {
-    bg: 'bg-emerald-50',
-    text: 'text-emerald-700',
-    border: 'border-emerald-200',
-    button: 'bg-emerald-500 hover:bg-emerald-600 text-white'
-  },
-  medium: {
-    bg: 'bg-blue-50',
-    text: 'text-blue-700',
-    border: 'border-blue-200',
-    button: 'bg-blue-500 hover:bg-blue-600 text-white'
-  },
-  hard: {
-    bg: 'bg-fuchsia-50',
-    text: 'text-fuchsia-700',
-    border: 'border-fuchsia-200',
-    button: 'bg-fuchsia-500 hover:bg-fuchsia-600 text-white'
-  }
-};
+import logo from '../assets/logo_GrammarMasterPro.png';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { getProgress } = useProgress();
-  const { hasInProgressAttempt, hasCompletedAttempt, getAttemptScore } = useAttempt();
-  
-  // Group topics by difficulty
-  const topicsByDifficulty = grammarTopics.reduce((acc, topic) => {
-    if (!acc[topic.difficulty]) {
-      acc[topic.difficulty] = [];
-    }
-    acc[topic.difficulty].push(topic);
-    return acc;
-  }, {} as Record<string, typeof grammarTopics>);
 
-  const getButtonText = (topicId: string) => {
-    if (hasCompletedAttempt(topicId)) {
-      return 'VIEW RESULTS';
+  const features = [
+    {
+      icon: <BookOpen className="h-12 w-12 text-blue-600" />,
+      title: "Learn Quickly",
+      description: "Master grammar rules through engaging exercises and interactive lessons."
+    },
+    {
+      icon: <BarChart2 className="h-12 w-12 text-green-600" />,
+      title: "Real-Time Feedback",
+      description: "Get instant feedback on your answers to improve your understanding."
+    },
+    {
+      icon: <Users className="h-12 w-12 text-purple-600" />,
+      title: "Track Your Growth",
+      description: "Monitor your progress and see how you're improving over time."
     }
-    if (hasInProgressAttempt(topicId)) {
-      return 'CONTINUE ATTEMPT';
-    }
-    return 'START PRACTICE';
-  };
-
-  const handleButtonClick = (e: React.MouseEvent, topicId: string) => {
-    e.stopPropagation();
-    if (hasCompletedAttempt(topicId)) {
-      navigate(`/results/${topicId}`);
-    } else {
-      navigate(`/game/${topicId}`);
-    }
-  };
+  ];
 
   return (
-    <div className="animate-fade-in max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <section className="mb-16 text-center">
-        <h1 className="font-extrabold text-5xl md:text-6xl mb-6 text-primary tracking-tight">
-          GRAMMAR MASTER PRO
-        </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-          Master English Grammar Through Interactive Games And Activities Designed For B1-Level Learners.
-        </p>
-        <div className="flex justify-center mt-8 space-x-4">
-          <IconButton
-            icon={<Volume2 className="h-6 w-6" />}
-            variant="outline"
-            size="lg"
-            tooltip="Sound Settings"
-            aria-label="Sound Settings"
-            onClick={() => navigate('/settings')}
-            className="hover:scale-105 transition-transform"
-          />
-          <IconButton
-            icon={<Info className="h-6 w-6" />}
-            variant="outline"
-            size="lg"
-            tooltip="Help"
-            aria-label="Help"
-            onClick={() => navigate('/help')}
-            className="hover:scale-105 transition-transform"
-          />
-        </div>
-      </section>
-      
-      {Object.entries(topicsByDifficulty).map(([difficulty, topics]) => (
-        <section key={difficulty} className="mb-12">
-          <h2 className="text-3xl font-bold mb-8 text-gray-900 capitalize">
-            {difficulty} Topics
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {topics.map((topic) => {
-              const progress = getProgress(topic.id);
-              const score = getAttemptScore(topic.id);
-              const hasProgress = progress > 0;
-              
-              return (
-                <Card 
-                  key={topic.id}
-                  className={`cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1 ${difficultyColors[topic.difficulty].border}`}
-                  onClick={() => navigate(`/tutorial/${topic.id}`)}
+    <div className="py-0 mb-0">
+      {/* Logo y botón */}
+      <div className="bg-[rgba(0,12,234,0.11)] flex justify-between px-20">
+        <img src={logo} alt="Grammar Master Pro Logo" className="h-24 w-auto" />
+        <Button 
+          onClick={() => navigate('/login')}
+          className="bg-white text-[#000DFF] px-32 py-1 text-base font-black tracking-wider rounded-full flex items-center h-8 mt-4"
+          variant="custom"
+        >
+          LOGIN
+        </Button>
+      </div>
+
+      {/* Hero Section */}
+      <main className="flex-grow">
+        <section className="bg-[rgba(0,12,234,0.11)] pt-4 pb-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row items-center">
+              {/* Texto y botón */}
+              <div className="w-full md:w-1/2 text-center md:text-left mb-8 md:mb-0 md:pr-8">
+                <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6">
+                  A Classical Education <br /> for the <span className="text-blue-600">Future</span>
+                </h1>
+                <p className="text-xl text-gray-600 mb-10">
+                  Master English grammar through interactive exercises and real-time feedback.
+                  Perfect for B1 level students looking to improve their language skills.
+                </p>
+                <Button 
+                  onClick={() => navigate('/topics')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-32 py-3 text-lg font-medium rounded-full flex items-center md:mx-0 w-auto"
+                  variant="custom"
                 >
-                  <CardBody className="p-6 flex flex-col h-full">
-                    <div className="flex flex-col items-center text-center mb-6">
-                      <PlayIcon className={`mb-3 ${difficultyColors[topic.difficulty].text}`} size={32} />
-                      <h3 className="font-bold text-xl text-gray-900">{topic.title}</h3>
-                    </div>
-                    <div className="flex flex-col">
-                      <div className="flex justify-center mb-4">
-                        <span className={`text-xs font-semibold px-3 py-1 rounded-full ${difficultyColors[topic.difficulty].bg} ${difficultyColors[topic.difficulty].text}`}>
-                          {topic.difficulty.toUpperCase()}
-                        </span>
-                      </div>
-                      <div className="h-24">
-                        <p className="text-gray-600 text-base leading-relaxed text-center line-clamp-3">{topic.description}</p>
-                      </div>
-                      <div className="mb-6">
-                        <ProgressBar 
-                          value={progress} 
-                          max={100}
-                          size="md"
-                          color={topic.difficulty === 'easy' ? 'success' : topic.difficulty === 'medium' ? 'warning' : 'error'}
-                          label={hasProgress ? `Best Score: ${score.correct}/${score.total}` : 'Not Started'}
-                          showPercentage
-                          className="h-2"
-                        />
-                      </div>
-                    </div>
-                    <div className="mt-6">
-                      <Button 
-                        variant="primary" 
-                        size="lg" 
-                        className={`w-full ${difficultyColors[topic.difficulty].button} transition-colors duration-200 font-semibold`}
-                        onClick={(e) => handleButtonClick(e, topic.id)}
-                      >
-                        {getButtonText(topic.id)}
-                      </Button>
-                    </div>
-                  </CardBody>
-                </Card>
-              );
-            })}
+                  JOIN                
+                </Button>
+              </div>
+              
+              {/* Imagen */}
+              <div className="w-full md:w-1/2 flex items-start justify-center -mt-20">
+                <div className="relative w-80 h-80">
+                  <div className="absolute bg-[#083DED] opacity-25 inset-0 rounded-full"></div>
+                  <div className="relative w-full h-full">
+                    <img 
+                      src="/src/assets/img/homeStudents.png" 
+                      alt="Students learning" 
+                      className="w-full h-full object-cover rounded-full object-top"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
-      ))}
+
+        {/* Features Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {features.map((feature, index) => (
+                <div key={index} className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                  <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mb-6 mx-auto">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-center mb-3">{feature.title}</h3>
+                  <p className="text-gray-600 text-center">{feature.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* Footer */}
     </div>
   );
 };
