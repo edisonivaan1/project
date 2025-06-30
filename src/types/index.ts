@@ -5,6 +5,7 @@ export type GrammarTopic = {
   icon: string;
   difficulty: 'easy' | 'medium' | 'hard';
   completedPercentage?: number;
+  youtubeUrl?: string;
 };
 
 export type GameState = {
