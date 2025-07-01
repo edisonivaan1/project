@@ -228,7 +228,7 @@ export const conditionalsQuestions: QuestionType[] = [
     correctAnswer: 'rains',
     explanation: 'First Conditional Uses Present Simple In The If-Clause And "Will" In The Result Clause.',
     hint: 'Possible Future Condition. If it rains, we will cancel.',
-    image: 'rainy_day.png',
+    image: 'questions/conditional/con_1.png',
     alt: 'Un día lluvioso',
     audio: '/src/assets/audio_questions/conditional/question1_audio.mp3'
   },
@@ -239,7 +239,7 @@ export const conditionalsQuestions: QuestionType[] = [
     correctAnswer: 'were',
     explanation: 'Second Conditional Uses "Were" For All Persons In Hypothetical Present Situations.',
     hint: 'Imaginary Situation → If I were rich, I would travel.',
-    image: 'world_travel.png',
+    image: 'questions/conditional/con_2.png',
     alt: 'Un hombre viajando alrededor del mundo',
     audio: '/src/assets/audio_questions/conditional/question2_audio.mp3'
   },
@@ -250,7 +250,7 @@ export const conditionalsQuestions: QuestionType[] = [
     correctAnswer: 'would have told',
     explanation: 'Third Conditional For Past Hypotheticals: If + Past Perfect → Would Have + PP.',
     hint: 'Regret About The Past. She would have told me.',
-    image: 'thinking_person.png',
+    image: 'questions/conditional/con_3.png',
     alt: 'Una persona pensando',
     audio: '/src/assets/audio_questions/conditional/question3_audio.mp3'
   },
@@ -261,7 +261,7 @@ export const conditionalsQuestions: QuestionType[] = [
     correctAnswer: 'will pass',
     explanation: 'First Conditional Result Uses "Will" + Base Verb.',
     hint: 'Real Possibility. You will pass.',
-    image: 'studying_exam.png',
+    image: 'questions/conditional/con_4.png',
     alt: 'Un estudiante estudiando para un examen',
     audio: '/src/assets/audio_questions/conditional/question4_audio.mp3'
   },
@@ -272,7 +272,7 @@ export const conditionalsQuestions: QuestionType[] = [
     correctAnswer: 'would have caught',
     explanation: 'Third Conditional Describes A Missed Past Possibility.',
     hint: 'Past Regret. I would have caught the train.',
-    image: 'missed_train.png',
+      image: 'questions/conditional/con_5.png',
     alt: 'Un hombre perdiendo un tren',
     audio: '/src/assets/audio_questions/conditional/question5_audio.mp3'
   },
@@ -283,7 +283,7 @@ export const conditionalsQuestions: QuestionType[] = [
     correctAnswer: 'were',
     explanation: 'Second Conditional Uses Past Simple ("Were") For Hypothetical Present.',
     hint: 'They Are Not Here → Hypothetical. If they were here.',
-    image: 'waiting_people.png',
+    image: 'questions/conditional/con_6.png',
     alt: 'Unos adultos esperando',
     audio: '/src/assets/audio_questions/conditional/question6_audio.mp3'
   },
@@ -294,7 +294,7 @@ export const conditionalsQuestions: QuestionType[] = [
     correctAnswer: 'freezes',
     explanation: 'Zero Conditional Expresses Scientific Facts: If + Present Simple → Present Simple.',
     hint: 'General Truth. It freezes.',
-    image: 'ice_water.png',
+    image: 'questions/conditional/con_7.png',
     alt: 'Agua congelada',
     audio: '/src/assets/audio_questions/conditional/question7_audio.mp3'
   },
@@ -305,7 +305,7 @@ export const conditionalsQuestions: QuestionType[] = [
     correctAnswer: 'would',
     explanation: 'Second Conditional Question Uses "Would" + Base Verb.',
     hint: 'Hypothetical Question. What would you do?',
-    image: 'lost_wallet.png',
+    image: 'questions/conditional/con_8.png',
     alt: 'Una persona perdiendo su billetera',
     audio: '/src/assets/audio_questions/conditional/question8_audio.mp3'
   },
@@ -316,7 +316,7 @@ export const conditionalsQuestions: QuestionType[] = [
     correctAnswer: 'were',
     explanation: 'Fixed Expression In Second Conditional: "If I Were You".',
     hint: 'Advice Formula → If I were you.',
-    image: 'advice_giving.png',
+    image: 'questions/conditional/con_9.png',
     alt: 'Un hombre dando consejos',
     audio: '/src/assets/audio_questions/conditional/question9_audio.mp3'
   },
@@ -327,7 +327,7 @@ export const conditionalsQuestions: QuestionType[] = [
     correctAnswer: 'provided',
     explanation: '"Provided (That)" Introduces A Conditional Meaning "Only If".',
     hint: 'Conditional Word Synonym For "If". Provided you help.',
-    image: 'house_chores.png',
+    image: 'questions/conditional/con_10.png',
     alt: 'Unos adultos ayudando en la casa',
     audio: '/src/assets/audio_questions/conditional/question10_audio.mp3'
   },
@@ -342,8 +342,9 @@ export const prepositionsQuestions: QuestionType[] = [
     correctAnswer: 'on',
     explanation: 'Use "On" With Days Of The Week.',
     hint: 'Day Of The Week → on Monday.',
-    image: 'questions/prepositions/calendar_monday.png',
-    alt: 'Un calendario mostrando el lunes'
+    image: 'questions/prepositions/pre_1.png',
+    alt: 'Un calendario mostrando el lunes',
+    audio: '/src/assets/audio_questions/prepositions/question1_audio.mp3'
   },
   {
     id: 'prep-2',
@@ -352,8 +353,9 @@ export const prepositionsQuestions: QuestionType[] = [
     correctAnswer: 'under',
     explanation: '"Under" Shows A Lower Position Directly Beneath Something.',
     hint: 'Below The Surface. The cat is under the table.',
-    image: 'questions/prepositions/cat_under_table.png',
-    alt: 'Un gato debajo de una mesa'
+    image: 'questions/prepositions/pre_2.png',
+    alt: 'Un gato debajo de una mesa',
+    audio: '/src/assets/audio_questions/prepositions/question2_audio.mp3'
   },
   {
     id: 'prep-3',
@@ -362,8 +364,9 @@ export const prepositionsQuestions: QuestionType[] = [
     correctAnswer: 'in',
     explanation: 'Use "In" With Years, Months, Seasons.',
     hint: 'Year → in 1999.',
-    image: 'questions/prepositions/birth_year.png',
-    alt: 'Un hombre nacido en 1999'
+    image: 'questions/prepositions/pre_3.png',
+    alt: 'Un hombre nacido en 1999',
+    audio: '/src/assets/audio_questions/prepositions/question3_audio.mp3'
   },
   {
     id: 'prep-4',
@@ -372,18 +375,20 @@ export const prepositionsQuestions: QuestionType[] = [
     correctAnswer: 'at',
     explanation: 'Use "At" For Precise Times.',
     hint: 'Exact Clock Time → at noon.',
-    image: 'questions/prepositions/clock_noon.png',
-    alt: 'Un reloj mostrando la hora de la mañana'
+    image: 'questions/prepositions/pre_4.png',
+    alt: 'Un reloj mostrando la hora de la mañana',
+    audio: '/src/assets/audio_questions/prepositions/question4_audio.mp3'
   },
   {
     id: 'prep-5',
-    text: 'She walked _____ the bridge.',
+    text: 'He walked _____ the bridge.',
     options: ['over', 'across', 'through', 'behind'],
     correctAnswer: 'across',
     explanation: '"Across" Indicates Movement From One Side To The Other Side Of Something Flat.',
-    hint: 'Side-To-Side Movement. She walked across the bridge.',
-    image: 'questions/prepositions/walking_bridge.png',
-    alt: 'Una persona caminando sobre un puente'
+    hint: 'Side-To-Side Movement. He walked across the bridge.',
+    image: 'questions/prepositions/pre_5.png',
+    alt: 'Una persona caminando sobre un puente',
+    audio: '/src/assets/audio_questions/prepositions/question5_audio.mp3'
   },
   {
     id: 'prep-6',
@@ -392,8 +397,9 @@ export const prepositionsQuestions: QuestionType[] = [
     correctAnswer: 'between',
     explanation: '"Between" Is Used With Two Distinct Points.',
     hint: 'Two Places → between A and B.',
-    image: 'questions/prepositions/library_location.png',
-    alt: 'Una biblioteca entre un banco y un despacho de correos'
+    image: 'questions/prepositions/pre_6.png',
+    alt: 'Una biblioteca entre un banco y un despacho de correos',
+    audio: '/src/assets/audio_questions/prepositions/question6_audio.mp3'
   },
   {
     id: 'prep-7',
@@ -402,8 +408,9 @@ export const prepositionsQuestions: QuestionType[] = [
     correctAnswer: 'through',
     explanation: '"Through" Describes Movement Inside And Out The Other Side Of An Enclosed Space.',
     hint: 'Inside Then Out. Drove through the tunnel.',
-    image: 'questions/prepositions/tunnel_drive.png',
-    alt: 'Un coche pasando por un túnel'
+    image: 'questions/prepositions/pre_7.png',
+    alt: 'Un coche pasando por un túnel',
+    audio: '/src/assets/audio_questions/prepositions/question7_audio.mp3'
   },
   {
     id: 'prep-8',
@@ -412,8 +419,9 @@ export const prepositionsQuestions: QuestionType[] = [
     correctAnswer: 'on',
     explanation: '"On" Is Used For Surfaces.',
     hint: 'Attached To A Vertical Surface → on the wall.',
-    image: 'questions/prepositions/wall_picture.png',
-    alt: 'Un cuadro colgado en la pared'
+    image: 'questions/prepositions/pre_8.png',
+    alt: 'Un cuadro colgado en la pared',
+    audio: '/src/assets/audio_questions/prepositions/question8_audio.mp3'
   },
   {
     id: 'prep-9',
@@ -422,8 +430,9 @@ export const prepositionsQuestions: QuestionType[] = [
     correctAnswer: 'at',
     explanation: 'Use "At" With Specific Public Places (Airport, Station).',
     hint: 'Specific Point → at the airport.',
-    image: 'questions/prepositions/airport_arrival.png',
-    alt: 'Un hombre llegando a un aeropuerto'
+    image: 'questions/prepositions/pre_9.png',
+    alt: 'Un hombre llegando a un aeropuerto',
+    audio: '/src/assets/audio_questions/prepositions/question9_audio.mp3'
   },
   {
     id: 'prep-10',
@@ -432,8 +441,9 @@ export const prepositionsQuestions: QuestionType[] = [
     correctAnswer: 'in',
     explanation: '"In" Indicates Being Inside A Three-Dimensional Space (Garden, Room, City).',
     hint: 'Enclosed Area → in the garden.',
-    image: 'questions/prepositions/garden_play.png',
-    alt: 'Unos niños jugando en el jardín'
+    image: 'questions/prepositions/pre_10.png',
+    alt: 'Unos niños jugando en el jardín',
+    audio: '/src/assets/audio_questions/prepositions/question10_audio.mp3'
   },
 ];
 
@@ -446,8 +456,9 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'an',
     explanation: 'Use "An" Before Vowel Sounds.',
     hint: 'Engineer Starts With A Vowel Sound. He is an engineer.',
-    image: 'questions/articles/articles_question1_engineer.png',
-    alt: 'Un hombre trabajando como ingeniero'
+    image: 'questions/articles/art_1.png',
+    alt: 'Un hombre trabajando como ingeniero',
+    audio: '/src/assets/audio_questions/articles/question1_audio.mp3'
   },
   {
     id: 'art-2',
@@ -456,8 +467,9 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'the',
     explanation: 'Definite Article "The" For Something Both Speaker And Listener Know.',
     hint: 'Specific Salt On The Table → the salt.',
-    image: 'questions/articles/articles_question2_salt_shaker.png',
-    alt: 'Un shaker de sal'
+    image: 'questions/articles/art_2.png',
+    alt: 'Un shaker de sal',
+    audio: '/src/assets/audio_questions/articles/question2_audio.mp3'
   },
   {
     id: 'art-3',
@@ -466,8 +478,9 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'the',
     explanation: 'Use "The" With Unique Things (Only One).',
     hint: 'Only One Capital → the capital.',
-    image: 'questions/articles/articles_question3_paris_city.png',
-    alt: 'Paris city'
+    image: 'questions/articles/art_3.png',
+    alt: 'Paris city',
+    audio: '/src/assets/audio_questions/articles/question3_audio.mp3'
   },
   {
     id: 'art-4',
@@ -476,8 +489,9 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'a',
     explanation: 'Indefinite Article Introduces A Singular, Unspecified Item.',
     hint: 'First Mention. I bought a new phone.',
-    image: 'questions/articles/articles_question4_new_phone.png',
-    alt: 'Un teléfono nuevo'
+    image: 'questions/articles/art_4.png',
+    alt: 'Un teléfono nuevo',
+    audio: '/src/assets/audio_questions/articles/question4_audio.mp3'
   },
   {
     id: 'art-5',
@@ -486,8 +500,9 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'the',
     explanation: 'Superlatives Always Take "The".',
     hint: '"Highest" = Superlative. the highest mountain.',
-    image: 'questions/articles/articles_question5_mount_everest.png',
-    alt: 'El monte Everest'
+    image: 'questions/articles/art_5.png',
+    alt: 'El monte Everest',
+    audio: '/src/assets/audio_questions/articles/question5_audio.mp3'
   },
   {
     id: 'art-6',
@@ -496,8 +511,9 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'the',
     explanation: 'Musical Instruments Generally Use "The".',
     hint: 'Instrument Rule. She plays the piano.',
-    image: 'questions/articles/articles_question6_piano_player.png',
-    alt: 'Una persona tocando el piano'
+    image: 'questions/articles/art_6.png',
+    alt: 'Una persona tocando el piano',
+    audio: '/src/assets/audio_questions/articles/question6_audio.mp3'
   },
   {
     id: 'art-7',
@@ -506,8 +522,9 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: '—',
     explanation: 'Uncountable Nouns Used Generally Take No Article.',
     hint: 'Coffee In General → No Article.',
-    image: 'questions/articles/articles_question7_coffee.png',
-    alt: 'Una taza de café'
+    image: 'questions/articles/art_7.png',
+    alt: 'Una taza de café',
+    audio: '/src/assets/audio_questions/articles/question7_audio.mp3'
   },
   {
     id: 'art-8',
@@ -516,8 +533,9 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'the',
     explanation: 'Countries With Plural Names Take "The".',
     hint: 'Plural Country Name. the Netherlands.',
-    image: 'questions/articles/articles_question8_netherlands.png',
-    alt: 'Una ciudad con edificios y una torre'
+    image: 'questions/articles/art_8.png',
+    alt: 'Una ciudad con edificios y una torre',
+    audio: '/src/assets/audio_questions/articles/question8_audio.mp3'
   },
   {
     id: 'art-9',
@@ -526,8 +544,9 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: 'the',
     explanation: 'Context Makes "Sky" Specific → Use "The".',
     hint: 'Specific Object Overhead → the sky.',
-    image: 'questions/articles/articles_question9_starry_sky.png',
-    alt: 'Un cielo estrellado'
+    image: 'questions/articles/art_9.png',
+    alt: 'Un cielo estrellado',
+    audio: '/src/assets/audio_questions/articles/question9_audio.mp3'
   },
   {
     id: 'art-10',
@@ -536,8 +555,9 @@ export const articlesQuestions: QuestionType[] = [
     correctAnswer: '—',
     explanation: 'Institution Use ("Go To School") Takes Zero Article.',
     hint: 'Generic Purpose Of The Institution → No Article.',
-    image: 'questions/articles/articles_question10_school.png',
-    alt: 'Un edificio de escuela'
+    image: 'questions/articles/art_10.png',
+    alt: 'Un edificio de escuela',
+    audio: '/src/assets/audio_questions/articles/question10_audio.mp3'
   },
 ];
 
