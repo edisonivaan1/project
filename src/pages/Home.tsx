@@ -54,7 +54,7 @@ const Home: React.FC = () => {
                   Perfect for B1 level students looking to improve their language skills.
                 </p>
                 <Button 
-                  onClick={() => navigate('/topics')}
+                  onClick={() => navigate('/signup')}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-32 py-3 text-lg font-medium rounded-full flex items-center md:mx-0 w-auto"
                   variant="custom"
                 >
