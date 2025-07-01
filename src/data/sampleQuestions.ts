@@ -4,7 +4,7 @@ import { QuestionType } from '../types';
 export const presentTensesQuestions: QuestionType[] = [
   {
     id: 'pt-1',
-    text: 'Ben _____ (work) in a hospital.',
+    text: 'Ben _____ in a hospital.',
     options: ['work', 'works', 'is work', 'is works'],
     correctAnswer: 'works',
     explanation: '"Ben" is a third-person singular subject (like "he"). In the simple present, we add "-s" to the verb "work."',
@@ -15,7 +15,7 @@ export const presentTensesQuestions: QuestionType[] = [
   },
   {
     id: 'pt-2',
-    text: '_____ you _____ (like) fish?',
+    text: '_____ you _____ fish?',
     options: ['Do - like', 'Does - like', 'Do - likes', 'Does - likes'],
     correctAnswer: 'Do - like',
     explanation: 'To form a simple present question with "you," we use the auxiliary verb "do" before the subject. The main verb "like" remains in its base form.',
@@ -26,7 +26,7 @@ export const presentTensesQuestions: QuestionType[] = [
   },
   {
     id: 'pt-3',
-    text: 'Matthew never _____ (watch) television.',
+    text: 'Matthew never _____ television.',
     options: ['watch', 'are watch', 'watches', 'is matches'],
     correctAnswer: 'watches',
     explanation: '"Matthew" is a third-person singular subject (like "he"). Verbs ending in -ch (like "watch") add "-es" in the simple present for third-person singular subjects.',
@@ -48,7 +48,7 @@ export const presentTensesQuestions: QuestionType[] = [
   },
   {
     id: 'pt-5',
-    text: 'They always ______ (eat) dinner at 7 o\'clock.',
+    text: 'They always ______ dinner at 7 o\'clock.',
     options: ['eat', 'is eat', 'are eats', 'eats'],
     correctAnswer: 'boils',
     explanation: '"They" is a plural subject. For "I, you, we, they," the verb remains in its base form in the simple present.',
@@ -59,7 +59,7 @@ export const presentTensesQuestions: QuestionType[] = [
   },
   {
     id: 'pt-6',
-    text: 'Valerie ______ (study) English at university.',
+    text: 'Valerie ______ English at university.',
     options: ['study', 'studies', 'is study', 'is studies'],
     correctAnswer: 'do / go',
     explanation: '"Valerie" is a third-person singular subject (like "she"). Verbs ending in a consonant + "y" (like "study") change "y" to "i" and add "-es" in the simple present for third-person singular.',
@@ -81,7 +81,7 @@ export const presentTensesQuestions: QuestionType[] = [
   },
   {
     id: 'pt-8',
-    text: 'She _____(finish) her homework already.',
+    text: 'She _____ her homework already.',
     options: ['finishes', 'is finishing', 'has finished', 'finish'],
     correctAnswer: 'has finished',
     explanation: 'Present Perfect Shows A Recently Completed Action Relevant Now.',
@@ -92,7 +92,7 @@ export const presentTensesQuestions: QuestionType[] = [
   },
   {
     id: 'pt-9',
-    text: 'The sun _____(rise) in the east.',
+    text: 'The sun _____ in the east.',
     options: ['rise', 'rises', 'is rising', 'has risen'],
     correctAnswer: 'rises',
     explanation: 'Facts And Universal Truths Use Present Simple.',
