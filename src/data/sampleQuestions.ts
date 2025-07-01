@@ -458,7 +458,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'Are you describing the specific action your phone helps you achieve, or the general activity it\'s designed for?',
     image: 'questions/gerundsInfinitives/gi-1.png',
     alt: 'Un hombre trabajando como ingeniero',
-    audio: '/src/assets/audio_questions/articles/question1_audio.mp3'
+    audio: '/src/assets/audio_questions/gerundsInfinitives/question1_audio.mp3'
   },
   {
     id: 'art-2',
@@ -469,7 +469,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'Think about whether you\'re emphasizing the purposeful act they perform with the phone, or the function/activity the phone provides.',
     image: 'questions/gerundsInfinitives/gi-2.png',
     alt: 'Un shaker de sal',
-    audio: '/src/assets/audio_questions/articles/question2_audio.mp3'
+    audio: '/src/assets/audio_questions/gerundsInfinitives/question2_audio.mp3'
   },
   {
     id: 'art-3',
@@ -480,7 +480,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'Is the emphasis on the action of capturing an image, or the role of the phone in the act of photography?',
     image: 'questions/gerundsInfinitives/gi-3.png',
     alt: 'Paris city',
-    audio: '/src/assets/audio_questions/articles/question3_audio.mp3'
+    audio: '/src/assets/audio_questions/gerundsInfinitives/question3_audio.mp3'
   },
   {
     id: 'art-4',
@@ -491,7 +491,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'What was the action I intended?',
     image: 'questions/gerundsInfinitives/gi-4.png',
     alt: 'Un teléfono nuevo',
-    audio: '/src/assets/audio_questions/articles/question4_audio.mp3'
+    audio: '/src/assets/audio_questions/gerundsInfinitives/question4_audio.mp3'
   },
   {
     id: 'art-5',
@@ -502,7 +502,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'What is its main function?',
     image: 'questions/gerundsInfinitives/gi-5.png',
     alt: 'El monte Everest',
-    audio: '/src/assets/audio_questions/articles/question5_audio.mp3'
+    audio: '/src/assets/audio_questions/gerundsInfinitives/question5_audio.mp3'
   },
   {
     id: 'art-6',
@@ -513,7 +513,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'What activity does she do with it?',
     image: 'questions/gerundsInfinitives/gi-6.png',
     alt: 'Una persona tocando el piano',
-    audio: '/src/assets/audio_questions/articles/question6_audio.mp3'
+    audio: '/src/assets/audio_questions/gerundsInfinitives/question6_audio.mp3'
   },
   {
     id: 'art-7',
@@ -524,7 +524,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'Is she buying it so that she can perform an action, or for a general type of cooking?',
     image: 'questions/gerundsInfinitives/gi-7.png',
     alt: 'Una taza de café',
-    audio: '/src/assets/audio_questions/articles/question7_audio.mp3'
+    audio: '/src/assets/audio_questions/gerundsInfinitives/question7_audio.mp3' 
   },
   {
     id: 'art-8',
@@ -535,7 +535,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'What was the reason for his trip? Was it to do something specific, or for a general activity that happens there?',
     image: 'questions/gerundsInfinitives/gi-8.png',
     alt: 'Una ciudad con edificios y una torre',
-    audio: '/src/assets/audio_questions/articles/question8_audio.mp3'
+    audio: '/src/assets/audio_questions/gerundsInfinitives/question8_audio.mp3'
   },
   {
     id: 'art-9',
@@ -546,7 +546,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'Consider if the map helps you achieve a particular outcome, or if its use is related to a broader activity.',
     image: 'questions/gerundsInfinitives/gi-9.png',
     alt: 'Un cielo estrellado',
-    audio: '/src/assets/audio_questions/articles/question9_audio.mp3'
+    audio: '/src/assets/audio_questions/gerundsInfinitives/question9_audio.mp3'
   },
   {
     id: 'art-10',
@@ -557,7 +557,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'Are they wearing them in order to perform a certain action, or for a defensive purpose?',
     image: 'questions/gerundsInfinitives/gi-10.png',
     alt: 'Un edificio de escuela',
-    audio: '/src/assets/audio_questions/articles/question10_audio.mp3'
+    audio: '/src/assets/audio_questions/gerundsInfinitives/question10_audio.mp3'
   },
 ];
 
