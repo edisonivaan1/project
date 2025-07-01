@@ -30,7 +30,7 @@ export const grammarTopics: GrammarTopic[] = [
   },
   {
     id: 'prepositions',
-    title: 'PRESENT PERFECT CONTINUOS',
+    title: 'PARTICIPLES AS ADJECTIVES',
     description: 'Learn To Use Prepositions Of Time, Place, And Movement Correctly.',
     icon: 'MapPin',
     difficulty: 'medium',

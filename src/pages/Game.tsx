@@ -56,6 +56,8 @@ const Game: React.FC = () => {
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const [writtenAnswer, setWrittenAnswer] = useState<string>('');
+  const [draggedAnswers, setDraggedAnswers] = useState<string[]>([]);
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
   const [score, setScore] = useState(0);
   const [showHint, setShowHint] = useState(false);
@@ -153,7 +155,7 @@ const Game: React.FC = () => {
 
   // Efecto para mezclar las opciones cuando cambia la pregunta
   useEffect(() => {
-    if (currentQuestion && currentQuestion.options) {
+    if (currentQuestion && currentQuestion.options && !currentQuestion.isFillInTheBlank) {
       setShuffledOptions(shuffleOptions(currentQuestion.options));
     }
   }, [currentQuestion]);
@@ -172,6 +174,8 @@ const Game: React.FC = () => {
       const status = getQuestionStatus(topicId!, index);
       if (status === 'unanswered') {
         setSelectedAnswer(null);
+        setWrittenAnswer('');
+        setDraggedAnswers([]);
         setIsAnswerSubmitted(false);
         setShowHint(false);
         setAttempts(0);
@@ -181,6 +185,8 @@ const Game: React.FC = () => {
         const attempt = getCurrentAttempt(topicId!);
         if (attempt) {
           setSelectedAnswer(attempt.answers[index] || null);
+          setWrittenAnswer(attempt.answers[index] || '');
+          setDraggedAnswers(attempt.answers[index] ? attempt.answers[index].split(', ') : []);
           setIsCorrect(status === 'correct');
         }
       }
@@ -220,6 +226,85 @@ const Game: React.FC = () => {
       setLastQuestionIndex(topicId, nextQuestionIndex);
     }
   };
+
+  const handleWrittenAnswerSubmit = () => {
+    if (!isAnswerSubmitted && topicId && writtenAnswer.trim()) {
+      setIsAnswerSubmitted(true);
+      
+      const correctAnswer = Array.isArray(currentQuestion.correctAnswer) 
+        ? currentQuestion.correctAnswer[0] 
+        : currentQuestion.correctAnswer;
+      
+      const isAnswerCorrect = writtenAnswer.trim().toLowerCase() === correctAnswer.toLowerCase();
+      setIsCorrect(isAnswerCorrect);
+      
+      if (isAnswerCorrect) {
+        setScore(prev => prev + 1);
+        updateQuestionStatus(topicId, currentQuestionIndex, 'correct');
+      } else {
+        setAttempts(prev => prev + 1);
+        updateQuestionStatus(topicId, currentQuestionIndex, 'incorrect');
+      }
+
+      // Save answer to attempt
+      submitAnswer(topicId, currentQuestionIndex, writtenAnswer.trim());
+
+      // Update progress with current score
+      const nextQuestionIndex = currentQuestionIndex + 1;
+      const newScore = score + (isAnswerCorrect ? 1 : 0);
+      setProgress(topicId, newScore, questions.length);
+      setLastQuestionIndex(topicId, nextQuestionIndex);
+    }
+  };
+
+  const handleDragStart = (e: React.DragEvent, option: string) => {
+    e.dataTransfer.setData('text/plain', option);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e: React.DragEvent, dropIndex: number) => {
+    e.preventDefault();
+    const draggedOption = e.dataTransfer.getData('text/plain');
+    
+    setDraggedAnswers(prev => {
+      const newAnswers = [...prev];
+      newAnswers[dropIndex] = draggedOption;
+      return newAnswers;
+    });
+  };
+
+  const handleDragAndDropSubmit = () => {
+    if (!isAnswerSubmitted && topicId && draggedAnswers.length > 0) {
+      setIsAnswerSubmitted(true);
+      
+      const correctAnswer = currentQuestion.correctAnswer;
+      const isAnswerCorrect = Array.isArray(correctAnswer) 
+        ? JSON.stringify(draggedAnswers) === JSON.stringify(correctAnswer)
+        : draggedAnswers[0] === correctAnswer;
+      
+      setIsCorrect(isAnswerCorrect);
+      
+      if (isAnswerCorrect) {
+        setScore(prev => prev + 1);
+        updateQuestionStatus(topicId, currentQuestionIndex, 'correct');
+      } else {
+        setAttempts(prev => prev + 1);
+        updateQuestionStatus(topicId, currentQuestionIndex, 'incorrect');
+      }
+
+      // Save answer to attempt
+      submitAnswer(topicId, currentQuestionIndex, draggedAnswers.join(', '));
+
+      // Update progress with current score
+      const nextQuestionIndex = currentQuestionIndex + 1;
+      const newScore = score + (isAnswerCorrect ? 1 : 0);
+      setProgress(topicId, newScore, questions.length);
+      setLastQuestionIndex(topicId, nextQuestionIndex);
+    }
+  };
   
   const handleSubmitAnswer = () => {
     if (!selectedAnswer || isAnswerSubmitted) return;
@@ -248,6 +333,8 @@ const Game: React.FC = () => {
       // If not the last question, go to next
       setCurrentQuestionIndex(prev => prev + 1);
       setSelectedAnswer(null);
+      setWrittenAnswer('');
+      setDraggedAnswers([]);
       setIsAnswerSubmitted(false);
       setShowHint(false);
       setAttempts(0);
@@ -257,6 +344,8 @@ const Game: React.FC = () => {
   const handleRestartGame = () => {
     setCurrentQuestionIndex(0);
     setSelectedAnswer(null);
+    setWrittenAnswer('');
+    setDraggedAnswers([]);
     setIsAnswerSubmitted(false);
     setScore(0);
     setShowHint(false);
@@ -524,47 +613,153 @@ const Game: React.FC = () => {
                 </div>
               )}
               
-              {/* Options */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                {shuffledOptions.map((option, index) => {
-                  const isCorrect = option === currentQuestion.correctAnswer;
-                  const isSelected = option === selectedAnswer;
-                  
-                  let optionClass = "p-4 rounded-lg border-2 transition-all duration-300 flex justify-center items-center";
-                  
-                  if (isAnswerSubmitted) {
-                    if (isCorrect) {
-                      optionClass += " border-[rgb(var(--color-correct-option))] bg-[rgb(var(--color-correct-option)/0.1)] text-[rgb(var(--color-correct-option))]";
-                    } else if (isSelected) {
-                      optionClass += " border-[rgb(var(--color-incorrect-option))] bg-[rgb(var(--color-incorrect-option)/0.45)] text-[rgb(var(--color-incorrect-option))]";
-                    } else {
-                      optionClass += " border-gray-200 opacity-60";
-                    }
-                  } else {
-                    optionClass += isSelected 
-                      ? " border-[rgb(var(--color-primary))] bg-[rgb(var(--color-primary)/0.1)]" 
-                      : " border-gray-200 hover:border-[rgb(var(--color-primary)/0.5)]";
-                  }
-                  
-                  return (
-                    <button
-                      key={index}
-                      className={optionClass}
-                      onClick={() => handleAnswerSelect(option)}
+              {/* Options, Text Input, or Drag and Drop */}
+              {currentQuestion.isFillInTheBlank ? (
+                <div className="mb-6">
+                  <div className="flex flex-col gap-4">
+                    <input
+                      type="text"
+                      value={writtenAnswer}
+                      onChange={(e) => setWrittenAnswer(e.target.value)}
+                      placeholder="Escribe tu respuesta aquí..."
+                      className="p-4 border-2 border-gray-200 rounded-lg focus:border-[rgb(var(--color-primary))] focus:outline-none transition-all duration-300"
                       disabled={isAnswerSubmitted}
-                      style={{ height: '40px' }}
-                    >
-                      <span className="text-center">{option}</span>
-                      {isAnswerSubmitted && isCorrect && (
-                        <CheckCircle className="h-5 w-5 text-success ml-2" />
-                      )}
-                      {isAnswerSubmitted && isSelected && !isCorrect && (
-                        <XCircle className="h-5 w-5 text-error ml-2" />
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' && !isAnswerSubmitted && writtenAnswer.trim()) {
+                          handleWrittenAnswerSubmit();
+                        }
+                      }}
+                    />
+                    {!isAnswerSubmitted && (
+                      <Button
+                        onClick={handleWrittenAnswerSubmit}
+                        disabled={!writtenAnswer.trim()}
+                        className="ml-auto h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000]"
+                      >
+                        Enviar Respuesta
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ) : currentQuestion.isDragAndDrop ? (
+                <div className="mb-6">
+                  <div className="space-y-6">
+                    {/* Drag and Drop Area */}
+                    <div className="bg-gray-50 p-4 rounded-lg border-2 border-dashed border-gray-300">
+                      <div className="text-center mb-4">
+                        <p className="text-sm text-gray-600 mb-2">Arrastra las palabras a los espacios en blanco</p>
+                        <div className="flex flex-wrap gap-2 justify-center">
+                          {(() => {
+                            const textParts = currentQuestion.text.split('______');
+                            const blanks = textParts.length - 1;
+                            
+                            return textParts.map((part, index) => (
+                              <React.Fragment key={index}>
+                                <span className="text-lg">{part}</span>
+                                {index < textParts.length - 1 && (
+                                  <div
+                                    className="inline-block w-32 h-10 border-2 border-dashed border-gray-400 rounded-lg flex items-center justify-center bg-white"
+                                    onDragOver={handleDragOver}
+                                    onDrop={(e) => handleDrop(e, index)}
+                                  >
+                                    {draggedAnswers[index] ? (
+                                      <span className="text-sm font-medium text-gray-700">{draggedAnswers[index]}</span>
+                                    ) : (
+                                      <span className="text-xs text-gray-400">Soltar aquí</span>
+                                    )}
+                                  </div>
+                                )}
+                              </React.Fragment>
+                            ));
+                          })()}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Drag Options */}
+                    <div className="bg-white p-4 rounded-lg border-2 border-gray-200">
+                      <p className="text-sm font-medium text-gray-700 mb-3">Opciones disponibles:</p>
+                      <div className="flex flex-wrap gap-3">
+                        {currentQuestion.dragOptions?.map((option, index) => {
+                          const isUsed = draggedAnswers.includes(option);
+                          const usedCount = draggedAnswers.filter(answer => answer === option).length;
+                          const availableCount = currentQuestion.dragOptions?.filter(opt => opt === option).length || 0;
+                          const isAvailable = !isUsed || usedCount < availableCount;
+                          
+                          return (
+                            <div
+                              key={`${option}-${index}`}
+                              draggable={isAvailable && !isAnswerSubmitted}
+                              onDragStart={(e) => handleDragStart(e, option)}
+                              className={`px-4 py-2 rounded-lg border-2 cursor-move transition-all ${
+                                isAvailable && !isAnswerSubmitted
+                                  ? 'border-blue-300 bg-blue-50 hover:border-blue-400 hover:bg-blue-100'
+                                  : 'border-gray-200 bg-gray-100 cursor-not-allowed opacity-50'
+                              }`}
+                            >
+                              <span className="text-sm font-medium">{option}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    
+                    {/* Submit Button */}
+                    {!isAnswerSubmitted && (
+                      <div className="flex justify-center">
+                        <Button
+                          onClick={handleDragAndDropSubmit}
+                          disabled={draggedAnswers.length === 0}
+                          className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000]"
+                        >
+                          Verificar Respuesta
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                  {shuffledOptions.map((option, index) => {
+                    const isCorrect = option === currentQuestion.correctAnswer;
+                    const isSelected = option === selectedAnswer;
+                    
+                    let optionClass = "p-4 rounded-lg border-2 transition-all duration-300 flex justify-center items-center";
+                    
+                    if (isAnswerSubmitted) {
+                      if (isCorrect) {
+                        optionClass += " border-[rgb(var(--color-correct-option))] bg-[rgb(var(--color-correct-option)/0.1)] text-[rgb(var(--color-correct-option))]";
+                      } else if (isSelected) {
+                        optionClass += " border-[rgb(var(--color-incorrect-option))] bg-[rgb(var(--color-incorrect-option)/0.45)] text-[rgb(var(--color-incorrect-option))]";
+                      } else {
+                        optionClass += " border-gray-200 opacity-60";
+                      }
+                    } else {
+                      optionClass += isSelected 
+                        ? " border-[rgb(var(--color-primary))] bg-[rgb(var(--color-primary)/0.1)]" 
+                        : " border-gray-200 hover:border-[rgb(var(--color-primary)/0.5)]";
+                    }
+                    
+                    return (
+                      <button
+                        key={index}
+                        className={optionClass}
+                        onClick={() => handleAnswerSelect(option)}
+                        disabled={isAnswerSubmitted}
+                        style={{ height: '40px' }}
+                      >
+                        <span className="text-center">{option}</span>
+                        {isAnswerSubmitted && isCorrect && (
+                          <CheckCircle className="h-5 w-5 text-success ml-2" />
+                        )}
+                        {isAnswerSubmitted && isSelected && !isCorrect && (
+                          <XCircle className="h-5 w-5 text-error ml-2" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
               
               {/* Hint Section */}
               {showHint && (
@@ -580,10 +775,22 @@ const Game: React.FC = () => {
               {/* Explanation (shown after answer is submitted) */}
               {isAnswerSubmitted && (
                 <div className="space-y-4">
-                  <div className={`bg-${selectedAnswer === currentQuestion.correctAnswer ? 'success' : 'error'}/10 border border-${selectedAnswer === currentQuestion.correctAnswer ? 'success' : 'error'}/30 p-4 rounded-lg`}>
-                    <h3 className={`font-bold text-${selectedAnswer === currentQuestion.correctAnswer ? 'success' : 'error'} mb-2`}>
-                      {selectedAnswer === currentQuestion.correctAnswer ? 'Correct!' : 'Not quite right'}
+                  <div className={`bg-${isCorrect ? 'success' : 'error'}/10 border border-${isCorrect ? 'success' : 'error'}/30 p-4 rounded-lg`}>
+                    <h3 className={`font-bold text-${isCorrect ? 'success' : 'error'} mb-2`}>
+                      {isCorrect ? '¡Correcto!' : 'No es correcto'}
                     </h3>
+                    {currentQuestion.isFillInTheBlank && !isCorrect && (
+                      <p className="mb-2">
+                        <strong>Tu respuesta:</strong> {writtenAnswer.trim()}<br/>
+                        <strong>Respuesta correcta:</strong> {Array.isArray(currentQuestion.correctAnswer) ? currentQuestion.correctAnswer[0] : currentQuestion.correctAnswer}
+                      </p>
+                    )}
+                    {currentQuestion.isDragAndDrop && !isCorrect && (
+                      <p className="mb-2">
+                        <strong>Tu respuesta:</strong> {draggedAnswers.join(', ')}<br/>
+                        <strong>Respuesta correcta:</strong> {Array.isArray(currentQuestion.correctAnswer) ? currentQuestion.correctAnswer.join(', ') : currentQuestion.correctAnswer}
+                      </p>
+                    )}
                     <p>{currentQuestion.explanation}</p>
                   </div>
                   <div className="flex justify-end">
@@ -596,7 +803,7 @@ const Game: React.FC = () => {
                     >
                       {(() => {
                         const answeredQuestions = questions.filter((_, index) => getQuestionStatus(topicId!, index) !== 'unanswered').length;
-                        return answeredQuestions === questions.length ? 'See Results' : 'Next Question';
+                        return answeredQuestions === questions.length ? 'Ver Resultados' : 'Siguiente Pregunta';
                       })()}
                     </Button>
                   </div>

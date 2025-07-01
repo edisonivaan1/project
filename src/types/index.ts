@@ -34,4 +34,7 @@ export type QuestionType = {
   image?: string;
   alt?: string;
   audio?: string;
+  isFillInTheBlank?: boolean;
+  isDragAndDrop?: boolean;
+  dragOptions?: string[];
 };
