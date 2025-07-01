@@ -4,18 +4,52 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import bgLogin from '../assets/bgLogin.png';
 import logo from '../assets/logo_GrammarMasterPro.png';
+import { authService, handleAuthError } from '../services/api';
 
 const SignUpPage: React.FC = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    const firstName = formData.get('firstName') as string;
+    const lastName = formData.get('lastName') as string;
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    const confirmPassword = formData.get('confirmPassword') as string;
+    const securityQuestion = formData.get('securityQuestion') as string;
+    const securityAnswer = formData.get('securityAnswer') as string;
+
+    // Validación de contraseñas
+    if (password !== confirmPassword) {
+      toast.error('Las contraseñas no coinciden');
+      setIsLoading(false);
+      return;
+    }
+
+    // Validación de pregunta de seguridad
+    if (!securityQuestion) {
+      toast.error('Por favor selecciona una pregunta de seguridad');
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      // Simular registro exitoso
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Usar el servicio de API
+      const data = await authService.register({
+        firstName,
+        lastName,
+        email,
+        password,
+        confirmPassword,
+        securityQuestion,
+        securityAnswer
+      });
       
       // Mostrar notificación de éxito
       toast.success('¡Cuenta creada exitosamente! Redirigiendo...', {
@@ -33,7 +67,7 @@ const SignUpPage: React.FC = () => {
       });
     } catch (error) {
       console.error('Error en el registro:', error);
-      toast.error('Error al crear la cuenta. Inténtalo de nuevo.');
+      toast.error(handleAuthError(error));
       setIsLoading(false);
     }
   };
@@ -131,29 +165,97 @@ const SignUpPage: React.FC = () => {
               <label htmlFor="password" className="block text-sm font-extrabold text-gray-700 mb-1">
                 Password
               </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                placeholder="Create a password"
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  required
+                  className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                  placeholder="Create a password"
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
+                    </svg>
+                  ) : (
+                    <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
             
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-extrabold text-gray-700 mb-1">
                 Confirm Password
               </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                autoComplete="new-password"
+              <div className="relative">
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  required
+                  className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                  placeholder="Confirm your password"
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? (
+                    <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
+                    </svg>
+                  ) : (
+                    <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+            </div>
+            
+            <div>
+              <label htmlFor="securityQuestion" className="block text-sm font-extrabold text-gray-700 mb-1">
+                Security Question
+              </label>
+              <select
+                id="securityQuestion"
+                name="securityQuestion"
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                placeholder="Confirm your password"
+              >
+                <option value="">Select a security question</option>
+                <option value="What is the name of your first pet?">What is the name of your first pet?</option>
+                <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+                <option value="What is your favorite book?">What is your favorite book?</option>
+                <option value="What city were you born in?">What city were you born in?</option>
+              </select>
+            </div>
+            
+            <div>
+              <label htmlFor="securityAnswer" className="block text-sm font-extrabold text-gray-700 mb-1">
+                Security Answer
+              </label>
+              <input
+                id="securityAnswer"
+                name="securityAnswer"
+                type="text"
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                placeholder="Enter your answer"
               />
             </div>
             
