@@ -124,6 +124,7 @@ export const pastTensesQuestions: QuestionType[] = [
     hint: 'Ongoing action interrupted.',
     image: 'questions/pastTense/pat-1.png',
     alt: 'Una fiesta vacía',
+    isFillInTheBlank: true,
     audio: '/src/assets/audio_questions/past_question1_audio.mp3'
   },
   {
@@ -134,6 +135,7 @@ export const pastTensesQuestions: QuestionType[] = [
     hint: 'What happened first of the two?',
     image: 'questions/pastTense/pat-2.png',
     alt: 'Un hombre cocinando mientras el teléfono suena',
+    isFillInTheBlank: true,
     audio: '/src/assets/audio_questions/past_question2_audio.mp3'
   },
   {
@@ -144,8 +146,9 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Simple For Repeated Actions In The Past.',
     hint: 'Childhood Habit → Past Simple. I played soccer every Sunday.',
     image: 'questions/pastTense/past_tense_question3_child_soccer.png',
-    alt: 'Un niño jugando fútbol'
-    
+    alt: 'Un niño jugando fútbol',
+    isFillInTheBlank: true,
+    audio: '/src/assets/audio_questions/past_question3_audio.mp3'
   },
   {
     id: 'past-4',
@@ -155,7 +158,9 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Perfect Highlights The Earlier Past Action (Writing).',
     hint: 'First Write, Then Feel Relieved. She had written the letter.',
     image: 'questions/pastTense/past_tense_question4_writing_letter.png',
-    alt: 'Una persona escribiendo una carta'
+    alt: 'Una persona escribiendo una carta',
+    isFillInTheBlank: true,
+    audio: '/src/assets/audio_questions/past_question4_audio.mp3'
   },
   {
     id: 'past-5',
@@ -165,7 +170,9 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Continuous For An Ongoing Past Action Interrupted.',
     hint: 'Action In Progress → Past Continuous. They were watching TV.',
     image: 'watching_tv.png',
-    alt: 'Unos adultos viendo televisión'
+    alt: 'Unos adultos viendo televisión',
+    isFillInTheBlank: true,
+    audio: '/src/assets/audio_questions/past_question5_audio.mp3'
   },
   {
     id: 'past-6',
@@ -175,7 +182,9 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Perfect Shows Completion Before Another Past Event.',
     hint: 'Seat Finding Happened Earlier. We had found our seats.',
     image: 'questions/pastTense/past_tense_question6_movie_seats.png',
-    alt: 'Unos adultos buscando sus asientos en una sala de cine'
+    alt: 'Unos adultos buscando sus asientos en una sala de cine',
+    isFillInTheBlank: true,
+    audio: '/src/assets/audio_questions/past_question6_audio.mp3'
   },
   {
     id: 'past-7',
@@ -185,7 +194,9 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Simple For A Finished Past Situation With A Specific Time ("Last Year").',
     hint: 'Specific Past Time → Past Simple. He lived in Berlin last year.',
     image: 'questions/pastTense/past_tense_question7_berlin_city.png',
-    alt: 'Una ciudad con edificios y una torre'
+    alt: 'Una ciudad con edificios y una torre',
+    isFillInTheBlank: true,
+    audio: '/src/assets/audio_questions/past_question7_audio.mp3'
   },
   {
     id: 'past-8',
@@ -195,7 +206,9 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Continuous Describes The Activity In Progress During The Interruption.',
     hint: 'Focus On Ongoing Action. What were you doing?',
     image: 'phone_call.png',
-    alt: 'Un teléfono sonando'
+    alt: 'Un teléfono sonando',
+    isFillInTheBlank: true,
+    audio: '/src/assets/audio_questions/past_question8_audio.mp3'
   },
   {
     id: 'past-9',
@@ -205,7 +218,9 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Perfect Explains The Reason For A Past State.',
     hint: 'Work Finished Before Feeling Tired. She had worked all day.',
     image: 'questions/pastTense/past_tense_question9_tired_worker.png',
-    alt: 'Un trabajador cansado'
+    alt: 'Un trabajador cansado',
+    isFillInTheBlank: true,
+    audio: '/src/assets/audio_questions/past_question9_audio.mp3'
   },
   {
     id: 'past-10',
@@ -215,7 +230,9 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Simple Is Used With Finished Time Adverbs Like "Yesterday".',
     hint: 'Completed Trip. We went to the beach yesterday.',
     image: 'beach_day.png',
-    alt: 'Unos adultos en la playa'
+    alt: 'Unos adultos en la playa',
+    isFillInTheBlank: true,
+    audio: '/src/assets/audio_questions/past_question10_audio.mp3'
   },
 ];
 
@@ -337,112 +354,122 @@ export const conditionalsQuestions: QuestionType[] = [
 export const prepositionsQuestions: QuestionType[] = [
   {
     id: 'prep-1',
-    text: 'We will meet _____ Monday.',
-    options: ['in', 'on', 'at', 'by'],
-    correctAnswer: 'on',
-    explanation: 'Use "On" With Days Of The Week.',
-    hint: 'Day Of The Week → on Monday.',
-    image: 'questions/prepositions/pre_1.png',
-    alt: 'Un calendario mostrando el lunes',
+    text: 'That movie was incredibly ______. I couldn\'t stop watching it!',
+    correctAnswer: 'boring',
+    explanation: 'The movie is the source of the feeling, so it takes the -ing form.',
+    hint: 'Does the movie feel something, or does it make you feel something?',
+    image: 'questions/participles/movie_watching.png',
+    alt: 'Una persona viendo una película',
+    isDragAndDrop: true,
+    dragOptions: ['bored', 'boring'],
     audio: '/src/assets/audio_questions/prepositions/question1_audio.mp3'
   },
   {
     id: 'prep-2',
-    text: 'The cat is _____ the table.',
-    options: ['on', 'under', 'between', 'behind'],
-    correctAnswer: 'under',
-    explanation: '"Under" Shows A Lower Position Directly Beneath Something.',
-    hint: 'Below The Surface. The cat is under the table.',
-    image: 'questions/prepositions/pre_2.png',
-    alt: 'Un gato debajo de una mesa',
+    text: 'After working 10 hours, I felt completely ______.',
+    correctAnswer: 'tired',
+    explanation: 'The person experiences the feeling, so it takes the -ed form.',
+    hint: 'How do you feel?',
+    image: 'questions/participles/tired_worker.png',
+    alt: 'Un trabajador cansado',
+    isDragAndDrop: true,
+    dragOptions: ['tiring', 'tired'],
     audio: '/src/assets/audio_questions/prepositions/question2_audio.mp3'
   },
   {
     id: 'prep-3',
-    text: 'He was born _____ 1999.',
-    options: ['in', 'on', 'at', 'to'],
-    correctAnswer: 'in',
-    explanation: 'Use "In" With Years, Months, Seasons.',
-    hint: 'Year → in 1999.',
-    image: 'questions/prepositions/pre_3.png',
-    alt: 'Un hombre nacido en 1999',
+    text: 'The dog barked loudly, which was very ______ to the neighbors. They were very ______.',
+    correctAnswer: ['annoying', 'annoyed'],
+    explanation: 'The barking causes annoyance (annoying). The neighbors feel annoyed (annoyed).',
+    hint: 'What makes the noise, and who feels it?',
+    image: 'questions/participles/dog_barking.png',
+    alt: 'Un perro ladrando',
+    isDragAndDrop: true,
+    dragOptions: ['annoying', 'annoyed'],
     audio: '/src/assets/audio_questions/prepositions/question3_audio.mp3'
   },
   {
     id: 'prep-4',
-    text: 'Let\'s meet _____ noon.',
-    options: ['in', 'on', 'at', 'by'],
-    correctAnswer: 'at',
-    explanation: 'Use "At" For Precise Times.',
-    hint: 'Exact Clock Time → at noon.',
-    image: 'questions/prepositions/pre_4.png',
-    alt: 'Un reloj mostrando la hora de la mañana',
+    text: 'The rollercoaster ride was absolutely ______!',
+    correctAnswer: 'exciting',
+    explanation: 'The ride itself produces the feeling of excitement, so the -ing form is used.',
+    hint: 'Is the ride feeling excited?',
+    image: 'questions/participles/rollercoaster.png',
+    alt: 'Una montaña rusa',
+    isDragAndDrop: true,
+    dragOptions: ['excited', 'exciting'],
     audio: '/src/assets/audio_questions/prepositions/question4_audio.mp3'
   },
   {
     id: 'prep-5',
-    text: 'He walked _____ the bridge.',
-    options: ['over', 'across', 'through', 'behind'],
-    correctAnswer: 'across',
-    explanation: '"Across" Indicates Movement From One Side To The Other Side Of Something Flat.',
-    hint: 'Side-To-Side Movement. He walked across the bridge.',
-    image: 'questions/prepositions/pre_5.png',
-    alt: 'Una persona caminando sobre un puente',
+    text: 'She was so ______ when she heard the news; she couldn\'t believe it.',
+    correctAnswer: 'surprised',
+    explanation: 'The person experienced the surprise from the news.',
+    hint: 'How did she react?',
+    image: 'questions/participles/surprised_person.png',
+    alt: 'Una persona sorprendida',
+    isDragAndDrop: true,
+    dragOptions: ['surprising', 'surprised'],
     audio: '/src/assets/audio_questions/prepositions/question5_audio.mp3'
   },
   {
     id: 'prep-6',
-    text: 'The library is _____ the bank and the post office.',
-    options: ['between', 'among', 'behind', 'next'],
-    correctAnswer: 'between',
-    explanation: '"Between" Is Used With Two Distinct Points.',
-    hint: 'Two Places → between A and B.',
-    image: 'questions/prepositions/pre_6.png',
-    alt: 'Una biblioteca entre un banco y un despacho de correos',
+    text: 'Learning a new language can be very ______, but it\'s also very ______.',
+    correctAnswer: ['frustrating', 'rewarding'],
+    explanation: 'The process of learning causes frustration (frustrating) and provides rewards (rewarding).',
+    hint: 'What kind of experience is it, and what kind of results does it give?',
+    image: 'questions/participles/language_learning.png',
+    alt: 'Una persona aprendiendo idiomas',
+    isDragAndDrop: true,
+    dragOptions: ['frustrating', 'frustrated', 'rewarding', 'rewarded'],
     audio: '/src/assets/audio_questions/prepositions/question6_audio.mp3'
   },
   {
     id: 'prep-7',
-    text: 'We drove _____ the tunnel.',
-    options: ['along', 'through', 'over', 'into'],
-    correctAnswer: 'through',
-    explanation: '"Through" Describes Movement Inside And Out The Other Side Of An Enclosed Space.',
-    hint: 'Inside Then Out. Drove through the tunnel.',
-    image: 'questions/prepositions/pre_7.png',
-    alt: 'Un coche pasando por un túnel',
+    text: 'I find history books very ______.',
+    correctAnswer: 'interesting',
+    explanation: 'The books possess the quality that makes them interesting to read.',
+    hint: 'Do the books feel interest?',
+    image: 'questions/participles/history_books.png',
+    alt: 'Libros de historia',
+    isDragAndDrop: true,
+    dragOptions: ['interested', 'interesting'],
     audio: '/src/assets/audio_questions/prepositions/question7_audio.mp3'
   },
   {
     id: 'prep-8',
-    text: 'There is a picture _____ the wall.',
-    options: ['in', 'on', 'at', 'over'],
-    correctAnswer: 'on',
-    explanation: '"On" Is Used For Surfaces.',
-    hint: 'Attached To A Vertical Surface → on the wall.',
-    image: 'questions/prepositions/pre_8.png',
-    alt: 'Un cuadro colgado en la pared',
+    text: 'The sudden loud noise was quite ______, and the children felt very ______.',
+    correctAnswer: ['alarming', 'alarmed'],
+    explanation: 'The noise caused alarm (alarming), and the children felt alarm (alarmed).',
+    hint: 'What was the nature of the noise, and how did they feel?',
+    image: 'questions/participles/loud_noise.png',
+    alt: 'Un ruido fuerte',
+    isDragAndDrop: true,
+    dragOptions: ['alarming', 'alarmed'],
     audio: '/src/assets/audio_questions/prepositions/question8_audio.mp3'
   },
   {
     id: 'prep-9',
-    text: 'He arrived _____ the airport just in time.',
-    options: ['to', 'in', 'at', 'on'],
-    correctAnswer: 'at',
-    explanation: 'Use "At" With Specific Public Places (Airport, Station).',
-    hint: 'Specific Point → at the airport.',
-    image: 'questions/prepositions/pre_9.png',
-    alt: 'Un hombre llegando a un aeropuerto',
+    text: 'Climbing that mountain was the most ______ experience of my life. I was truly ______ by the view.',
+    correctAnswer: ['amazing', 'amazed'],
+    explanation: 'The experience caused amazement (amazing). The person felt amazement (amazed).',
+    hint: 'What kind of experience is it, and how does it make you feel?',
+    image: 'questions/participles/mountain_climbing.png',
+    alt: 'Escalada de montaña',
+    isDragAndDrop: true,
+    dragOptions: ['amazing', 'amazed'],
     audio: '/src/assets/audio_questions/prepositions/question9_audio.mp3'
   },
   {
     id: 'prep-10',
-    text: 'The kids are playing _____ the garden.',
-    options: ['in', 'on', 'at', 'under'],
-    correctAnswer: 'in',
-    explanation: '"In" Indicates Being Inside A Three-Dimensional Space (Garden, Room, City).',
-    hint: 'Enclosed Area → in the garden.',
-    image: 'questions/prepositions/pre_10.png',
-    alt: 'Unos niños jugando en el jardín',
+    text: 'The exam results were very ______. The students were all ______.',
+    correctAnswer: ['disappointing', 'disappointed'],
+    explanation: 'The results caused disappointment (disappointing). The students felt disappointment (disappointed).',
+    hint: 'What kind of results were they, and how did the students feel about them?',
+    image: 'questions/participles/exam_results.png',
+    alt: 'Resultados de examen',
+    isDragAndDrop: true,
+    dragOptions: ['disappointing', 'disappointed'],
     audio: '/src/assets/audio_questions/prepositions/question10_audio.mp3'
   },
 ];
