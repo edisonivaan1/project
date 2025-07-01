@@ -110,6 +110,105 @@ export const authService = {
   },
 };
 
+// Servicios de progreso del juego
+export const progressService = {
+  // Obtener progreso completo del usuario
+  getProgress: async () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+    
+    try {
+      const response = await apiRequest('/progress', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      
+      console.log('Progress API response:', response);
+      return response;
+    } catch (error) {
+      console.error('Error in getProgress:', error);
+      throw error;
+    }
+  },
+
+  // Completar un nivel
+  completeLevel: async (levelData: {
+    topicId: string;
+    difficulty: 'easy' | 'medium' | 'hard';
+    correct: number;
+    total: number;
+  }) => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+    
+    // Validar datos de entrada
+    if (!levelData.topicId || !levelData.difficulty) {
+      throw new Error('Topic ID and difficulty are required');
+    }
+    
+    if (typeof levelData.correct !== 'number' || typeof levelData.total !== 'number') {
+      throw new Error('Correct and total must be numbers');
+    }
+    
+    if (levelData.correct < 0 || levelData.total <= 0 || levelData.correct > levelData.total) {
+      throw new Error('Invalid score values');
+    }
+    
+    try {
+      console.log('Sending level completion data:', levelData);
+      
+      const response = await apiRequest('/progress/complete-level', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(levelData),
+      });
+      
+      console.log('Complete level API response:', response);
+      return response;
+    } catch (error) {
+      console.error('Error in completeLevel:', error);
+      throw error;
+    }
+  },
+
+  // Obtener progreso de un nivel específico
+  getLevelProgress: async (topicId: string, difficulty: 'easy' | 'medium' | 'hard') => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest(`/progress/level/${topicId}/${difficulty}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+
+  // Obtener dificultades desbloqueadas
+  getUnlockedDifficulties: async () => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest('/progress/unlocked-difficulties', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+
+  // Obtener estadísticas del usuario
+  getStats: async () => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest('/progress/stats', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+};
+
 // Helper para manejar errores de autenticación
 export const handleAuthError = (error: any): string => {
   switch (error.status) {
@@ -136,4 +235,4 @@ export const handleAuthError = (error: any): string => {
   }
 };
 
-export default { authService, handleAuthError }; 
+export default { authService, progressService, handleAuthError }; 

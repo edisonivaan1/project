@@ -1,11 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, BookOpen, BarChart2, Users } from 'lucide-react';
 import Button from '../components/UI/Button';
 import logo from '../assets/logo_GrammarMasterPro.png';
+import { useAuth } from '../contexts/AuthContext';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const { isAuthenticated, isLoading } = useAuth();
+
+  // Redirigir a TopicsPage si el usuario ya está autenticado
+  useEffect(() => {
+    if (isAuthenticated && !isLoading) {
+      navigate('/topics', { replace: true });
+    }
+  }, [isAuthenticated, isLoading, navigate]);
+
+  // Mostrar loading mientras se verifica la autenticación
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   const features = [
     {
