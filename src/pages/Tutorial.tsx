@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { PlayCircle, SkipForward, ArrowLeft, Rewind } from 'lucide-react';
 import Card, { CardBody, CardFooter } from '../components/UI/Card';
 import Button from '../components/UI/Button';
+import YouTubePlayer from '../components/UI/YouTubePlayer';
 import { grammarTopics } from '../data/grammarTopics';
 import { presentTensesQuestions } from '../data/sampleQuestions';
 
@@ -11,26 +12,29 @@ const Tutorial: React.FC = () => {
   const navigate = useNavigate();
   const [isWatched, setIsWatched] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [videoError, setVideoError] = useState(false);
   
   const topic = grammarTopics.find(t => t.id === topicId);
   
-  // Simulate progress in the tutorial video
-  useEffect(() => {
-    if (progress < 100 && !isWatched) {
-      const interval = setInterval(() => {
-        setProgress(prev => {
-          const newProgress = prev + 1;
-          if (newProgress >= 100) {
-            setIsWatched(true);
-            clearInterval(interval);
-          }
-          return newProgress;
-        });
-      }, 300); // 30 seconds total duration (300ms * 100)
-      
-      return () => clearInterval(interval);
-    }
-  }, [progress, isWatched]);
+  // Función para extraer el ID del video de una URL de YouTube
+  const extractVideoId = (url: string): string => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11 ? match[2] : '';
+  };
+  
+  const handleVideoProgress = (videoProgress: number) => {
+    setProgress(videoProgress);
+  };
+  
+  const handleVideoComplete = () => {
+    setIsWatched(true);
+    setProgress(100);
+  };
+  
+  const handleVideoError = () => {
+    setVideoError(true);
+  };
   
   if (!topic) {
     return (
@@ -53,10 +57,14 @@ const Tutorial: React.FC = () => {
   const handleReplayTutorial = () => {
     setIsWatched(false);
     setProgress(0);
+    setVideoError(false);
   };
   
   // Example question for this topic (normally would be loaded based on topicId)
   const exampleQuestion = presentTensesQuestions[0];
+  
+  // Extraer el ID del video de YouTube
+  const videoId = topic.youtubeUrl ? extractVideoId(topic.youtubeUrl) : '';
   
   return (
     <div className="max-w-3xl mx-auto animate-fade-in">
@@ -64,35 +72,52 @@ const Tutorial: React.FC = () => {
       
       <Card className="mb-8">
         <CardBody>
-          <div className="aspect-video bg-gray-800 rounded-lg mb-4 flex items-center justify-center relative overflow-hidden">
-            {!isWatched ? (
-              <>
-                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                  <div className="text-white text-center">
-                    <div className="text-xl mb-2">Tutorial Video</div>
-                    <div className="mb-4">Loading {progress}%...</div>
-                    {progress < 100 && (
-                      <Button 
-                        variant="primary"
-                        icon={<SkipForward />}
-                        onClick={handleSkipTutorial}
-                      >
-                        Skip Tutorial
-                      </Button>
-                    )}
-                  </div>
+          <div className="aspect-video bg-gray-800 rounded-lg mb-4 relative overflow-hidden">
+            {videoError ? (
+              <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                <div className="text-white text-center">
+                  <div className="text-xl mb-2">Video no disponible</div>
+                  <div className="mb-4">El video de tutorial no se pudo cargar</div>
+                  <Button 
+                    variant="primary"
+                    icon={<Rewind />}
+                    onClick={handleReplayTutorial}
+                  >
+                    Reintentar
+                  </Button>
                 </div>
-                <div 
-                  className="absolute bottom-0 left-0 h-1 bg-primary transition-all duration-300" 
-                  style={{ width: `${progress}%` }} 
-                />
-              </>
-            ) : (
-              <div className="text-white text-center">
-                <PlayCircle className="h-16 w-16 mb-4 mx-auto opacity-70 hover:opacity-100 transition-opacity cursor-pointer" onClick={handleReplayTutorial} />
-                <p>Tutorial Completed!</p>
-                <p className="text-sm opacity-70 mt-2">Click to replay</p>
               </div>
+            ) : topic.youtubeUrl && videoId ? (
+              <YouTubePlayer
+                videoId={videoId}
+                onProgress={handleVideoProgress}
+                onComplete={handleVideoComplete}
+                className="w-full h-full"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                <div className="text-white text-center">
+                  <div className="text-xl mb-2">Tutorial Video</div>
+                  <div className="mb-4">Loading {progress}%...</div>
+                  {progress < 100 && (
+                    <Button 
+                      variant="primary"
+                      icon={<SkipForward />}
+                      onClick={handleSkipTutorial}
+                    >
+                      Skip Tutorial
+                    </Button>
+                  )}
+                </div>
+              </div>
+            )}
+            
+            {/* Progress indicator */}
+            {!isWatched && !videoError && (
+              <div 
+                className="absolute bottom-0 left-0 h-1 bg-primary transition-all duration-300" 
+                style={{ width: `${progress}%` }} 
+              />
             )}
           </div>
           
