@@ -38,3 +38,48 @@ export type QuestionType = {
   isDragAndDrop?: boolean;
   dragOptions?: string[];
 };
+
+// Tipos para el sistema de progreso del juego
+export type LevelProgress = {
+  topicId: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  isCompleted: boolean;
+  bestScore: {
+    correct: number;
+    total: number;
+    percentage: number;
+  };
+  completedAt: string | null;
+  attempts: Array<{
+    score: {
+      correct: number;
+      total: number;
+      percentage: number;
+    };
+    completedAt: string;
+  }>;
+};
+
+export type User = {
+  _id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  gameProgress: {
+    levels: LevelProgress[];
+    unlockedDifficulties: string[];
+    totalScore: number;
+    lastPlayedAt: string | null;
+  };
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ApiResponse<T = any> = {
+  success: boolean;
+  message?: string;
+  data?: T;
+  token?: string;
+  user?: User;
+  errors?: any[];
+};

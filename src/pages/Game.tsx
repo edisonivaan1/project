@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   ArrowLeft, Lightbulb, Volume2, VolumeX, RefreshCw, Home, 
-  ChevronRight, CheckCircle, XCircle, Play, Pause
+  ChevronRight, CheckCircle, XCircle, Play, Pause, Trophy
 } from 'lucide-react';
 import Button from '../components/UI/Button';
 import IconButton from '../components/UI/IconButton';
@@ -22,6 +22,8 @@ import { useProgress } from '../contexts/ProgressContext';
 import { useQuestionStatus } from '../contexts/QuestionStatusContext';
 import { useAttempt } from '../contexts/AttemptContext';
 import { useAudio } from '../contexts/AudioContext';
+import { useGameProgress } from '../contexts/GameProgressContext';
+import { toast } from 'react-toastify';
 
 // Importar todas las imágenes
 const images = import.meta.glob('../assets/questions/**/*.png', { eager: true });
@@ -41,6 +43,9 @@ const HintIcon = () => (
 const Game: React.FC = () => {
   const { topicId } = useParams<{ topicId: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const difficulty = (searchParams.get('difficulty') as 'easy' | 'medium' | 'hard') || 'easy';
+  
   const { setProgress, getLastQuestionIndex, setLastQuestionIndex } = useProgress();
   const { updateQuestionStatus, getQuestionStatus, resetQuestionStatuses } = useQuestionStatus();
   const { 
@@ -53,6 +58,7 @@ const Game: React.FC = () => {
     getUsedHints
   } = useAttempt();
   const { playBackgroundMusic, stopBackgroundMusic } = useAudio();
+  const { completeLevel, canAccessDifficulty } = useGameProgress();
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -71,6 +77,14 @@ const Game: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   
   const topic = grammarTopics.find(t => t.id === topicId);
+  
+  // Verificar acceso a la dificultad
+  useEffect(() => {
+    if (!canAccessDifficulty(difficulty)) {
+      toast.error(`No tienes acceso a la dificultad ${difficulty}. Completa los niveles anteriores primero.`);
+      navigate('/topics');
+    }
+  }, [difficulty, canAccessDifficulty, navigate]);
   
   // Initialize attempt if needed
   useEffect(() => {
@@ -320,13 +334,40 @@ const Game: React.FC = () => {
     }
   };
   
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     const answeredQuestions = questions.filter((_, index) => getQuestionStatus(topicId!, index) !== 'unanswered').length;
     
     if (answeredQuestions === questions.length) {
       // If all questions are answered, complete the attempt
       if (topicId) {
         completeAttempt(topicId, score, questions.length);
+        
+        // Guardar progreso en el backend - SIEMPRE
+        try {
+          const result = await completeLevel(topicId, difficulty, score, questions.length);
+          if (result.success) {
+            const percentage = Math.round((score / questions.length) * 100);
+            if (result.newUnlocks && result.newUnlocks.length > 0) {
+              toast.success(`¡Progreso guardado! Has desbloqueado: ${result.newUnlocks.join(', ').toUpperCase()}`, {
+                position: "top-center",
+                autoClose: 4000
+              });
+            } else if (percentage === 100) {
+              toast.success('¡Perfecto! Nivel completado al 100%', {
+                position: "top-center",
+                autoClose: 2000
+              });
+            } else {
+              toast.success('¡Progreso guardado exitosamente!', {
+                position: "top-center",
+                autoClose: 2000
+              });
+            }
+          }
+        } catch (error) {
+          console.error('Error saving progress:', error);
+          toast.error('Error al guardar progreso, pero el juego se completó localmente');
+        }
       }
       setIsGameCompleted(true);
     } else if (currentQuestionIndex < questions.length - 1) {
@@ -440,12 +481,27 @@ const Game: React.FC = () => {
   // Render the game completion screen
   if (isGameCompleted) {
     const percentage = Math.round((score / questions.length) * 100);
+    const isPerfectScore = percentage === 100; // Solo 100% es "completado"
     
     return (
       <div className="min-h-screen bg-background flex flex-col">
         <div className="flex-grow flex items-center justify-center p-4">
           <div className="bg-white rounded-xl shadow-lg max-w-lg w-full p-8 animate-slide-up">
-            <h1 className="text-3xl font-bold mb-6 text-center">Game Completed!</h1>
+            <div className="text-center mb-6">
+              {isPerfectScore ? (
+                <Trophy className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
+              ) : (
+                <div className="h-16 w-16 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-2xl">📚</span>
+                </div>
+              )}
+              <h1 className="text-3xl font-bold mb-2">
+                {isPerfectScore ? '¡Perfecto! Nivel Completado!' : 'Nivel Intentado'}
+              </h1>
+              <p className="text-gray-600">
+                {topic?.title} - {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+              </p>
+            </div>
             
             <div className="text-center mb-8">
               <div className="text-6xl font-bold mb-2 text-primary">{score}/{questions.length}</div>
@@ -453,7 +509,7 @@ const Game: React.FC = () => {
                 value={percentage} 
                 max={100}
                 size="lg"
-                color={percentage >= 70 ? 'success' : percentage >= 40 ? 'warning' : 'error'}
+                color={percentage === 100 ? 'success' : percentage >= 70 ? 'warning' : 'error'}
                 className="mb-2"
               />
               <p className="text-lg">{percentage}% Correct</p>
@@ -462,37 +518,38 @@ const Game: React.FC = () => {
             <div className="bg-gray-50 rounded-lg p-4 mb-6">
               <h3 className="font-bold mb-2">Performance Summary:</h3>
               <p>
-                {percentage >= 80 
-                  ? "Excellent job! You've mastered this topic!" 
-                  : percentage >= 60 
-                  ? "Good work! You're on the right track." 
-                  : "Keep practicing! You'll improve with more attempts."}
+                {isPerfectScore 
+                  ? "¡Excelente trabajo! Puntuación perfecta. Has dominado este nivel completamente." 
+                  : percentage >= 80 
+                  ? "¡Muy bien! Casi perfecto. Necesitas 100% para desbloquear el siguiente nivel." 
+                  : percentage >= 50
+                  ? "Buen intento. Sigue practicando para alcanzar el 100%."
+                  : "Sigue practicando. Puedes intentarlo de nuevo hasta conseguir el 100%."}
               </p>
+              <div className="mt-3 p-3 bg-blue-100 rounded-lg">
+                <p className="text-blue-800 font-medium">
+                  ✨ ¡Progreso guardado exitosamente!
+                </p>
+              </div>
             </div>
             
-            <div className="text-center">
-              <h2 className="text-2xl font-bold mb-4">Game Completed!</h2>
-              <p className="text-lg mb-6">
-                Your score: {score} out of {questions.length}
-              </p>
-              <div className="flex justify-center gap-4">
-                <Button
-                  variant="outline"
-                  onClick={handleRestartGame}
-                  className="h-[40px] w-[225px] border-2 border-black flex items-center justify-center"
-                >
-                  <RefreshCw className="h-5 w-5 mr-2" />
-                  Try Again
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => navigate('/')}
-                  className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000] flex items-center justify-center"
-                >
-                  <Home className="h-5 w-5 mr-2 text-white" />
-                  BACK TO HOME
-                </Button>
-              </div>
+            <div className="flex justify-center gap-4">
+              <Button
+                variant="outline"
+                onClick={handleRestartGame}
+                className="h-[40px] w-[225px] border-2 border-black flex items-center justify-center"
+              >
+                <RefreshCw className="h-5 w-5 mr-2" />
+                Try Again
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => navigate('/topics')}
+                className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000] flex items-center justify-center"
+              >
+                <Home className="h-5 w-5 mr-2 text-white" />
+                BACK TO TOPICS
+              </Button>
             </div>
           </div>
         </div>
@@ -517,13 +574,13 @@ const Game: React.FC = () => {
                   icon={<ArrowLeft />}
                   variant="ghost"
                   onClick={() => {
-                    navigate('/');
+                    navigate('/topics');
                   }}
-                  tooltip="Back to Home"
-                  aria-label="Back to Home"
+                  tooltip="Back to Topics"
+                  aria-label="Back to Topics"
                   className="flex items-center"
                 />
-                <span className="text-[#000] font-['Poppins'] text-[18px] italic font-[275] leading-normal capitalize ml-2 flex items-center mt-1">Back Home</span>
+                <span className="text-[#000] font-['Poppins'] text-[18px] italic font-[275] leading-normal capitalize ml-2 flex items-center mt-1">Back to Topics</span>
               </div>
               
               <div className="flex-1 mx-4">

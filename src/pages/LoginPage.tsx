@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import bgLogin from '../assets/bgLogin.png';
 import logo from '../assets/logo_GrammarMasterPro.png';
 import { authService, handleAuthError } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login, isAuthenticated, isLoading: authLoading } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+
+  // Redirigir si ya está autenticado (solo en carga inicial, no durante login)
+  useEffect(() => {
+    if (isAuthenticated && !authLoading && !isLoading && !shouldRedirect) {
+      const from = (location.state as any)?.from || '/topics';
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, authLoading, navigate, location, isLoading, shouldRedirect]);
   
   // Modal states
   const [showForgotModal, setShowForgotModal] = useState(false);
@@ -28,40 +40,41 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setShouldRedirect(true); // Evitar redirección automática
     
     const formData = new FormData(e.currentTarget as HTMLFormElement);
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
-
-
     try {
-      // Usar el servicio de API para login
-      const data = await authService.login({ email, password });
+      const result = await login(email, password);
 
-      // Guardar token en localStorage si viene en la respuesta
-      if (data.token) {
-        localStorage.setItem('authToken', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
+      if (result.success) {
+        // Mostrar notificación de éxito
+        toast.success('Inicio de sesión exitoso', {
+          position: "top-center",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        
+        // Redirigir después de un pequeño delay para que se vea el toast
+        setTimeout(() => {
+          const from = (location.state as any)?.from || '/topics';
+          navigate(from, { replace: true });
+        }, 1600);
+      } else {
+        toast.error(result.message || 'Error en el inicio de sesión');
+        setShouldRedirect(false); // Permitir redirección automática si hay error
       }
-      
-      // Mostrar notificación de éxito
-      toast.success('Inicio de sesión exitoso', {
-        position: "top-center",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        onClose: () => {
-          // Redirigir a la página de temas después del inicio de sesión exitoso
-          navigate('/topics');
-        }
-      });
     } catch (error) {
       console.error('Error en el inicio de sesión:', error);
-      toast.error(handleAuthError(error));
+      toast.error('Error inesperado en el inicio de sesión');
+      setShouldRedirect(false); // Permitir redirección automática si hay error
+    } finally {
       setIsLoading(false);
     }
   };
@@ -174,7 +187,18 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex relative">
-      <ToastContainer />
+      <ToastContainer 
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       {/* Botón de regresar */}
       <div className="absolute top-4 right-4">
         <Link 

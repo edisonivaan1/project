@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import bgLogin from '../assets/bgLogin.png';
 import logo from '../assets/logo_GrammarMasterPro.png';
-import { authService, handleAuthError } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 
 const SignUpPage: React.FC = () => {
   const navigate = useNavigate();
+  const { register, isAuthenticated, isLoading: authLoading } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Redirigir si ya está autenticado (solo en carga inicial)
+  useEffect(() => {
+    if (isAuthenticated && !authLoading) {
+      navigate('/topics', { replace: true });
+    }
+  }, [isAuthenticated, authLoading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,8 +48,7 @@ const SignUpPage: React.FC = () => {
     }
 
     try {
-      // Usar el servicio de API
-      const data = await authService.register({
+      const result = await register({
         firstName,
         lastName,
         email,
@@ -51,30 +58,47 @@ const SignUpPage: React.FC = () => {
         securityAnswer
       });
       
-      // Mostrar notificación de éxito
-      toast.success('¡Cuenta creada exitosamente! Redirigiendo...', {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        onClose: () => {
-          // Redirigir a login después de que se cierre la notificación
-          navigate('/login');
-        }
-      });
+      if (result.success) {
+        // Mostrar notificación de éxito
+        toast.success('¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.', {
+          position: "top-center",
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        
+        // Redirigir a login después de un pequeño delay para que se vea el toast
+        setTimeout(() => {
+          navigate('/login', { replace: true });
+        }, 2600);
+      } else {
+        toast.error(result.message || 'Error en el registro');
+      }
     } catch (error) {
       console.error('Error en el registro:', error);
-      toast.error(handleAuthError(error));
+      toast.error('Error inesperado en el registro');
+    } finally {
       setIsLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen flex relative">
-      <ToastContainer />
+      <ToastContainer 
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       {/* Botón de regresar */}
       <div className="absolute top-4 right-4">
         <Link 

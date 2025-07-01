@@ -14,7 +14,12 @@ const Settings: React.FC = () => {
     toggleSoundEffects 
   } = useAudio();
   
-  const [settings, setSettings] = React.useState(() => {
+  interface SettingsState {
+    fullscreenMode: boolean;
+    textSize: 'small' | 'medium' | 'large';
+  }
+
+  const [settings, setSettings] = React.useState<SettingsState>(() => {
     // Cargar configuración guardada del localStorage
     const savedSettings = localStorage.getItem('gameSettings');
     return savedSettings ? JSON.parse(savedSettings) : {
@@ -28,14 +33,14 @@ const Settings: React.FC = () => {
     localStorage.setItem('gameSettings', JSON.stringify(settings));
   }, [settings]);
   
-  const toggleSetting = (key: keyof typeof settings, value?: any) => {
-    setSettings(prev => ({
+  const toggleSetting = (key: keyof SettingsState, value?: any) => {
+    setSettings((prev: SettingsState) => ({
       ...prev,
       [key]: value !== undefined ? value : !prev[key],
     }));
   };
   
-  const textSizeOptions = {
+  const textSizeOptions: Record<'small' | 'medium' | 'large', string> = {
     small: 'Small',
     medium: 'Medium',
     large: 'Large',
@@ -189,7 +194,7 @@ const Settings: React.FC = () => {
           <Button
             variant="outline"
             icon={<ArrowLeft className="text-white" />}
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/topics')}
             className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000]"
           >
             Back to topics

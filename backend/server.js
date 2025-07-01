@@ -27,6 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/progress', require('./routes/progress'));
 
 // Health check route
 app.get('/api/health', (req, res) => {
@@ -96,4 +97,5 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📱 Health check: http://localhost:${PORT}/api/health`);
   console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth`);
+  console.log(`🎮 Progress endpoints: http://localhost:${PORT}/api/progress`);
 }); 
