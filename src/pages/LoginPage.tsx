@@ -4,18 +4,46 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import bgLogin from '../assets/bgLogin.png';
 import logo from '../assets/logo_GrammarMasterPro.png';
+import { authService, handleAuthError } from '../services/api';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  
+  // Modal states
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [forgotStep, setForgotStep] = useState(1); // 1: email, 2: security question, 3: new password
+  const [isLoadingForgot, setIsLoadingForgot] = useState(false);
+  
+  // Forgot password form data
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [securityQuestion, setSecurityQuestion] = useState('');
+  const [securityAnswer, setSecurityAnswer] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+
+
     try {
-      // Simular inicio de sesión exitoso
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Usar el servicio de API para login
+      const data = await authService.login({ email, password });
+
+      // Guardar token en localStorage si viene en la respuesta
+      if (data.token) {
+        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+      }
       
       // Mostrar notificación de éxito
       toast.success('Inicio de sesión exitoso', {
@@ -33,10 +61,117 @@ const LoginPage: React.FC = () => {
       });
     } catch (error) {
       console.error('Error en el inicio de sesión:', error);
-      toast.error('Error en las credenciales. Inténtalo de nuevo.');
+      toast.error(handleAuthError(error));
       setIsLoading(false);
     }
   };
+
+  // Reset modal state
+  const resetForgotModal = () => {
+    setShowForgotModal(false);
+    setForgotStep(1);
+    setForgotEmail('');
+    setSecurityQuestion('');
+    setSecurityAnswer('');
+    setNewPassword('');
+    setConfirmNewPassword('');
+    setShowNewPassword(false);
+    setShowConfirmNewPassword(false);
+    setIsLoadingForgot(false);
+  };
+
+  // Handle email submission (Step 1)
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoadingForgot(true);
+    
+
+    
+    try {
+      // Usar el servicio de API para forgot password
+      const response = await authService.forgotPassword(forgotEmail);
+      
+      if (response.securityQuestion) {
+        setSecurityQuestion(response.securityQuestion);
+        setForgotStep(2);
+      } else {
+        throw new Error('No se pudo obtener la pregunta de seguridad');
+      }
+      
+      toast.success('Email verificado. Responde tu pregunta de seguridad.');
+      
+    } catch (error) {
+      console.error('Error getting security question:', error);
+      toast.error(handleAuthError(error));
+    } finally {
+      setIsLoadingForgot(false);
+    }
+  };
+
+  // Handle security answer submission (Step 2)
+  const handleSecuritySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoadingForgot(true);
+    
+    try {
+      // Validate security answer is not empty
+      if (!securityAnswer.trim()) {
+        toast.error('Por favor ingresa tu respuesta de seguridad.');
+        setIsLoadingForgot(false);
+        return;
+      }
+      
+      // En el flujo real, la verificación de la respuesta de seguridad
+      // se hace en el paso final de reset de contraseña
+      setForgotStep(3);
+      toast.success('Continúa con el cambio de contraseña.');
+      
+    } catch (error) {
+      console.error('Error verifying security answer:', error);
+      toast.error('Error del servidor. Inténtalo de nuevo más tarde.');
+    } finally {
+      setIsLoadingForgot(false);
+    }
+  };
+
+  // Handle password reset (Step 3)
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (newPassword !== confirmNewPassword) {
+      toast.error('Las contraseñas no coinciden');
+      return;
+    }
+    
+    if (newPassword.length < 6) {
+      toast.error('La contraseña debe tener al menos 6 caracteres');
+      return;
+    }
+    
+    setIsLoadingForgot(true);
+    
+
+    
+    try {
+      // Usar el servicio de API para reset password
+      await authService.resetPassword({
+        email: forgotEmail,
+        securityAnswer,
+        newPassword,
+        confirmPassword: confirmNewPassword
+      });
+      
+      toast.success('¡Contraseña cambiada exitosamente! Ya puedes iniciar sesión.');
+      resetForgotModal();
+      
+    } catch (error) {
+      console.error('Error resetting password:', error);
+      toast.error(handleAuthError(error));
+    } finally {
+      setIsLoadingForgot(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex relative">
       <ToastContainer />
@@ -103,21 +238,43 @@ const LoginPage: React.FC = () => {
                 </label>
                
               </div>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                placeholder="Enter your password"
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  required
+                  className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
+                    </svg>
+                  ) : (
+                    <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
             
             <div className="flex items-center">
-              <Link to="/forgot-password" className="text-sm text-gray-600 hover:text-blue-800">
-                  Forgot password?
-                </Link>
+              <button 
+                type="button"
+                onClick={() => setShowForgotModal(true)}
+                className="text-sm text-gray-600 hover:text-blue-800 focus:outline-none"
+              >
+                Forgot password?
+              </button>
             </div>
             
             <button
@@ -150,6 +307,268 @@ const LoginPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Forgot Password Modal */}
+      {showForgotModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-md w-full p-6 relative">
+            {/* Close button */}
+            <button
+              onClick={resetForgotModal}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            >
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Progress Bar */}
+            <div className="mb-6 mt-2">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                    forgotStep >= 1 ? 'bg-[#000DFF] text-white' : 'bg-gray-200 text-gray-500'
+                  }`}>
+                    1
+                  </div>
+                  <span className={`ml-2 text-xs font-medium ${
+                    forgotStep === 1 ? 'text-[#000DFF]' : 'text-gray-500'
+                  }`}>
+                    Email
+                  </span>
+                </div>
+                
+                <div className="flex items-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                    forgotStep >= 2 ? 'bg-[#000DFF] text-white' : 'bg-gray-200 text-gray-500'
+                  }`}>
+                    2
+                  </div>
+                  <span className={`ml-2 text-xs font-medium ${
+                    forgotStep === 2 ? 'text-[#000DFF]' : 'text-gray-500'
+                  }`}>
+                    Security
+                  </span>
+                </div>
+                
+                <div className="flex items-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                    forgotStep >= 3 ? 'bg-[#000DFF] text-white' : 'bg-gray-200 text-gray-500'
+                  }`}>
+                    3
+                  </div>
+                  <span className={`ml-2 text-xs font-medium ${
+                    forgotStep === 3 ? 'text-[#000DFF]' : 'text-gray-500'
+                  }`}>
+                    Password
+                  </span>
+                </div>
+              </div>
+              
+              {/* Progress line */}
+              <div className="relative">
+                <div className="absolute top-0 left-0 w-full h-2 bg-gray-200 rounded-full"></div>
+                <div 
+                  className="absolute top-0 left-0 h-2 bg-[#000DFF] rounded-full transition-all duration-300 ease-in-out"
+                  style={{ width: `${((forgotStep - 1) / 2) * 100}%` }}
+                ></div>
+              </div>
+            </div>
+
+            {/* Step 1: Email */}
+            {forgotStep === 1 && (
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Forgot Password</h3>
+                <p className="text-gray-600 text-sm mb-6">
+                  Enter your email address and we'll help you reset your password.
+                </p>
+                
+                <form onSubmit={handleEmailSubmit}>
+                  <div className="mb-4">
+                    <label htmlFor="forgotEmail" className="block text-sm font-extrabold text-gray-700 mb-1">
+                      Email Address
+                    </label>
+                    <input
+                      id="forgotEmail"
+                      type="email"
+                      value={forgotEmail}
+                      onChange={(e) => setForgotEmail(e.target.value)}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      placeholder="Enter your email"
+                    />
+                  </div>
+                  
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={resetForgotModal}
+                      className="flex-1 py-3 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isLoadingForgot}
+                      className="flex-1 py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-[#000DFF] hover:bg-[#0000cc] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
+                    >
+                      {isLoadingForgot ? 'Loading...' : 'Continue'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* Step 2: Security Question */}
+            {forgotStep === 2 && (
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Security Question</h3>
+                <p className="text-gray-600 text-sm mb-4">
+                  Please answer your security question to verify your identity.
+                </p>
+                
+                <form onSubmit={handleSecuritySubmit}>
+                  <div className="mb-4">
+                    <label className="block text-sm font-extrabold text-gray-700 mb-1">
+                      Security Question
+                    </label>
+                    <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700">
+                      {securityQuestion}
+                    </div>
+                  </div>
+                  
+                  <div className="mb-6">
+                    <label htmlFor="securityAnswer" className="block text-sm font-extrabold text-gray-700 mb-1">
+                      Your Answer
+                    </label>
+                    <input
+                      id="securityAnswer"
+                      type="text"
+                      value={securityAnswer}
+                      onChange={(e) => setSecurityAnswer(e.target.value)}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      placeholder="Enter your answer"
+                    />
+                  </div>
+                  
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setForgotStep(1)}
+                      className="flex-1 py-3 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                    >
+                      Back
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isLoadingForgot}
+                      className="flex-1 py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-[#000DFF] hover:bg-[#0000cc] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
+                    >
+                      {isLoadingForgot ? 'Verifying...' : 'Continue'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* Step 3: New Password */}
+            {forgotStep === 3 && (
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Reset Password</h3>
+                <p className="text-gray-600 text-sm mb-4">
+                  Create a new password for your account.
+                </p>
+                
+                <form onSubmit={handlePasswordReset}>
+                  <div className="mb-4">
+                    <label htmlFor="newPassword" className="block text-sm font-extrabold text-gray-700 mb-1">
+                      New Password
+                    </label>
+                    <div className="relative">
+                      <input
+                        id="newPassword"
+                        type={showNewPassword ? "text" : "password"}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        required
+                        className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                        placeholder="Enter new password"
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 flex items-center pr-3"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                      >
+                        {showNewPassword ? (
+                          <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
+                          </svg>
+                        ) : (
+                          <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="mb-6">
+                    <label htmlFor="confirmNewPassword" className="block text-sm font-extrabold text-gray-700 mb-1">
+                      Confirm New Password
+                    </label>
+                    <div className="relative">
+                      <input
+                        id="confirmNewPassword"
+                        type={showConfirmNewPassword ? "text" : "password"}
+                        value={confirmNewPassword}
+                        onChange={(e) => setConfirmNewPassword(e.target.value)}
+                        required
+                        className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                        placeholder="Confirm new password"
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 flex items-center pr-3"
+                        onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
+                      >
+                        {showConfirmNewPassword ? (
+                          <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
+                          </svg>
+                        ) : (
+                          <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setForgotStep(2)}
+                      className="flex-1 py-3 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                    >
+                      Back
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isLoadingForgot}
+                      className="flex-1 py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-[#000DFF] hover:bg-[#0000cc] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
+                    >
+                      {isLoadingForgot ? 'Resetting...' : 'Reset Password'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
