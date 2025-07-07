@@ -24,9 +24,9 @@ const QuestionNavigator: React.FC<QuestionNavigatorProps> = ({
     
     switch (status) {
       case 'correct':
-        return `${baseClasses} bg-[rgb(var(--color-success))] text-white hover:bg-[rgb(var(--color-success))/0.8] focus:ring-[rgb(var(--color-success))/0.5]`;
+        return `${baseClasses} bg-[rgb(var(--color-success))] text-white hover:bg-green-600 focus:ring-[rgb(var(--color-success))/0.5]`;
       case 'incorrect':
-        return `${baseClasses} bg-[rgb(var(--color-error))] text-white hover:bg-[rgb(var(--color-error))/0.8] focus:ring-[rgb(var(--color-error))/0.5]`;
+        return `${baseClasses} bg-[rgb(var(--color-error))] text-white hover:bg-red-600 focus:ring-[rgb(var(--color-error))/0.5]`;
       default:
         return `${baseClasses} border-2 ${index === currentQuestionIndex ? 'border-[rgb(var(--color-primary))] bg-[rgb(var(--color-primary))/0.1]' : 'border-gray-300'} text-gray-700 hover:border-[rgb(var(--color-primary))] hover:text-[rgb(var(--color-primary))] focus:ring-[rgb(var(--color-primary))/0.5]`;
     }

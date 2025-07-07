@@ -358,7 +358,7 @@ const Game: React.FC = () => {
                 autoClose: 2000
               });
             } else {
-              toast.success('¡Progreso guardado exitosamente!', {
+              toast.success('Progress saved successfully!', {
                 position: "top-center",
                 autoClose: 2000
               });
@@ -366,7 +366,7 @@ const Game: React.FC = () => {
           }
         } catch (error) {
           console.error('Error saving progress:', error);
-          toast.error('Error al guardar progreso, pero el juego se completó localmente');
+          toast.error('Failed to save progress, but game completed locally');
         }
       }
       setIsGameCompleted(true);
@@ -496,7 +496,7 @@ const Game: React.FC = () => {
                 </div>
               )}
               <h1 className="text-3xl font-bold mb-2">
-                {isPerfectScore ? '¡Perfecto! Nivel Completado!' : 'Nivel Intentado'}
+                {isPerfectScore ? 'Perfect! Level Completed!' : 'Level Attempted!'}
               </h1>
               <p className="text-gray-600">
                 {topic?.title} - {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
@@ -519,12 +519,12 @@ const Game: React.FC = () => {
               <h3 className="font-bold mb-2">Performance Summary:</h3>
               <p>
                 {isPerfectScore 
-                  ? "¡Excelente trabajo! Puntuación perfecta. Has dominado este nivel completamente." 
+                  ? "Excellent work! Perfect score. You've completely mastered this level." 
                   : percentage >= 80 
-                  ? "¡Muy bien! Casi perfecto. Necesitas 100% para desbloquear el siguiente nivel." 
+                  ? "Very good! Almost perfect. You need 100% to unlock the next level." 
                   : percentage >= 50
-                  ? "Buen intento. Sigue practicando para alcanzar el 100%."
-                  : "Sigue practicando. Puedes intentarlo de nuevo hasta conseguir el 100%."}
+                  ? "Nice try. Keep practicing to reach 100%."
+                  : "Keep practicing. You can try again until you get 100%."}
               </p>
               <div className="mt-3 p-3 bg-blue-100 rounded-lg">
                 <p className="text-blue-800 font-medium">
@@ -608,10 +608,10 @@ const Game: React.FC = () => {
                   <>
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-medium">
-                        {answeredQuestions} de {questions.length} preguntas respondidas
+                        {answeredQuestions} of {questions.length} questions answered
                       </span>
                       <span className="text-sm font-medium">
-                        {percentage}% Completado
+                        {percentage}% Completed
                       </span>
                     </div>
                     <ProgressBar 
@@ -704,7 +704,7 @@ const Game: React.FC = () => {
                     {/* Drag and Drop Area */}
                     <div className="bg-gray-50 p-4 rounded-lg border-2 border-dashed border-gray-300">
                       <div className="text-center mb-4">
-                        <p className="text-sm text-gray-600 mb-2">Arrastra las palabras a los espacios en blanco</p>
+                        <p className="text-sm text-gray-600 mb-2">Drag the words into the blank spaces</p>
                         <div className="flex flex-wrap gap-2 justify-center">
                           {(() => {
                             const textParts = currentQuestion.text.split('______');
@@ -735,7 +735,7 @@ const Game: React.FC = () => {
                     
                     {/* Drag Options */}
                     <div className="bg-white p-4 rounded-lg border-2 border-gray-200">
-                      <p className="text-sm font-medium text-gray-700 mb-3">Opciones disponibles:</p>
+                      <p className="text-sm font-medium text-gray-700 mb-3">Available options:</p>
                       <div className="flex flex-wrap gap-3">
                         {currentQuestion.dragOptions?.map((option, index) => {
                           const isUsed = draggedAnswers.includes(option);
@@ -834,33 +834,33 @@ const Game: React.FC = () => {
                 <div className="space-y-4">
                   <div className={`bg-${isCorrect ? 'success' : 'error'}/10 border border-${isCorrect ? 'success' : 'error'}/30 p-4 rounded-lg`}>
                     <h3 className={`font-bold text-${isCorrect ? 'success' : 'error'} mb-2`}>
-                      {isCorrect ? '¡Correcto!' : 'No es correcto'}
+                      {isCorrect ? '¡Correct!' : "It's incorrect"}
                     </h3>
                     {currentQuestion.isFillInTheBlank && !isCorrect && (
                       <p className="mb-2">
-                        <strong>Tu respuesta:</strong> {writtenAnswer.trim()}<br/>
-                        <strong>Respuesta correcta:</strong> {Array.isArray(currentQuestion.correctAnswer) ? currentQuestion.correctAnswer[0] : currentQuestion.correctAnswer}
+                        <strong>Your answer:</strong> {writtenAnswer.trim()}<br/>
+                        <strong>Correct answer:</strong> {Array.isArray(currentQuestion.correctAnswer) ? currentQuestion.correctAnswer[0] : currentQuestion.correctAnswer}
                       </p>
                     )}
                     {currentQuestion.isDragAndDrop && !isCorrect && (
                       <p className="mb-2">
-                        <strong>Tu respuesta:</strong> {draggedAnswers.join(', ')}<br/>
-                        <strong>Respuesta correcta:</strong> {Array.isArray(currentQuestion.correctAnswer) ? currentQuestion.correctAnswer.join(', ') : currentQuestion.correctAnswer}
+                        <strong>Your answer:</strong> {draggedAnswers.join(', ')}<br/>
+                        <strong>Correct answer:</strong> {Array.isArray(currentQuestion.correctAnswer) ? currentQuestion.correctAnswer.join(', ') : currentQuestion.correctAnswer}
                       </p>
                     )}
                     <p>{currentQuestion.explanation}</p>
                   </div>
                   <div className="flex justify-end">
                     <Button
-                      variant="outline"
+                      variant="custom"
                       icon={<ChevronRight className="text-white" />}
                       iconPosition="right"
                       onClick={handleNextQuestion}
-                      className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000]"
+                      className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[#183AB0] text-white border-[2px] border-solid border-white"
                     >
                       {(() => {
                         const answeredQuestions = questions.filter((_, index) => getQuestionStatus(topicId!, index) !== 'unanswered').length;
-                        return answeredQuestions === questions.length ? 'Ver Resultados' : 'Siguiente Pregunta';
+                        return answeredQuestions === questions.length ? 'See results' : 'Next Question';
                       })()}
                     </Button>
                   </div>

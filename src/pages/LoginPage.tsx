@@ -51,7 +51,7 @@ const LoginPage: React.FC = () => {
 
       if (result.success) {
         // Mostrar notificación de éxito
-        toast.success('Inicio de sesión exitoso', {
+        toast.success('Login successful', {
           position: "top-center",
           autoClose: 1500,
           hideProgressBar: false,
@@ -67,12 +67,12 @@ const LoginPage: React.FC = () => {
           navigate(from, { replace: true });
         }, 1600);
       } else {
-        toast.error(result.message || 'Error en el inicio de sesión');
+        toast.error(result.message || 'Login error');
         setShouldRedirect(false); // Permitir redirección automática si hay error
       }
     } catch (error) {
-      console.error('Error en el inicio de sesión:', error);
-      toast.error('Error inesperado en el inicio de sesión');
+      console.error('Login error:', error);
+      toast.error('Unexpected login error');
       setShouldRedirect(false); // Permitir redirección automática si hay error
     } finally {
       setIsLoading(false);
@@ -108,10 +108,10 @@ const LoginPage: React.FC = () => {
         setSecurityQuestion(response.securityQuestion);
         setForgotStep(2);
       } else {
-        throw new Error('No se pudo obtener la pregunta de seguridad');
+        throw new Error('Security question could not be obtained');
       }
       
-      toast.success('Email verificado. Responde tu pregunta de seguridad.');
+      toast.success('Email verified. Answer your security question.');
       
     } catch (error) {
       console.error('Error getting security question:', error);
@@ -129,7 +129,7 @@ const LoginPage: React.FC = () => {
     try {
       // Validate security answer is not empty
       if (!securityAnswer.trim()) {
-        toast.error('Por favor ingresa tu respuesta de seguridad.');
+        toast.error('Please enter your security answer.');
         setIsLoadingForgot(false);
         return;
       }
@@ -137,11 +137,11 @@ const LoginPage: React.FC = () => {
       // En el flujo real, la verificación de la respuesta de seguridad
       // se hace en el paso final de reset de contraseña
       setForgotStep(3);
-      toast.success('Continúa con el cambio de contraseña.');
+      toast.success('Continue with the password change.');
       
     } catch (error) {
       console.error('Error verifying security answer:', error);
-      toast.error('Error del servidor. Inténtalo de nuevo más tarde.');
+      toast.error('Server error. Please try again later.');
     } finally {
       setIsLoadingForgot(false);
     }
@@ -152,12 +152,12 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     
     if (newPassword !== confirmNewPassword) {
-      toast.error('Las contraseñas no coinciden');
+      toast.error("Passwords don't match");
       return;
     }
     
     if (newPassword.length < 6) {
-      toast.error('La contraseña debe tener al menos 6 caracteres');
+      toast.error('Password must be at least 6 characters');
       return;
     }
     
@@ -174,7 +174,7 @@ const LoginPage: React.FC = () => {
         confirmPassword: confirmNewPassword
       });
       
-      toast.success('¡Contraseña cambiada exitosamente! Ya puedes iniciar sesión.');
+      toast.success('Password changed successfully! You can now login.');
       resetForgotModal();
       
     } catch (error) {
@@ -305,7 +305,7 @@ const LoginPage: React.FC = () => {
               type="submit"
               className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#000DFF] hover:bg-[#0000cc] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
             >
-              {isLoading ? 'Iniciando sesión...' : 'Login'}
+              {isLoading ? 'Logging in...' : 'Login'}
             </button>
           </form>
           

@@ -46,7 +46,7 @@ const apiRequest = async <T = any>(
     // Error de red o servidor no disponible
     throw {
       status: 500,
-      message: 'Error de conexión. Verifica que el servidor esté ejecutándose.',
+      message: 'Connection error. Verify that the server is running.',
       errors: [],
     };
   }
@@ -214,24 +214,24 @@ export const handleAuthError = (error: any): string => {
   switch (error.status) {
     case 400:
       if (error.message.includes('already exists')) {
-        return 'Ya existe una cuenta con este email';
+        return 'This email is already registered';
       }
       if (error.errors && Array.isArray(error.errors) && error.errors.length > 0) {
         return error.errors[0].msg || error.errors[0];
       }
-      return error.message || 'Error en la validación de datos';
+      return error.message || 'Data validation error';
     
     case 401:
-      return 'Credenciales incorrectas. Verifica tu email y contraseña.';
+      return 'Incorrect credentials. Verify your email and password.';
     
     case 404:
-      return 'No se encontró una cuenta con este email.';
+      return 'No account was found with this email address.';
     
     case 500:
-      return error.message || 'Error del servidor. Inténtalo de nuevo más tarde.';
+      return error.message || 'Server error. Please try again later.';
     
     default:
-      return error.message || 'Error inesperado. Inténtalo de nuevo.';
+      return error.message || 'Unexpected error. Please try again.';
   }
 };
 

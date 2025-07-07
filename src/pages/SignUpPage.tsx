@@ -35,14 +35,14 @@ const SignUpPage: React.FC = () => {
 
     // Validación de contraseñas
     if (password !== confirmPassword) {
-      toast.error('Las contraseñas no coinciden');
+      toast.error('Passwords do not match');
       setIsLoading(false);
       return;
     }
 
     // Validación de pregunta de seguridad
     if (!securityQuestion) {
-      toast.error('Por favor selecciona una pregunta de seguridad');
+      toast.error('Please select a security question');
       setIsLoading(false);
       return;
     }
@@ -60,7 +60,7 @@ const SignUpPage: React.FC = () => {
       
       if (result.success) {
         // Mostrar notificación de éxito
-        toast.success('¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.', {
+        toast.success('¡Account successfully created! Now you can log in.', {
           position: "top-center",
           autoClose: 2500,
           hideProgressBar: false,
@@ -75,11 +75,11 @@ const SignUpPage: React.FC = () => {
           navigate('/login', { replace: true });
         }, 2600);
       } else {
-        toast.error(result.message || 'Error en el registro');
+        toast.error(result.message || 'Error in registration');
       }
     } catch (error) {
-      console.error('Error en el registro:', error);
-      toast.error('Error inesperado en el registro');
+      console.error('Error in registration:', error);
+      toast.error('Unexpected error in registration');
     } finally {
       setIsLoading(false);
     }
