@@ -10,6 +10,8 @@ interface Attempt {
   totalQuestions: number;
   correctAnswers: number;
   usedHints: number[];
+  timePerQuestion: Record<number, number>;
+  hintsPerQuestion: Record<number, number>;
 }
 
 interface AttemptHistory {
@@ -72,7 +74,9 @@ export const AttemptProvider: React.FC<{ children: ReactNode }> = ({ children })
       score: 0,
       totalQuestions: 10, // Set default total questions
       correctAnswers: 0,
-      usedHints: []
+      usedHints: [],
+      timePerQuestion: {},
+      hintsPerQuestion: {}
     };
 
     setAttempts(prev => ({

@@ -74,6 +74,9 @@ const Game: React.FC = () => {
   const [isCorrect, setIsCorrect] = useState(false);
   const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [questionStartTime, setQuestionStartTime] = useState<number>(Date.now());
+  const [timePerQuestion, setTimePerQuestion] = useState<Record<number, number>>({});
+  const [hintsPerQuestion, setHintsPerQuestion] = useState<Record<number, number>>({});
   const audioRef = useRef<HTMLAudioElement | null>(null);
   
   const topic = grammarTopics.find(t => t.id === topicId);
@@ -100,6 +103,9 @@ const Game: React.FC = () => {
         setIsAnswerSubmitted(false);
         setSelectedAnswer(null);
         setIsPlaying(false);
+        setTimePerQuestion({});
+        setHintsPerQuestion({});
+        setQuestionStartTime(Date.now());
       }
     }
   }, [topicId]);
@@ -180,7 +186,21 @@ const Game: React.FC = () => {
       setShowHint(true);
     }
   }, [attempts, showHint, isAnswerSubmitted]);
-  
+
+  // Actualizar tiempo cuando cambia la pregunta
+  useEffect(() => {
+    setQuestionStartTime(Date.now());
+  }, [currentQuestionIndex]);
+
+  // Registrar tiempo cuando se responde una pregunta
+  const recordQuestionTime = () => {
+    const timeSpent = Math.round((Date.now() - questionStartTime) / 1000); // Convertir a segundos
+    setTimePerQuestion(prev => ({
+      ...prev,
+      [currentQuestionIndex]: timeSpent
+    }));
+  };
+
   const handleQuestionSelect = (index: number) => {
     if (index !== currentQuestionIndex) {
       setCurrentQuestionIndex(index);
@@ -207,11 +227,14 @@ const Game: React.FC = () => {
     }
   };
   
+  // Registrar uso de pista
   const handleShowHint = () => {
-    if (topicId && !showHint) {
-      setShowHint(true);
-      recordHintUsage(topicId, currentQuestionIndex);
-    }
+    setShowHint(true);
+    recordHintUsage(topicId!, currentQuestionIndex);
+    setHintsPerQuestion(prev => ({
+      ...prev,
+      [currentQuestionIndex]: (prev[currentQuestionIndex] || 0) + 1
+    }));
   };
   
   const handleAnswerSelect = (answer: string) => {
@@ -337,14 +360,59 @@ const Game: React.FC = () => {
   const handleNextQuestion = async () => {
     const answeredQuestions = questions.filter((_, index) => getQuestionStatus(topicId!, index) !== 'unanswered').length;
     
+    // Registrar tiempo de la pregunta actual antes de continuar
+    recordQuestionTime();
+    
     if (answeredQuestions === questions.length) {
-      // If all questions are answered, complete the attempt
+      // Si todas las preguntas están respondidas, completar el intento
       if (topicId) {
         completeAttempt(topicId, score, questions.length);
         
-        // Guardar progreso en el backend - SIEMPRE
+        // Obtener detalles de las preguntas
+        const questionsDetails = questions.map((question, index) => {
+          const attempt = getCurrentAttempt(topicId);
+          const answer = attempt?.answers[index] || '';
+          const correctAnswer = Array.isArray(question.correctAnswer) 
+            ? question.correctAnswer.join(', ') 
+            : question.correctAnswer;
+          const isCorrect = answer === correctAnswer;
+          
+          return {
+            questionId: `q${index + 1}`,
+            userAnswer: answer,
+            correctAnswer,
+            isCorrect,
+            timeSpent: timePerQuestion[index] || 0,
+            hintsUsed: hintsPerQuestion[index] || 0
+          };
+        });
+
+        // Calcular totales
+        const totalTimeSpent = Object.values(timePerQuestion).reduce((sum, time) => sum + time, 0);
+        const totalHintsUsed = Object.values(hintsPerQuestion).reduce((sum, hints) => sum + hints, 0);
+        
+        // Guardar progreso en el backend
         try {
-          const result = await completeLevel(topicId, difficulty, score, questions.length);
+          // Asegurar que los datos sean del tipo correcto
+          const totalTimeSpentInt = Math.round(totalTimeSpent);
+          const totalHintsUsedInt = Math.round(totalHintsUsed);
+          
+          const result = await completeLevel(
+            topicId, 
+            difficulty, 
+            score, 
+            questions.length, 
+            {
+              timeSpent: totalTimeSpentInt,
+              hintsUsed: totalHintsUsedInt,
+              questionsDetails: questionsDetails.map(q => ({
+                ...q,
+                timeSpent: Math.round(q.timeSpent || 0),
+                hintsUsed: Math.round(q.hintsUsed || 0)
+              }))
+            }
+          );
+
           if (result.success) {
             const percentage = Math.round((score / questions.length) * 100);
             if (result.newUnlocks && result.newUnlocks.length > 0) {
@@ -371,7 +439,7 @@ const Game: React.FC = () => {
       }
       setIsGameCompleted(true);
     } else if (currentQuestionIndex < questions.length - 1) {
-      // If not the last question, go to next
+      // Si no es la última pregunta, ir a la siguiente
       setCurrentQuestionIndex(prev => prev + 1);
       setSelectedAnswer(null);
       setWrittenAnswer('');

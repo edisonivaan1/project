@@ -34,7 +34,24 @@ interface GameProgressContextType {
   getLevelPercentage: (topicId: string, difficulty: 'easy' | 'medium' | 'hard') => number;
   
   // Métodos para actualizar progreso
-  completeLevel: (topicId: string, difficulty: 'easy' | 'medium' | 'hard', correct: number, total: number) => Promise<{ success: boolean; message?: string; newUnlocks?: string[] }>;
+  completeLevel: (
+    topicId: string, 
+    difficulty: 'easy' | 'medium' | 'hard', 
+    correct: number, 
+    total: number,
+    additionalData?: {
+      timeSpent?: number;
+      hintsUsed?: number;
+      questionsDetails?: Array<{
+        questionId: string;
+        userAnswer: string;
+        correctAnswer: string;
+        isCorrect: boolean;
+        timeSpent?: number;
+        hintsUsed?: number;
+      }>;
+    }
+  ) => Promise<{ success: boolean; message?: string; newUnlocks?: string[] }>;
   refreshProgress: () => Promise<void>;
   
   // Estadísticas
@@ -117,7 +134,19 @@ export const GameProgressProvider: React.FC<{ children: ReactNode }> = ({ childr
     topicId: string, 
     difficulty: 'easy' | 'medium' | 'hard', 
     correct: number, 
-    total: number
+    total: number,
+    additionalData?: {
+      timeSpent?: number;
+      hintsUsed?: number;
+      questionsDetails?: Array<{
+        questionId: string;
+        userAnswer: string;
+        correctAnswer: string;
+        isCorrect: boolean;
+        timeSpent?: number;
+        hintsUsed?: number;
+      }>;
+    }
   ) => {
     try {
       setIsLoading(true);
@@ -127,7 +156,10 @@ export const GameProgressProvider: React.FC<{ children: ReactNode }> = ({ childr
         topicId,
         difficulty,
         correct,
-        total
+        total,
+        timeSpent: additionalData?.timeSpent || 0,
+        hintsUsed: additionalData?.hintsUsed || 0,
+        questionsDetails: additionalData?.questionsDetails || []
       });
 
       if (response.success && response.data) {

@@ -83,3 +83,20 @@ export type ApiResponse<T = any> = {
   user?: User;
   errors?: any[];
 };
+
+export interface CompleteLevelData {
+  topicId: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  correct: number;
+  total: number;
+  timeSpent?: number;
+  hintsUsed?: number;
+  questionsDetails?: Array<{
+    questionId: string;
+    userAnswer: string;
+    correctAnswer: string;
+    isCorrect: boolean;
+    timeSpent?: number;
+    hintsUsed?: number;
+  }>;
+}

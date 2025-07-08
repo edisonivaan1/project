@@ -1,3 +1,5 @@
+import { CompleteLevelData } from '../types';
+
 const API_BASE_URL = 'http://localhost:5000/api';
 
 // Interfaz para las respuestas de la API
@@ -19,17 +21,29 @@ const apiRequest = async <T = any>(
   options: RequestInit = {}
 ): Promise<ApiResponse<T>> => {
   try {
+    // Obtener el token de autenticación
+    const token = localStorage.getItem('authToken');
+    
+    // Preparar los headers
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(token && { Authorization: `Bearer ${token}` }),
+      ...options.headers,
+    };
+
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
       ...options,
+      headers,
     });
 
     const data = await response.json();
 
     if (!response.ok) {
+      // Si es error de autenticación, limpiar el token
+      if (response.status === 401) {
+        localStorage.removeItem('authToken');
+      }
+      
       throw {
         status: response.status,
         message: data.message || 'Error en la petición',
@@ -135,45 +149,54 @@ export const progressService = {
   },
 
   // Completar un nivel
-  completeLevel: async (levelData: {
-    topicId: string;
-    difficulty: 'easy' | 'medium' | 'hard';
-    correct: number;
-    total: number;
-  }) => {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      throw new Error('No authentication token found');
-    }
-    
-    // Validar datos de entrada
-    if (!levelData.topicId || !levelData.difficulty) {
-      throw new Error('Topic ID and difficulty are required');
-    }
-    
-    if (typeof levelData.correct !== 'number' || typeof levelData.total !== 'number') {
-      throw new Error('Correct and total must be numbers');
-    }
-    
-    if (levelData.correct < 0 || levelData.total <= 0 || levelData.correct > levelData.total) {
-      throw new Error('Invalid score values');
-    }
-    
+  completeLevel: async (data: CompleteLevelData): Promise<ApiResponse> => {
     try {
-      console.log('Sending level completion data:', levelData);
+      console.log('🚀 Iniciando completeLevel');
       
-      const response = await apiRequest('/progress/complete-level', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(levelData),
-      });
+      // Verificar autenticación
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        console.error('❌ No se encontró token de autenticación');
+        throw new Error('No authentication token found');
+      }
+
+      console.log('🔑 Token encontrado');
+      console.log('📦 Datos recibidos:', data);
       
-      console.log('Complete level API response:', response);
-      return response;
+      // Formatear los datos según el esquema esperado
+      const formattedData = {
+        topicId: data.topicId.replace('_', '-'), // Convertir guión bajo a guión
+        difficulty: data.difficulty,
+        correct: data.correct, // Mover fuera del objeto score
+        total: data.total, // Mover fuera del objeto score
+        timeSpent: data.timeSpent || 0,
+        hintsUsed: data.hintsUsed || 0,
+        questionsDetails: data.questionsDetails?.map(q => ({
+          ...q,
+          timeSpent: q.timeSpent || 0,
+          hintsUsed: q.hintsUsed || 0
+        })) || []
+      };
+
+      console.log('📝 Datos formateados:', formattedData);
+      
+      try {
+        const response = await apiRequest('/progress/complete-level', {
+          method: 'POST',
+          body: JSON.stringify(formattedData)
+        });
+
+        console.log('✅ Respuesta del servidor:', response);
+        return response;
+      } catch (error: any) {
+        console.error('❌ Error en la petición:', error);
+        if (error.status === 401) {
+          console.error('❌ Error de autenticación - Token inválido o expirado');
+        }
+        throw error;
+      }
     } catch (error) {
-      console.error('Error in completeLevel:', error);
+      console.error('❌ Error en completeLevel:', error);
       throw error;
     }
   },
