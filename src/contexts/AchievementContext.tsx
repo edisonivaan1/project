@@ -233,32 +233,54 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
   // Check for new achievements using backend
   const checkForNewAchievements = async (newStats?: any): Promise<Achievement[]> => {
     try {
-      // Get unnotified achievements from backend
+      console.log('🔍 Checking for new achievements...');
+      
+      // First trigger achievement check in backend
+      console.log('🎯 Triggering backend achievement check...');
+      const checkResponse = await achievementService.checkAchievements();
+      console.log('🎯 Backend check response:', checkResponse);
+      
+      // Then get unnotified achievements from backend
+      console.log('🔔 Getting unnotified achievements...');
       const response = await achievementService.getUnnotifiedAchievements();
+      console.log('🔔 Unnotified response:', response);
       
       if (response.success && response.data) {
         const unnotifiedAchievements = response.data;
         
         if (unnotifiedAchievements.length > 0) {
-          console.log('New achievements from backend:', unnotifiedAchievements.map((a: Achievement) => a.name));
+          console.log('🏆 New achievements from backend:', unnotifiedAchievements.map((a: Achievement) => a.name));
           
           // Filter out achievements that have already been shown locally
           const shownAchievements = getShownAchievements();
+          console.log('👁️ Already shown achievements:', shownAchievements);
+          
           const newAchievements = unnotifiedAchievements.filter(
             (achievement: Achievement) => !shownAchievements.includes(achievement.id)
           );
           
+          console.log('✨ Truly new achievements to show:', newAchievements.map((a: Achievement) => a.name));
+          
           if (newAchievements.length > 0) {
-            setPendingNotifications(prev => [...prev, ...newAchievements]);
+            console.log('📝 Adding to pending notifications...');
+            setPendingNotifications(prev => {
+              const updated = [...prev, ...newAchievements];
+              console.log('📝 Total pending after update:', updated.length);
+              return updated;
+            });
           }
           
           return newAchievements;
+        } else {
+          console.log('🔔 No unnotified achievements found');
         }
+      } else {
+        console.log('❌ Failed to get unnotified achievements:', response);
       }
 
       return [];
     } catch (error) {
-      console.error('Error checking for new achievements:', error);
+      console.error('❌ Error checking for new achievements:', error);
       return [];
     }
   };

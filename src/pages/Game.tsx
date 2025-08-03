@@ -111,13 +111,11 @@ const Game: React.FC = () => {
         setQuestionStartTime(Date.now());
 
         // Check for achievements when starting a new game (attempts-based achievements)
-        setTimeout(async () => {
-          try {
-            await checkForNewAchievements(undefined);
-          } catch (error) {
+        setTimeout(() => {
+          checkForNewAchievements(undefined).catch(error => {
             console.error('Error checking achievements at game start:', error);
-          }
-        }, 500);
+          });
+        }, 1000); // Dar más tiempo para que se inicialice el contexto
       }
     }
   }, [topicId]);
@@ -248,14 +246,10 @@ const Game: React.FC = () => {
       [currentQuestionIndex]: (prev[currentQuestionIndex] || 0) + 1
     }));
 
-    // Check for hint-related achievements (asynchronously, non-blocking)
-    setTimeout(async () => {
-      try {
-        await checkForNewAchievements(undefined);
-      } catch (error) {
-        console.error('Error checking achievements after hint usage:', error);
-      }
-    }, 100);
+    // Check for hint-related achievements
+    checkForNewAchievements(undefined).catch(error => {
+      console.error('Error checking achievements after hint usage:', error);
+    });
   };
   
   const handleAnswerSelect = (answer: string) => {
@@ -283,14 +277,10 @@ const Game: React.FC = () => {
       setProgress(topicId, newScore, questions.length);
       setLastQuestionIndex(topicId, nextQuestionIndex);
 
-      // Check for achievements after each answer (asynchronously, non-blocking)
-      setTimeout(async () => {
-        try {
-          await checkForNewAchievements(undefined);
-        } catch (error) {
-          console.error('Error checking achievements after answer:', error);
-        }
-      }, 100);
+      // Check for achievements after each answer
+      checkForNewAchievements(undefined).catch(error => {
+        console.error('Error checking achievements after answer:', error);
+      });
     }
   };
 
@@ -322,14 +312,10 @@ const Game: React.FC = () => {
       setProgress(topicId, newScore, questions.length);
       setLastQuestionIndex(topicId, nextQuestionIndex);
 
-      // Check for achievements after each answer (asynchronously, non-blocking)
-      setTimeout(async () => {
-        try {
-          await checkForNewAchievements(undefined);
-        } catch (error) {
-          console.error('Error checking achievements after answer:', error);
-        }
-      }, 100);
+      // Check for achievements after each answer
+      checkForNewAchievements(undefined).catch(error => {
+        console.error('Error checking achievements after answer:', error);
+      });
     }
   };
 
@@ -380,14 +366,10 @@ const Game: React.FC = () => {
       setProgress(topicId, newScore, questions.length);
       setLastQuestionIndex(topicId, nextQuestionIndex);
 
-      // Check for achievements after each answer (asynchronously, non-blocking)
-      setTimeout(async () => {
-        try {
-          await checkForNewAchievements(undefined);
-        } catch (error) {
-          console.error('Error checking achievements after answer:', error);
-        }
-      }, 100);
+      // Check for achievements after each answer
+      checkForNewAchievements(undefined).catch(error => {
+        console.error('Error checking achievements after answer:', error);
+      });
     }
   };
   
@@ -481,8 +463,13 @@ const Game: React.FC = () => {
             }
 
             // Check for new achievements after completing a level
+            console.log('🏆 Checking for achievements after level completion...');
             try {
-              await checkForNewAchievements(undefined);
+              const newAchievements = await checkForNewAchievements(undefined);
+              console.log('🏆 New achievements found:', newAchievements.length);
+              if (newAchievements.length > 0) {
+                console.log('🏆 Achievement names:', newAchievements.map(a => a.name));
+              }
             } catch (error) {
               console.error('Error checking achievements after level completion:', error);
             }
@@ -608,7 +595,7 @@ const Game: React.FC = () => {
     
     return (
       <div className="min-h-screen bg-background flex flex-col">
-        {/* Achievement Toast Manager for completion screen */}
+        {/* Achievement Manager for completion screen */}
         <AchievementToastManager enabled={true} />
         
         <div className="flex-grow flex items-center justify-center p-4">
@@ -685,7 +672,7 @@ const Game: React.FC = () => {
   
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Achievement Toast Manager */}
+      {/* Achievement Manager */}
       <AchievementToastManager enabled={true} />
       
       {/* Game Content */}
