@@ -29,6 +29,10 @@ import { toast } from 'react-toastify';
 // Importar todas las imágenes
 const images = import.meta.glob('../assets/questions/**/*.png', { eager: true });
 
+// Importar archivos de audio para feedback
+import correctAudioFile from '../assets/audio/CorrectAnswer.mp3';
+import wrongAudioFile from '../assets/audio/WrongAnswer.mp3';
+
 // Función para obtener la imagen
 const getImage = (imagePath: string) => {
   const path = `../assets/${imagePath}`;
@@ -80,6 +84,8 @@ const Game: React.FC = () => {
   const [hintsPerQuestion, setHintsPerQuestion] = useState<Record<number, number>>({});
   const [isFreshRestart, setIsFreshRestart] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const correctAudioRef = useRef<HTMLAudioElement | null>(null);
+  const wrongAudioRef = useRef<HTMLAudioElement | null>(null);
   
   const topic = grammarTopics.find(t => t.id === topicId);
   
@@ -194,6 +200,74 @@ const Game: React.FC = () => {
       }
     }
   }, [topicId, isFreshRestart, questions]);
+
+  // Inicializar audios de feedback
+  useEffect(() => {
+    // Audio para respuesta correcta
+    const correctAudio = new Audio(correctAudioFile);
+    correctAudio.volume = 0.6;
+    correctAudioRef.current = correctAudio;
+
+    // Audio para respuesta incorrecta  
+    const wrongAudio = new Audio(wrongAudioFile);
+    wrongAudio.volume = 0.6;
+    wrongAudioRef.current = wrongAudio;
+
+    // Cleanup al desmontar
+    return () => {
+      if (correctAudioRef.current) {
+        correctAudioRef.current.pause();
+        correctAudioRef.current = null;
+      }
+      if (wrongAudioRef.current) {
+        wrongAudioRef.current.pause();
+        wrongAudioRef.current = null;
+      }
+    };
+  }, []);
+
+  // Función para reproducir audio de feedback
+  const playFeedbackAudio = (isCorrect: boolean) => {
+    if (!soundEnabled) return;
+    
+    const audioToPlay = isCorrect ? correctAudioRef.current : wrongAudioRef.current;
+    if (audioToPlay) {
+      audioToPlay.currentTime = 0; // Reiniciar al inicio
+      audioToPlay.play().catch(error => {
+        console.error('Error playing feedback audio:', error);
+      });
+    }
+  };
+
+  // Navegación con teclado
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Solo procesar si no estamos en un input o textarea
+      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      switch (event.key) {
+        case 'ArrowLeft':
+          event.preventDefault();
+          if (currentQuestionIndex > 0) {
+            handleQuestionSelect(currentQuestionIndex - 1);
+          }
+          break;
+        case 'ArrowRight':
+          event.preventDefault();
+          if (currentQuestionIndex < questions.length - 1) {
+            handleQuestionSelect(currentQuestionIndex + 1);
+          }
+          break;
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [currentQuestionIndex, questions.length]);
   
   // Función para mezclar las opciones
   const shuffleOptions = (options: string[]) => {
@@ -282,6 +356,9 @@ const Game: React.FC = () => {
       const isAnswerCorrect = answer === currentQuestion.correctAnswer;
       setIsCorrect(isAnswerCorrect);
       
+      // Reproducir audio de feedback
+      playFeedbackAudio(isAnswerCorrect);
+      
       if (isAnswerCorrect) {
         setScore(prev => prev + 1);
         updateQuestionStatus(topicId, currentQuestionIndex, 'correct');
@@ -315,6 +392,9 @@ const Game: React.FC = () => {
       
       const isAnswerCorrect = writtenAnswer.trim().toLowerCase() === correctAnswer.toLowerCase();
       setIsCorrect(isAnswerCorrect);
+      
+      // Reproducir audio de feedback
+      playFeedbackAudio(isAnswerCorrect);
       
       if (isAnswerCorrect) {
         setScore(prev => prev + 1);
@@ -368,6 +448,9 @@ const Game: React.FC = () => {
         : draggedAnswers[0] === correctAnswer;
       
       setIsCorrect(isAnswerCorrect);
+      
+      // Reproducir audio de feedback
+      playFeedbackAudio(isAnswerCorrect);
       
       if (isAnswerCorrect) {
         setScore(prev => prev + 1);
@@ -709,6 +792,13 @@ const Game: React.FC = () => {
               <div className="flex-1 mx-4">
                 <div className="flex justify-between items-center mb-2">
                 </div>
+              </div>
+
+              {/* Keyboard navigation hint */}
+              <div className="text-xs text-gray-500 flex items-center">
+                <kbd className="px-2 py-1 bg-gray-100 border border-gray-300 rounded text-xs mr-1">←</kbd>
+                <kbd className="px-2 py-1 bg-gray-100 border border-gray-300 rounded text-xs mr-2">→</kbd>
+                <span>Navigate</span>
               </div>
             </div>
 
