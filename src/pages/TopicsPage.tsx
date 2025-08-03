@@ -139,8 +139,8 @@ const TopicsPage: React.FC = () => {
             icon={!isUserAuthenticated ? <VolumeX className="h-6 w-6 opacity-50" /> : (isMusicEnabled ? <Volume2 className="h-6 w-6 text-blue-600" /> : <VolumeX className="h-6 w-6" />)}
             variant="outline"
             size="lg"
-            tooltip={!isUserAuthenticated ? "🔐 Música de Fondo (Login Requerido)" : (isMusicEnabled ? "🎵 Silenciar Música de Fondo" : "🎵 Activar Música de Fondo")}
-            aria-label={!isUserAuthenticated ? "Música de Fondo - Login Requerido" : (isMusicEnabled ? "Silenciar Música de Fondo" : "Activar Música de Fondo")}
+            tooltip={!isUserAuthenticated ? "🔐 Background Music (Login Required)" : (isMusicEnabled ? "🎵 Mute Background Music" : "🎵 Enable Background Music")}
+            aria-label={!isUserAuthenticated ? "Background Music - Login Required" : (isMusicEnabled ? "Mute Background Music" : "Enable Background Music")}
             onClick={isUserAuthenticated ? toggleMusic : undefined}
             disabled={!isUserAuthenticated}
             className={`transition-transform ${isUserAuthenticated ? 'hover:scale-105' : 'opacity-50 cursor-not-allowed'}`}
@@ -149,8 +149,8 @@ const TopicsPage: React.FC = () => {
             icon={<Info className="h-6 w-6" />}
             variant="outline"
             size="lg"
-            tooltip="Ayuda"
-            aria-label="Ayuda"
+            tooltip="Help"
+            aria-label="Help"
             onClick={() => navigate('/help')}
             className="hover:scale-105 transition-transform"
           />
@@ -226,7 +226,7 @@ const TopicsPage: React.FC = () => {
                           {isLocked ? (
                             <div className="flex items-center justify-center">
                               <Lock className="h-5 w-5 mr-2 text-white" />
-                               BLOQUEADO
+                               LOCKED
                             </div>
                           ) : (
                             getButtonText(topic.id, topic.difficulty)

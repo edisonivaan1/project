@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
         </div>
       </div>
       <div className="bg-[#007AA26B] py-4 mt-8">
-        <p className="text-black text-center text-sm">© 2023 Grammar Master Pro. All rights reserved.</p>
+        <p className="text-black text-center text-sm">© 2025 Grammar Master Pro. All rights reserved.</p>
       </div>
     </footer>
   );

@@ -72,40 +72,43 @@ const Header: React.FC = () => {
     <header className="bg-white shadow-sm">
       <div className="container-custom py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center space-x-2">
-            <img src={logo} alt="Grammar Master Pro Logo" className="h-24 w-auto" />
-            <span className="text-2xl font-bold text-primary"></span>
-          </Link>
-          
-          <nav className="hidden md:flex items-center space-x-6">
-            <Link 
-              to="/topics" 
-              className={`flex items-center space-x-1 font-medium transition-colors ${
-                isActive('/topics') ? 'text-[rgb(var(--color-button))]' : 'hover:text-primary'
-              }`}
-            >
-              <Home className={`h-5 w-5 ${isActive('/topics') ? 'text-[rgb(var(--color-button))]' : ''}`} />
-              <span>Topics</span>
+          {/* Logo y navegación principal agrupados */}
+          <div className="flex items-center space-x-8">
+            <Link to="/" className="flex items-center">
+              <img src={logo} alt="Grammar Master Pro Logo" className="h-32 w-auto" />
             </Link>
-            <Link 
-              to="/settings" 
-              className={`flex items-center space-x-1 font-medium transition-colors ${
-                isActive('/settings') ? 'text-[rgb(var(--color-button))]' : 'hover:text-primary'
-              }`}
-            >
-              <Settings className={`h-5 w-5 ${isActive('/settings') ? 'text-[rgb(var(--color-button))]' : ''}`} />
-              <span>Settings</span>
-            </Link>
-            <Link 
-              to="/help" 
-              className={`flex items-center space-x-1 font-medium transition-colors ${
-                isActive('/help') ? 'text-[rgb(var(--color-button))]' : 'hover:text-primary'
-              }`}
-            >
-              <HelpCircle className={`h-5 w-5 ${isActive('/help') ? 'text-[rgb(var(--color-button))]' : ''}`} />
-              <span>Help</span>
-            </Link>
-          </nav>
+            
+            {/* Navegación principal al lado del logo */}
+            <nav className="hidden md:flex items-center space-x-8">
+              <Link 
+                to="/topics" 
+                className={`flex items-center space-x-2 font-medium text-lg transition-colors ${
+                  isActive('/topics') ? 'text-[rgb(var(--color-button))]' : 'text-gray-700 hover:text-blue-600'
+                }`}
+              >
+                <Home className={`h-6 w-6 ${isActive('/topics') ? 'text-[rgb(var(--color-button))]' : ''}`} />
+                <span>Topics</span>
+              </Link>
+              <Link 
+                to="/settings" 
+                className={`flex items-center space-x-2 font-medium text-lg transition-colors ${
+                  isActive('/settings') ? 'text-[rgb(var(--color-button))]' : 'text-gray-700 hover:text-blue-600'
+                }`}
+              >
+                <Settings className={`h-6 w-6 ${isActive('/settings') ? 'text-[rgb(var(--color-button))]' : ''}`} />
+                <span>Settings</span>
+              </Link>
+              <Link 
+                to="/help" 
+                className={`flex items-center space-x-2 font-medium text-lg transition-colors ${
+                  isActive('/help') ? 'text-[rgb(var(--color-button))]' : 'text-gray-700 hover:text-blue-600'
+                }`}
+              >
+                <HelpCircle className={`h-6 w-6 ${isActive('/help') ? 'text-[rgb(var(--color-button))]' : ''}`} />
+                <span>Help</span>
+              </Link>
+            </nav>
+          </div>
           
           {/* User section - desktop */}
           <div className="hidden md:block">

@@ -48,7 +48,7 @@ const QuestionAudioIcon = ({ className = "", isPlaying = false }: { className?: 
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" className={className}>
     {!isPlaying ? (
       // Icono de play simple
-      <path d="M8 5v14l11-7z" fill="currentColor" />
+        <path d="M8 5v14l11-7z" fill="currentColor" />
     ) : (
       // Icono de pausa para cuando está reproduciéndose
       <>
@@ -137,13 +137,33 @@ const Game: React.FC = () => {
   const questions = getQuestions();
   const currentQuestion = questions[currentQuestionIndex];
   
-  // Verificar acceso a la dificultad
+  // Estado para controlar si se ha verificado el intento en progreso
+  const [hasCheckedAttempt, setHasCheckedAttempt] = useState(false);
+  const [isLoadingAttempt, setIsLoadingAttempt] = useState(true);
+  
+  // Verificar acceso a la dificultad SOLO después de verificar el intento en progreso
   useEffect(() => {
-    if (!canAccessDifficulty(difficulty)) {
-      toast.error(`No tienes acceso a la dificultad ${difficulty}. Completa los niveles anteriores primero.`);
+    if (hasCheckedAttempt && !canAccessDifficulty(difficulty)) {
+      // Solo verificar si no hay un intento en progreso
+      const checkInProgressAttempt = async () => {
+        if (!topicId) return;
+        
+        try {
+          const existingAttempt = await loadInProgressAttempt(topicId, difficulty);
+          if (!existingAttempt) {
+            // No hay intento en progreso y no tiene acceso, redirigir
+            toast.error(`You don't have access to ${difficulty} difficulty. Complete previous levels first.`);
       navigate('/topics');
     }
-  }, [difficulty, canAccessDifficulty, navigate]);
+        } catch (error) {
+          console.error('Error checking in-progress attempt:', error);
+          // En caso de error, permitir que continúe (mejor UX)
+        }
+      };
+      
+      checkInProgressAttempt();
+    }
+  }, [difficulty, canAccessDifficulty, navigate, hasCheckedAttempt, topicId]);
   
 
 
@@ -173,6 +193,10 @@ const Game: React.FC = () => {
         setIsGameCompleted(false);
         setIsCorrect(false);
 
+        // Marcar que ya se verificó el intento en progreso
+        setHasCheckedAttempt(true);
+        setIsLoadingAttempt(false);
+
         // Limpiar el parámetro fresh del URL
         const newSearchParams = new URLSearchParams(searchParams);
         newSearchParams.delete('fresh');
@@ -186,6 +210,10 @@ const Game: React.FC = () => {
 
       // Intentar cargar un intento en progreso desde el backend
       const existingAttempt = await loadInProgressAttempt(topicId, difficulty);
+      
+      // Marcar que ya se verificó el intento en progreso
+      setHasCheckedAttempt(true);
+      setIsLoadingAttempt(false);
       
       if (existingAttempt) {
         // Restaurar estado desde el backend
@@ -250,6 +278,10 @@ const Game: React.FC = () => {
         console.log('✅ Estado restaurado desde backend');
       } else if (!hasInProgressAttempt(topicId)) {
         // No hay intento en progreso, crear uno nuevo
+        // Marcar que ya se verificó el intento en progreso (en este punto sabemos que no hay)
+        setHasCheckedAttempt(true);
+        setIsLoadingAttempt(false);
+        
         resetQuestionStatuses(topicId);
         await startNewAttempt(topicId, difficulty, questions.length);
         setCurrentQuestionIndex(0);
@@ -278,7 +310,12 @@ const Game: React.FC = () => {
       }, 1000);
     };
 
-    initializeAttempt();
+    initializeAttempt().catch(error => {
+      console.error('Error initializing attempt:', error);
+      // En caso de error, marcar como terminado el loading para evitar pantalla infinita
+      setHasCheckedAttempt(true);
+      setIsLoadingAttempt(false);
+    });
   }, [topicId, difficulty, searchParams]);
 
 
@@ -316,13 +353,13 @@ const Game: React.FC = () => {
     const isWordAlreadyUsed = draggedAnswers.includes(word);
     
     if (isWordAlreadyUsed) {
-      announceToScreenReader(`La palabra "${word}" ya está colocada en un espacio.`);
+      announceToScreenReader(`The word "${word}" is already placed in a space.`);
       return;
     }
     
     setSelectedWordIndex(wordIndex);
     setSelectedSpaceIndex(null);
-    announceToScreenReader(`Palabra "${word}" seleccionada. Presiona 1 o 2 para colocarla en un espacio.`);
+    announceToScreenReader(`Word "${word}" selected. Press 1 or 2 to place it in a space.`);
   };
 
   /**
@@ -333,13 +370,13 @@ const Game: React.FC = () => {
   const selectWordFromSpace = (spaceIndex: number) => {
     const word = draggedAnswers[spaceIndex];
     if (!word) {
-      announceToScreenReader(`El espacio ${spaceIndex + 1} está vacío.`);
+      announceToScreenReader(`Space ${spaceIndex + 1} is empty.`);
       return;
     }
     
     setSelectedSpaceIndex(spaceIndex);
     setSelectedWordIndex(null);
-    announceToScreenReader(`Palabra "${word}" seleccionada del espacio ${spaceIndex + 1}. Presiona 1 o 2 para moverla.`);
+    announceToScreenReader(`Word "${word}" selected from space ${spaceIndex + 1}. Press 1 or 2 to move it.`);
   };
 
   /**
@@ -354,9 +391,9 @@ const Game: React.FC = () => {
       const newAnswers = [...draggedAnswers];
       
       if (newAnswers[targetSpaceIndex]) {
-        announceToScreenReader(`Reemplazando "${newAnswers[targetSpaceIndex]}" con "${word}" en el espacio ${targetSpaceIndex + 1}.`);
+        announceToScreenReader(`Replacing "${newAnswers[targetSpaceIndex]}" with "${word}" in space ${targetSpaceIndex + 1}.`);
       } else {
-        announceToScreenReader(`Colocando "${word}" en el espacio ${targetSpaceIndex + 1}.`);
+        announceToScreenReader(`Placing "${word}" in space ${targetSpaceIndex + 1}.`);
       }
       
       newAnswers[targetSpaceIndex] = word;
@@ -373,12 +410,12 @@ const Game: React.FC = () => {
         const targetWord = newAnswers[targetSpaceIndex];
         newAnswers[selectedSpaceIndex] = targetWord;
         newAnswers[targetSpaceIndex] = word;
-        announceToScreenReader(`Intercambiando "${word}" con "${targetWord}".`);
+        announceToScreenReader(`Swapping "${word}" with "${targetWord}".`);
       } else {
         // Solo mover la palabra
         newAnswers[selectedSpaceIndex] = '';
         newAnswers[targetSpaceIndex] = word;
-        announceToScreenReader(`Moviendo "${word}" al espacio ${targetSpaceIndex + 1}.`);
+        announceToScreenReader(`Moving "${word}" to space ${targetSpaceIndex + 1}.`);
       }
       
       setDraggedAnswers(newAnswers);
@@ -397,7 +434,7 @@ const Game: React.FC = () => {
       const newAnswers = [...draggedAnswers];
       newAnswers[spaceIndex] = '';
       setDraggedAnswers(newAnswers);
-      announceToScreenReader(`Palabra "${word}" eliminada del espacio ${spaceIndex + 1}.`);
+      announceToScreenReader(`Word "${word}" removed from space ${spaceIndex + 1}.`);
     }
   };
 
@@ -429,7 +466,7 @@ const Game: React.FC = () => {
         event.stopPropagation();
         setSelectedWordIndex(null);
         setSelectedSpaceIndex(null);
-        announceToScreenReader('Selección cancelada.');
+        announceToScreenReader('Selection cancelled.');
         return;
       }
 
@@ -454,7 +491,7 @@ const Game: React.FC = () => {
                 return;
               } else {
                 // Si la palabra ya está en uso, no hacer nada pero anunciar al usuario
-                announceToScreenReader(`La palabra "${word}" ya está colocada.`);
+                announceToScreenReader(`The word "${word}" is already placed.`);
                 return;
               }
             }
@@ -957,6 +994,19 @@ const Game: React.FC = () => {
   
 
   
+  // Mostrar loading mientras se verifica el intento en progreso
+  if (isLoadingAttempt) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-gray-700">Loading your progress...</h2>
+          <p className="text-gray-500 mt-2">Please wait while we restore your attempt</p>
+        </div>
+      </div>
+    );
+  }
+  
   if (!topic || !currentQuestion) {
     return (
       <div className="text-center py-12">
@@ -1189,7 +1239,7 @@ const Game: React.FC = () => {
                       type="text"
                       value={writtenAnswer}
                       onChange={(e) => setWrittenAnswer(e.target.value)}
-                      placeholder="Escribe tu respuesta aquí..."
+                      placeholder="Write your answer here..."
                       className="p-4 border-2 border-gray-200 rounded-lg focus:border-[rgb(var(--color-primary))] focus:outline-none transition-all duration-300"
                       disabled={isAnswerSubmitted}
                       onKeyPress={(e) => {
@@ -1204,7 +1254,7 @@ const Game: React.FC = () => {
                         disabled={!writtenAnswer.trim()}
                         className="ml-auto h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000]"
                       >
-                        Enviar Respuesta
+                        Submit Answer
                       </Button>
                     )}
                   </div>
@@ -1229,7 +1279,7 @@ const Game: React.FC = () => {
                         <div 
                           className="flex flex-wrap gap-2 justify-center"
                           role="application"
-                          aria-label="Área de construcción de oraciones"
+                          aria-label="Sentence construction area"
                         >
                           {(() => {
                             const textParts = currentQuestion.text.split('______');
@@ -1254,7 +1304,7 @@ const Game: React.FC = () => {
                                     }}
                                     tabIndex={!isAnswerSubmitted ? 0 : -1}
                                     role="button"
-                                    aria-label={`Espacio ${index + 1}: ${draggedAnswers[index] || 'vacío'}. ${!isAnswerSubmitted ? 'Presiona Enter para seleccionar.' : ''}`}
+                                    aria-label={`Space ${index + 1}: ${draggedAnswers[index] || 'empty'}. ${!isAnswerSubmitted ? 'Press Enter to select.' : ''}`}
                                     aria-describedby={`space-${index}-description`}
                                   >
                                     {draggedAnswers[index] ? (
@@ -1272,7 +1322,7 @@ const Game: React.FC = () => {
                                     id={`space-${index}-description`} 
                                     className="sr-only"
                                   >
-                                    Espacio número {index + 1} para colocar una palabra.
+                                    Space number {index + 1} to place a word.
                                   </div>
                                 )}
                               </React.Fragment>
@@ -1284,11 +1334,11 @@ const Game: React.FC = () => {
                     
                     {/* Lista de opciones disponibles */}
                     <div className="bg-white p-4 rounded-lg border-2 border-gray-200">
-                      <p className="text-sm font-medium text-gray-700 mb-3">Palabras disponibles:</p>
+                      <p className="text-sm font-medium text-gray-700 mb-3">Available words:</p>
                       <div 
                         className="flex flex-wrap gap-3"
                         role="group"
-                        aria-label="Lista de palabras disponibles para arrastrar"
+                        aria-label="List of available words to drag"
                       >
                         {currentQuestion.dragOptions?.map((option, index) => {
                           const isUsed = draggedAnswers.includes(option);
@@ -1316,7 +1366,7 @@ const Game: React.FC = () => {
                                 }
                               `}
                               role="button"
-                              aria-label={`Palabra ${index + 1}: ${option}. ${isAvailable && !isAnswerSubmitted ? 'Presiona Ctrl+' + (index + 1) + ' para seleccionar.' : 'No disponible.'}`}
+                              aria-label={`Word ${index + 1}: ${option}. ${isAvailable && !isAnswerSubmitted ? 'Press Ctrl+' + (index + 1) + ' to select.' : 'Not available.'}`}
                               aria-pressed={isSelected}
                               aria-disabled={!isAvailable || isAnswerSubmitted}
                             >
@@ -1336,9 +1386,9 @@ const Game: React.FC = () => {
                           onClick={handleDragAndDropSubmit}
                           disabled={draggedAnswers.filter(answer => answer.trim()).length === 0}
                           className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000]"
-                          aria-label="Verificar respuesta de arrastrar y soltar"
+                          aria-label="Check drag and drop answer"
                         >
-                          Verificar Respuesta
+                          Check Answer
                         </Button>
                       </div>
                     )}
@@ -1403,7 +1453,7 @@ const Game: React.FC = () => {
                 <div className="space-y-4">
                   <div className={`bg-${isCorrect ? 'success' : 'error'}/10 border border-${isCorrect ? 'success' : 'error'}/30 p-4 rounded-lg`}>
                     <h3 className={`font-bold text-${isCorrect ? 'success' : 'error'} mb-2`}>
-                      {isCorrect ? '¡Correct!' : "It's incorrect"}
+                      {isCorrect ? 'Correct!' : "It's incorrect"}
                     </h3>
                     {currentQuestion.isFillInTheBlank && !isCorrect && (
                       <p className="mb-2">

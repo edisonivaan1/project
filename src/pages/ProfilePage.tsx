@@ -435,13 +435,13 @@ const ProfilePage: React.FC = () => {
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      alert('Por favor selecciona un archivo de imagen válido.');
+      alert('Please select a valid image file.');
       return;
     }
 
     // Validate file size (5MB max)
     if (file.size > 5 * 1024 * 1024) {
-      alert('La imagen es demasiado grande. Máximo 5MB.');
+      alert('Image is too large. Maximum 5MB.');
       return;
     }
 
@@ -466,7 +466,7 @@ const ProfilePage: React.FC = () => {
           }
         } catch (error) {
           console.error('❌ Error uploading image:', error);
-          alert('Error al subir la imagen. Por favor intenta de nuevo.');
+          alert('Error uploading image. Please try again.');
         } finally {
           setIsUploadingImage(false);
         }
@@ -475,7 +475,7 @@ const ProfilePage: React.FC = () => {
       reader.readAsDataURL(file);
     } catch (error) {
       console.error('❌ Error processing image:', error);
-      alert('Error al procesar la imagen.');
+      alert('Error processing image.');
       setIsUploadingImage(false);
     }
   };
@@ -504,7 +504,7 @@ const ProfilePage: React.FC = () => {
       }
     } catch (error) {
       console.error('❌ Error deleting image:', error);
-      alert('Error al eliminar la imagen.');
+      alert('Error deleting image.');
     } finally {
       setIsUploadingImage(false);
     }

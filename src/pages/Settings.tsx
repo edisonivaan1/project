@@ -21,7 +21,7 @@ const Settings: React.FC = () => {
   }
 
   const [settings, setSettings] = React.useState<SettingsState>(() => {
-    // Cargar configuración guardada del localStorage
+    // Load saved configuration from localStorage
     const savedSettings = localStorage.getItem('gameSettings');
     return savedSettings ? JSON.parse(savedSettings) : {
       fullscreenMode: false,
@@ -29,7 +29,7 @@ const Settings: React.FC = () => {
     };
   });
 
-  // Guardar configuración cuando cambie
+  // Save configuration when it changes
   useEffect(() => {
     localStorage.setItem('gameSettings', JSON.stringify(settings));
   }, [settings]);
@@ -47,18 +47,18 @@ const Settings: React.FC = () => {
     large: 'Large',
   };
 
-  // Aplicar configuración de texto
+  // Apply text configuration
   useEffect(() => {
     document.documentElement.style.fontSize = 
       settings.textSize === 'small' ? '14px' : 
       settings.textSize === 'large' ? '18px' : '16px';
   }, [settings.textSize]);
 
-  // Aplicar configuración de pantalla completa
+  // Apply fullscreen configuration
   useEffect(() => {
     if (settings.fullscreenMode) {
       document.documentElement.requestFullscreen().catch(err => {
-        console.error('Error al intentar pantalla completa:', err);
+        console.error('Error attempting fullscreen:', err);
       });
     } else if (document.fullscreenElement) {
       document.exitFullscreen();

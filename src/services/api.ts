@@ -100,10 +100,20 @@ export const authService = {
     });
   },
 
+  // Verificar respuesta de seguridad
+  verifySecurityAnswer: async (verificationData: {
+    email: string;
+    securityAnswer: string;
+  }) => {
+    return apiRequest('/auth/verify-security-answer', {
+      method: 'POST',
+      body: JSON.stringify(verificationData),
+    });
+  },
+
   // Resetear contraseña
   resetPassword: async (resetData: {
     email: string;
-    securityAnswer: string;
     newPassword: string;
     confirmPassword: string;
   }) => {

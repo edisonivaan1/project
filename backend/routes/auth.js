@@ -213,10 +213,10 @@ router.post('/forgot-password', [
   }
 });
 
-// @route   POST /api/auth/reset-password
-// @desc    Reset password using security question
+// @route   POST /api/auth/verify-security-answer
+// @desc    Verify security answer for password recovery
 // @access  Public
-router.post('/reset-password', [
+router.post('/verify-security-answer', [
   body('email')
     .isEmail()
     .normalizeEmail()
@@ -224,7 +224,62 @@ router.post('/reset-password', [
   body('securityAnswer')
     .trim()
     .isLength({ min: 1 })
-    .withMessage('Security answer is required'),
+    .withMessage('Security answer is required')
+], async (req, res) => {
+  try {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        errors: errors.array()
+      });
+    }
+
+    const { email, securityAnswer } = req.body;
+
+    // Find user by email
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'No account found with this email address'
+      });
+    }
+
+    // Check security answer
+    const isAnswerValid = await user.compareSecurityAnswer(securityAnswer);
+    if (!isAnswerValid) {
+      return res.status(401).json({
+        success: false,
+        message: 'Incorrect security answer'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Security answer verified successfully',
+      email: user.email
+    });
+
+  } catch (error) {
+    console.error('Verify security answer error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error during security verification'
+    });
+  }
+});
+
+// @route   POST /api/auth/reset-password
+// @desc    Reset password (assumes security answer already verified)
+// @access  Public
+router.post('/reset-password', [
+  body('email')
+    .isEmail()
+    .normalizeEmail()
+    .withMessage('Please provide a valid email'),
   body('newPassword')
     .isLength({ min: 6 })
     .withMessage('New password must be at least 6 characters long'),
@@ -247,7 +302,7 @@ router.post('/reset-password', [
       });
     }
 
-    const { email, securityAnswer, newPassword } = req.body;
+    const { email, newPassword } = req.body;
 
     // Find user by email
     const user = await User.findOne({ email: email.toLowerCase() });
@@ -258,16 +313,7 @@ router.post('/reset-password', [
       });
     }
 
-    // Check security answer
-    const isAnswerValid = await user.compareSecurityAnswer(securityAnswer);
-    if (!isAnswerValid) {
-      return res.status(401).json({
-        success: false,
-        message: 'Incorrect security answer'
-      });
-    }
-
-    // Update password
+    // Update password (security answer verification should have been done previously)
     user.password_hash = newPassword; // Will be hashed by pre-save middleware
     await user.save();
 

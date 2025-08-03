@@ -134,14 +134,22 @@ const LoginPage: React.FC = () => {
         return;
       }
       
-      // En el flujo real, la verificación de la respuesta de seguridad
-      // se hace en el paso final de reset de contraseña
-      setForgotStep(3);
-      toast.success('Continue with the password change.');
+      // Verify security answer with backend
+      const response = await authService.verifySecurityAnswer({
+        email: forgotEmail,
+        securityAnswer: securityAnswer.trim()
+      });
+      
+      if (response.success) {
+        setForgotStep(3);
+        toast.success('Security answer verified. You can now reset your password.');
+      } else {
+        throw new Error(response.message || 'Invalid security answer');
+      }
       
     } catch (error) {
       console.error('Error verifying security answer:', error);
-      toast.error('Server error. Please try again later.');
+      toast.error(handleAuthError(error));
     } finally {
       setIsLoadingForgot(false);
     }
@@ -169,7 +177,6 @@ const LoginPage: React.FC = () => {
       // Usar el servicio de API para reset password
       await authService.resetPassword({
         email: forgotEmail,
-        securityAnswer,
         newPassword,
         confirmPassword: confirmNewPassword
       });
