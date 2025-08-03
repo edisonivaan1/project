@@ -148,6 +148,47 @@ export const progressService = {
     }
   },
 
+  // Obtener historial de intentos del usuario
+  getAttempts: async (filters?: {
+    topicId?: string;
+    difficulty?: string;
+    limit?: number;
+    skip?: number;
+    sortBy?: string;
+    sortOrder?: string;
+  }) => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+    
+    const queryParams = new URLSearchParams();
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    
+    const queryString = queryParams.toString();
+    const endpoint = `/progress/attempts${queryString ? `?${queryString}` : ''}`;
+    
+    try {
+      const response = await apiRequest(endpoint, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      
+      console.log('Attempts API response:', response);
+      return response;
+    } catch (error) {
+      console.error('Error in getAttempts:', error);
+      throw error;
+    }
+  },
+
   // Completar un nivel
   completeLevel: async (data: CompleteLevelData): Promise<ApiResponse> => {
     try {

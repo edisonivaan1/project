@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { progressService } from '../services/api';
+import { useAuth } from './AuthContext';
 
 interface Attempt {
   id: string;
@@ -22,18 +24,31 @@ interface AttemptHistory {
   timestamp: number;
 }
 
+interface BackendAttempt {
+  _id: string;
+  topicId: string;
+  difficulty: string;
+  correct: number;
+  total: number;
+  percentage: number;
+  timeSpent: number;
+  hintsUsed: number;
+  completedAt: string;
+}
+
 interface AttemptContextType {
   getCurrentAttempt: (topicId: string) => Attempt | null;
   startNewAttempt: (topicId: string) => void;
   submitAnswer: (topicId: string, questionIndex: number, answer: string) => void;
   completeAttempt: (topicId: string, correctAnswers: number, totalQuestions: number) => void;
   hasInProgressAttempt: (topicId: string) => boolean;
-  hasCompletedAttempt: (topicId: string) => boolean;
+  hasCompletedAttempt: (topicId: string, difficulty?: string) => boolean;
   getAttemptHistory: (topicId: string) => AttemptHistory[];
   resetAttempt: (topicId: string) => void;
   getAttemptScore: (topicId: string) => { correct: number; total: number };
   recordHintUsage: (topicId: string, questionIndex: number) => void;
   getUsedHints: (topicId: string) => number[];
+  refreshAttempts: () => Promise<void>;
 }
 
 const AttemptContext = createContext<AttemptContextType | undefined>(undefined);
@@ -41,24 +56,47 @@ const AttemptContext = createContext<AttemptContextType | undefined>(undefined);
 export const AttemptProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [attempts, setAttempts] = useState<Record<string, Attempt>>({});
   const [attemptHistory, setAttemptHistory] = useState<Record<string, AttemptHistory[]>>({});
+  const [completedAttempts, setCompletedAttempts] = useState<BackendAttempt[]>([]);
+  const [isLoadingAttempts, setIsLoadingAttempts] = useState(false);
+  const { user } = useAuth();
 
-  // Load attempts and attempt history from localStorage on mount
-  useEffect(() => {
-    const savedAttempts = localStorage.getItem('topicAttempts');
-    const savedHistory = localStorage.getItem('attemptHistory');
-    if (savedAttempts) {
-      setAttempts(JSON.parse(savedAttempts));
+  // Load completed attempts from backend when user is available
+  const loadCompletedAttempts = async () => {
+    if (!user || isLoadingAttempts) return;
+    
+    try {
+      setIsLoadingAttempts(true);
+      const response = await progressService.getAttempts({
+        limit: 1000, // Get all attempts
+        sortBy: 'completedAt',
+        sortOrder: 'desc'
+      });
+      
+      if (response.success && response.data?.attempts) {
+        setCompletedAttempts(response.data.attempts);
+        console.log('✅ Intentos cargados desde el backend:', response.data.attempts);
+      }
+    } catch (error) {
+      console.error('❌ Error cargando intentos desde el backend:', error);
+    } finally {
+      setIsLoadingAttempts(false);
     }
-    if (savedHistory) {
-      setAttemptHistory(JSON.parse(savedHistory));
-    }
-  }, []);
+  };
 
-  // Save attempts and attempt history to localStorage when they change
+  // Load attempts when user is available
   useEffect(() => {
-    localStorage.setItem('topicAttempts', JSON.stringify(attempts));
-    localStorage.setItem('attemptHistory', JSON.stringify(attemptHistory));
-  }, [attempts, attemptHistory]);
+    if (user) {
+      loadCompletedAttempts();
+    } else {
+      // Clear attempts when user logs out
+      setCompletedAttempts([]);
+    }
+  }, [user]);
+
+  // Function to refresh attempts from backend
+  const refreshAttempts = async () => {
+    await loadCompletedAttempts();
+  };
 
   const getCurrentAttempt = (topicId: string): Attempt | null => {
     return attempts[topicId] || null;
@@ -163,7 +201,18 @@ export const AttemptProvider: React.FC<{ children: ReactNode }> = ({ children })
     return attempt !== undefined && !attempt.isCompleted;
   };
 
-  const hasCompletedAttempt = (topicId: string): boolean => {
+  const hasCompletedAttempt = (topicId: string, difficulty?: string): boolean => {
+    // Check backend attempts first
+    const backendAttempts = completedAttempts.filter(attempt => 
+      attempt.topicId === topicId && 
+      (!difficulty || attempt.difficulty === difficulty)
+    );
+    
+    if (backendAttempts.length > 0) {
+      return true;
+    }
+    
+    // Fallback to local attempts (for current session)
     const attempt = attempts[topicId];
     return attempt !== undefined && attempt.isCompleted;
   };
@@ -202,7 +251,8 @@ export const AttemptProvider: React.FC<{ children: ReactNode }> = ({ children })
         resetAttempt,
         getAttemptScore,
         recordHintUsage,
-        getUsedHints
+        getUsedHints,
+        refreshAttempts
       }}
     >
       {children}

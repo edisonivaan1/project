@@ -49,16 +49,13 @@ const TopicsPage: React.FC = () => {
   }, {} as Record<string, typeof grammarTopics>);
 
   const getButtonText = (topicId: string) => {
-    if (hasCompletedAttempt(topicId)) {
-      return 'VIEW RESULTS';
-    }
     if (hasInProgressAttempt(topicId)) {
       return 'CONTINUE ATTEMPT';
     }
     return 'START PRACTICE';
   };
 
-  const handleButtonClick = (e: React.MouseEvent, topicId: string, difficulty: 'easy' | 'medium' | 'hard') => {
+  const handleStartClick = (e: React.MouseEvent, topicId: string, difficulty: 'easy' | 'medium' | 'hard') => {
     e.stopPropagation();
     
     // Verificar si el usuario puede acceder a esta dificultad
@@ -66,11 +63,18 @@ const TopicsPage: React.FC = () => {
       return; // No permitir clic si está bloqueado
     }
     
-    if (hasCompletedAttempt(topicId)) {
-      navigate(`/results/${topicId}?difficulty=${difficulty}`);
-    } else {
-      navigate(`/game/${topicId}?difficulty=${difficulty}`);
+    navigate(`/game/${topicId}?difficulty=${difficulty}`);
+  };
+
+  const handleViewResultsClick = (e: React.MouseEvent, topicId: string, difficulty: 'easy' | 'medium' | 'hard') => {
+    e.stopPropagation();
+    
+    // Verificar si el usuario puede acceder a esta dificultad
+    if (!canAccessDifficulty(difficulty)) {
+      return; // No permitir clic si está bloqueado
     }
+    
+    navigate(`/results/${topicId}?difficulty=${difficulty}`);
   };
 
   const getTopicStatus = (topicId: string, difficulty: 'easy' | 'medium' | 'hard') => {
@@ -175,22 +179,35 @@ const TopicsPage: React.FC = () => {
                         <ProgressBar value={progress} max={100} className="h-2" />
                       </div>
                       
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        className={`w-full mt-2 ${isLocked ? 'bg-gray-400 cursor-not-allowed' : colors.button}`}
-                        onClick={(e) => handleButtonClick(e, topic.id, topic.difficulty as 'easy' | 'medium' | 'hard')}
-                        disabled={isLocked}
-                      >
-                        {isLocked ? (
-                          <div className="flex items-center justify-center">
-                            <Lock className="h-4 w-4 mr-2" />
-                            LOCKED
-                          </div>
-                        ) : (
-                          getButtonText(topic.id)
+                      <div className="space-y-2">
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          className={`w-full ${isLocked ? 'bg-gray-400 cursor-not-allowed' : colors.button}`}
+                          onClick={(e) => handleStartClick(e, topic.id, topic.difficulty as 'easy' | 'medium' | 'hard')}
+                          disabled={isLocked}
+                        >
+                          {isLocked ? (
+                            <div className="flex items-center justify-center">
+                              <Lock className="h-4 w-4 mr-2" />
+                              LOCKED
+                            </div>
+                          ) : (
+                            getButtonText(topic.id)
+                          )}
+                        </Button>
+                        
+                        {!isLocked && hasCompletedAttempt(topic.id, topic.difficulty as 'easy' | 'medium' | 'hard') && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full border-2 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+                            onClick={(e) => handleViewResultsClick(e, topic.id, topic.difficulty as 'easy' | 'medium' | 'hard')}
+                          >
+                            VIEW RESULTS
+                          </Button>
                         )}
-                      </Button>
+                      </div>
                     </div>
                   </CardBody>
                 </Card>

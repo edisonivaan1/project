@@ -6,6 +6,7 @@ interface ProgressContextType {
   setProgress: (topicId: string, correctAnswers: number, totalQuestions: number) => void;
   getLastQuestionIndex: (topicId: string) => number;
   setLastQuestionIndex: (topicId: string, index: number) => void;
+  resetLastQuestionIndex: (topicId: string) => void;
   getHighestScore: (topicId: string) => { correct: number; total: number };
 }
 
@@ -86,6 +87,13 @@ export const ProgressProvider: React.FC<{ children: ReactNode }> = ({ children }
     }));
   };
 
+  const resetLastQuestionIndex = (topicId: string) => {
+    setLastQuestionMap(prev => {
+      const { [topicId]: _, ...rest } = prev;
+      return rest;
+    });
+  };
+
   const getHighestScore = (topicId: string) => {
     return highestScores[topicId] || { correct: 0, total: 10 };
   };
@@ -97,6 +105,7 @@ export const ProgressProvider: React.FC<{ children: ReactNode }> = ({ children }
         setProgress,
         getLastQuestionIndex,
         setLastQuestionIndex,
+        resetLastQuestionIndex,
         getHighestScore
       }}
     >

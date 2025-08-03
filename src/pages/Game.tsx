@@ -80,9 +80,33 @@ const Game: React.FC = () => {
   const [questionStartTime, setQuestionStartTime] = useState<number>(Date.now());
   const [timePerQuestion, setTimePerQuestion] = useState<Record<number, number>>({});
   const [hintsPerQuestion, setHintsPerQuestion] = useState<Record<number, number>>({});
+  const [isFreshRestart, setIsFreshRestart] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   
   const topic = grammarTopics.find(t => t.id === topicId);
+  
+  // Get questions based on topic ID
+  const getQuestions = (): QuestionType[] => {
+    switch (topicId) {
+      case 'present-tenses':
+        return presentTensesQuestions;
+      case 'past-tenses':
+        return pastTensesQuestions;
+      case 'conditionals':
+        return conditionalsQuestions;
+      case 'prepositions':
+        return prepositionsQuestions;
+      case 'articles':
+        return articlesQuestions;
+      case 'modal-verbs':
+        return modalVerbsQuestions;
+      default:
+        return presentTensesQuestions; // Default to present tenses questions
+    }
+  };
+  
+  const questions = getQuestions();
+  const currentQuestion = questions[currentQuestionIndex];
   
   // Verificar acceso a la dificultad
   useEffect(() => {
@@ -92,10 +116,17 @@ const Game: React.FC = () => {
     }
   }, [difficulty, canAccessDifficulty, navigate]);
   
+  // Detectar fresh restart al montar el componente
+  useEffect(() => {
+    const isFreshStart = searchParams.get('fresh') === 'true';
+    setIsFreshRestart(isFreshStart);
+  }, []);
+
   // Initialize attempt if needed
   useEffect(() => {
     if (topicId) {
-      if (!hasInProgressAttempt(topicId)) {
+      const isFreshStart = searchParams.get('fresh') === 'true';
+      if (!hasInProgressAttempt(topicId) || isFreshStart) {
         // Reset all states for a new attempt
         resetQuestionStatuses(topicId);
         startNewAttempt(topicId);
@@ -105,10 +136,26 @@ const Game: React.FC = () => {
         setShowHint(false);
         setIsAnswerSubmitted(false);
         setSelectedAnswer(null);
+        setWrittenAnswer('');
+        setDraggedAnswers([]);
         setIsPlaying(false);
         setTimePerQuestion({});
         setHintsPerQuestion({});
         setQuestionStartTime(Date.now());
+        setIsGameCompleted(false);
+        setShowFeedback(false);
+        setIsCorrect(false);
+
+        // Limpiar el parámetro fresh del URL si está presente
+        if (isFreshStart) {
+          const newSearchParams = new URLSearchParams(searchParams);
+          newSearchParams.delete('fresh');
+          const newURL = newSearchParams.toString() 
+            ? `${window.location.pathname}?${newSearchParams.toString()}`
+            : window.location.pathname;
+          window.history.replaceState({}, '', newURL);
+          setIsFreshRestart(false); // Reset the flag after cleaning
+        }
 
         // Check for achievements when starting a new game (attempts-based achievements)
         setTimeout(() => {
@@ -118,11 +165,12 @@ const Game: React.FC = () => {
         }, 1000); // Dar más tiempo para que se inicialice el contexto
       }
     }
-  }, [topicId]);
+  }, [topicId, searchParams]);
 
   // Load attempt state
   useEffect(() => {
-    if (topicId) {
+    if (topicId && !isFreshRestart) {
+      // Solo restaurar estado si NO es un fresh restart
       const attempt = getCurrentAttempt(topicId);
       if (attempt) {
         // Restore answers and hints
@@ -148,30 +196,7 @@ const Game: React.FC = () => {
         }
       }
     }
-  }, [topicId]);
-
-  // Get questions based on topic ID
-  const getQuestions = (): QuestionType[] => {
-    switch (topicId) {
-      case 'present-tenses':
-        return presentTensesQuestions;
-      case 'past-tenses':
-        return pastTensesQuestions;
-      case 'conditionals':
-        return conditionalsQuestions;
-      case 'prepositions':
-        return prepositionsQuestions;
-      case 'articles':
-        return articlesQuestions;
-      case 'modal-verbs':
-        return modalVerbsQuestions;
-      default:
-        return presentTensesQuestions; // Default to present tenses questions
-    }
-  };
-  
-  const questions = getQuestions();
-  const currentQuestion = questions[currentQuestionIndex];
+  }, [topicId, isFreshRestart, questions]);
   
   // Función para mezclar las opciones
   const shuffleOptions = (options: string[]) => {

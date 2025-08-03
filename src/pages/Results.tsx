@@ -1,14 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Home, RefreshCw, Trophy } from 'lucide-react';
-import Card, { CardBody, CardFooter } from '../components/UI/Card';
+import Card, { CardBody } from '../components/UI/Card';
 import Button from '../components/UI/Button';
 import ProgressBar from '../components/UI/ProgressBar';
 import { grammarTopics } from '../data/grammarTopics';
 import { useAttempt } from '../contexts/AttemptContext';
 import { useQuestionStatus } from '../contexts/QuestionStatusContext';
-import { useGameProgress } from '../contexts/GameProgressContext';
 import { useAchievements } from '../contexts/AchievementContext';
+import { useGame } from '../contexts/GameContext';
+import { useProgress } from '../contexts/ProgressContext';
+import { progressService } from '../services/api';
+
+interface BackendAttempt {
+  _id: string;
+  topicId: string;
+  difficulty: string;
+  correct: number;
+  total: number;
+  percentage: number;
+  timeSpent: number;
+  hintsUsed: number;
+  completedAt: string;
+}
 
 const Results: React.FC = () => {
   const { topicId } = useParams<{ topicId: string }>();
@@ -16,23 +30,87 @@ const Results: React.FC = () => {
   const [searchParams] = useSearchParams();
   const difficulty = (searchParams.get('difficulty') as 'easy' | 'medium' | 'hard') || 'easy';
   
-  const { getCurrentAttempt, getAttemptHistory, resetAttempt, getAttemptScore } = useAttempt();
-  const { getQuestionStatus } = useQuestionStatus();
-  const { getLevelProgress, getLevelPercentage } = useGameProgress();
+  // Estados para datos del backend
+  const [backendAttempts, setBackendAttempts] = useState<BackendAttempt[]>([]);
+  const [isLoadingAttempts, setIsLoadingAttempts] = useState(true);
+  const [currentScore, setCurrentScore] = useState({ correct: 0, total: 10 });
+  const [percentage, setPercentage] = useState(0);
+  
+  const { getCurrentAttempt, resetAttempt } = useAttempt();
+  const { resetQuestionStatuses } = useQuestionStatus();
   const { checkForNewAchievements } = useAchievements();
+  const { resetGame } = useGame();
+  const { resetLastQuestionIndex } = useProgress();
 
   const topic = grammarTopics.find(t => t.id === topicId);
-  const attempt = topicId ? getCurrentAttempt(topicId) : null;
-  const attemptHistory = topicId ? getAttemptHistory(topicId) : [];
-  
-  // Usar progreso del backend si está disponible, sino usar el local
-  const levelProgress = topicId ? getLevelProgress(topicId, difficulty) : null;
-  const backendPercentage = topicId ? getLevelPercentage(topicId, difficulty) : 0;
-  const localScore = topicId ? getAttemptScore(topicId) : { correct: 0, total: 10 };
-  
-  // Priorizar datos del backend si existen
-  const currentScore = levelProgress ? levelProgress.bestScore : localScore;
-  const percentage = levelProgress ? backendPercentage : Math.round((localScore.correct / localScore.total) * 100);
+
+  // Cargar intentos del backend para este tema y dificultad específicos
+  useEffect(() => {
+    const loadAttempts = async () => {
+      if (!topicId) return;
+      
+      try {
+        setIsLoadingAttempts(true);
+        
+        // Obtener intentos específicos para este tema y dificultad
+        const response = await progressService.getAttempts({
+          topicId: topicId.replace('_', '-'), // Convertir formato si es necesario
+          difficulty: difficulty,
+          limit: 100, // Obtener todos los intentos para este tema/dificultad
+          sortBy: 'completedAt',
+          sortOrder: 'desc'
+        });
+        
+        if (response.success && response.data?.attempts) {
+          const attempts = response.data.attempts as BackendAttempt[];
+          setBackendAttempts(attempts);
+          
+          // Encontrar el intento con la puntuación más alta
+          if (attempts.length > 0) {
+            const bestAttempt = attempts.reduce((best, current) => 
+              current.percentage > best.percentage ? current : best
+            );
+            
+            setCurrentScore({ 
+              correct: bestAttempt.correct, 
+              total: bestAttempt.total 
+            });
+            setPercentage(bestAttempt.percentage);
+            
+            console.log('✅ Mejor intento encontrado:', bestAttempt);
+          } else {
+            // Fallback a datos locales si no hay intentos en el backend
+            const localAttempt = getCurrentAttempt(topicId);
+            if (localAttempt && localAttempt.isCompleted) {
+              setCurrentScore({ 
+                correct: localAttempt.correctAnswers, 
+                total: localAttempt.totalQuestions 
+              });
+              setPercentage(localAttempt.score);
+            }
+          }
+          
+          console.log('✅ Intentos cargados para Results:', attempts);
+        }
+      } catch (error) {
+        console.error('❌ Error cargando intentos en Results:', error);
+        
+        // Fallback a datos locales en caso de error
+        const localAttempt = getCurrentAttempt(topicId);
+        if (localAttempt && localAttempt.isCompleted) {
+          setCurrentScore({ 
+            correct: localAttempt.correctAnswers, 
+            total: localAttempt.totalQuestions 
+          });
+          setPercentage(localAttempt.score);
+        }
+      } finally {
+        setIsLoadingAttempts(false);
+      }
+    };
+
+    loadAttempts();
+  }, [topicId, difficulty, getCurrentAttempt]);
 
   if (!topic) {
     return (
@@ -45,13 +123,20 @@ const Results: React.FC = () => {
 
   const handleTryAgain = () => {
     if (topicId) {
+      // Limpiar solo el estado de la sesión actual (no localStorage)
       resetAttempt(topicId);
-      navigate(`/game/${topicId}?difficulty=${difficulty}`);
+      resetQuestionStatuses(topicId);
+      resetLastQuestionIndex(topicId);
+      resetGame();
+      
+      // Navegar directamente al juego sin delay
+      const timestamp = Date.now();
+      navigate(`/game/${topicId}?difficulty=${difficulty}&fresh=true&key=${timestamp}`);
     }
   };
 
-  const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleString();
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleString();
   };
 
   const isPerfectScore = percentage === 100;
@@ -141,25 +226,85 @@ const Results: React.FC = () => {
         </CardBody>
       </Card>
 
-      {attemptHistory.length > 0 && (
+      {!isLoadingAttempts && backendAttempts.length > 0 && (
         <Card>
           <CardBody>
-            <h2 className="text-2xl font-bold mb-6">My Attempts</h2>
-            <div className="space-y-4">
-              {attemptHistory.map((history) => (
-                <div
-                  key={history.timestamp}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-                >
-                  <div>
-                    <div className="font-semibold">Attempt #{history.attemptNumber}</div>
-                    <div className="text-sm text-gray-600">{formatDate(history.timestamp)}</div>
+            <h2 className="text-2xl font-bold mb-6">
+              My Attempts
+              {backendAttempts.length > 5 && (
+                <span className="text-sm font-normal text-gray-500 ml-2">
+                  ({backendAttempts.length} total - scroll to see all)
+                </span>
+              )}
+            </h2>
+            <div className="relative">
+              <div className="space-y-4 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
+                {backendAttempts.map((attempt, index) => {
+                // Encontrar el porcentaje más alto para destacar el mejor intento
+                const bestPercentage = Math.max(...backendAttempts.map(a => a.percentage));
+                const isBestAttempt = attempt.percentage === bestPercentage;
+                
+                return (
+                  <div
+                    key={attempt._id}
+                    className={`flex items-center justify-between p-4 rounded-lg relative ${
+                      isBestAttempt 
+                        ? 'bg-green-50 border-2 border-green-200' 
+                        : 'bg-gray-50'
+                    }`}
+                  >
+                    {isBestAttempt && (
+                      <div className="absolute top-2 right-2">
+                        <Trophy className="h-5 w-5 text-yellow-500" />
+                      </div>
+                    )}
+                    <div>
+                      <div className={`font-semibold ${isBestAttempt ? 'text-green-800' : ''}`}>
+                        Attempt #{backendAttempts.length - index}
+                        {isBestAttempt && (
+                          <span className="ml-2 text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
+                            BEST
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-sm text-gray-600">{formatDate(attempt.completedAt)}</div>
+                      {attempt.timeSpent > 0 && (
+                        <div className="text-xs text-gray-500">
+                          Time: {Math.round(attempt.timeSpent / 60)}m {attempt.timeSpent % 60}s
+                        </div>
+                      )}
+                      {attempt.hintsUsed > 0 && (
+                        <div className="text-xs text-gray-500">
+                          Hints used: {attempt.hintsUsed}
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      <div className={`text-lg font-bold ${isBestAttempt ? 'text-green-700' : ''}`}>
+                        {attempt.correct} / {attempt.total}
+                      </div>
+                      <div className={`text-sm ${isBestAttempt ? 'text-green-600' : 'text-gray-600'}`}>
+                        {attempt.percentage}%
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-lg font-bold">
-                    {history.correctAnswers} / {history.totalQuestions}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
+              </div>
+              {/* Gradient indicator at bottom when scrollable */}
+              {backendAttempts.length > 5 && (
+                <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+              )}
+            </div>
+          </CardBody>
+        </Card>
+      )}
+
+      {isLoadingAttempts && (
+        <Card>
+          <CardBody>
+            <div className="text-center py-8">
+              <div className="text-gray-500">Loading attempts...</div>
             </div>
           </CardBody>
         </Card>
