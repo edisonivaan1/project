@@ -145,7 +145,7 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'played',
     explanation: 'Past Simple For Repeated Actions In The Past.',
     hint: 'Childhood Habit → Past Simple. I played soccer every Sunday.',
-    image: 'questions/pastTense/past_tense_question3_child_soccer.png',
+    image: 'questions/pastTense/pat-3.png',
     alt: 'Un niño jugando fútbol',
     isFillInTheBlank: true,
     audio: '/src/assets/audio_questions/past_question3_audio.mp3'
@@ -157,7 +157,7 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'had written',
     explanation: 'Past Perfect Highlights The Earlier Past Action (Writing).',
     hint: 'First Write, Then Feel Relieved. She had written the letter.',
-    image: 'questions/pastTense/past_tense_question4_writing_letter.png',
+    image: 'questions/pastTense/pat-4.png',
     alt: 'Una persona escribiendo una carta',
     isFillInTheBlank: true,
     audio: '/src/assets/audio_questions/past_question4_audio.mp3'
@@ -169,7 +169,7 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'were watching',
     explanation: 'Past Continuous For An Ongoing Past Action Interrupted.',
     hint: 'Action In Progress → Past Continuous. They were watching TV.',
-    image: 'watching_tv.png',
+    image: 'questions/pastTense/pat-5.png',
     alt: 'Unos adultos viendo televisión',
     isFillInTheBlank: true,
     audio: '/src/assets/audio_questions/past_question5_audio.mp3'
@@ -181,7 +181,7 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'had found',
     explanation: 'Past Perfect Shows Completion Before Another Past Event.',
     hint: 'Seat Finding Happened Earlier. We had found our seats.',
-    image: 'questions/pastTense/past_tense_question6_movie_seats.png',
+    image: 'questions/pastTense/pat-6.png',
     alt: 'Unos adultos buscando sus asientos en una sala de cine',
     isFillInTheBlank: true,
     audio: '/src/assets/audio_questions/past_question6_audio.mp3'
@@ -193,7 +193,7 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'lived',
     explanation: 'Past Simple For A Finished Past Situation With A Specific Time ("Last Year").',
     hint: 'Specific Past Time → Past Simple. He lived in Berlin last year.',
-    image: 'questions/pastTense/past_tense_question7_berlin_city.png',
+    image: 'questions/pastTense/pat-7.png',
     alt: 'Una ciudad con edificios y una torre',
     isFillInTheBlank: true,
     audio: '/src/assets/audio_questions/past_question7_audio.mp3'
@@ -205,19 +205,19 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'were / doing',
     explanation: 'Past Continuous Describes The Activity In Progress During The Interruption.',
     hint: 'Focus On Ongoing Action. What were you doing?',
-    image: 'phone_call.png',
+    image: 'questions/pastTense/pat-8.png',
     alt: 'Un teléfono sonando',
     isFillInTheBlank: true,
     audio: '/src/assets/audio_questions/past_question8_audio.mp3'
   },
   {
     id: 'past-9',
-    text: 'She was tired because she _____ all day.',
+    text: 'He was tired because he _____ all day.',
     options: ['worked', 'was working', 'had worked', 'has worked'],
     correctAnswer: 'had worked',
     explanation: 'Past Perfect Explains The Reason For A Past State.',
-    hint: 'Work Finished Before Feeling Tired. She had worked all day.',
-    image: 'questions/pastTense/past_tense_question9_tired_worker.png',
+    hint: 'Work Finished Before Feeling Tired. He had worked all day.',
+    image: 'questions/pastTense/pat-9.png',
     alt: 'Un trabajador cansado',
     isFillInTheBlank: true,
     audio: '/src/assets/audio_questions/past_question9_audio.mp3'
@@ -229,7 +229,7 @@ export const pastTensesQuestions: QuestionType[] = [
     correctAnswer: 'went',
     explanation: 'Past Simple Is Used With Finished Time Adverbs Like "Yesterday".',
     hint: 'Completed Trip. We went to the beach yesterday.',
-    image: 'beach_day.png',
+    image: 'questions/pastTense/pat-10.png',
     alt: 'Unos adultos en la playa',
     isFillInTheBlank: true,
     audio: '/src/assets/audio_questions/past_question10_audio.mp3'
