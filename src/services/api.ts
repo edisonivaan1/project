@@ -122,6 +122,21 @@ export const authService = {
       },
     });
   },
+
+  // Actualizar imagen de perfil
+  updateProfileImage: async (profileImageBase64: string) => {
+    return apiRequest('/auth/profile-image', {
+      method: 'PUT',
+      body: JSON.stringify({ profileImage: profileImageBase64 }),
+    });
+  },
+
+  // Eliminar imagen de perfil
+  deleteProfileImage: async () => {
+    return apiRequest('/auth/profile-image', {
+      method: 'DELETE',
+    });
+  },
 };
 
 // Servicios de progreso del juego

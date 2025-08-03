@@ -2,6 +2,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const auth = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -341,6 +342,109 @@ router.get('/debug/users', async (req, res) => {
       success: false, 
       message: 'Error del servidor',
       error: error.message
+    });
+  }
+});
+
+// @route   PUT /api/auth/profile-image
+// @desc    Update user profile image
+// @access  Private
+router.put('/profile-image', [
+  auth,
+  body('profileImage')
+    .isString()
+    .notEmpty()
+    .withMessage('Profile image data is required')
+    .isLength({ max: 5000000 }) // Limit to ~5MB base64 string
+    .withMessage('Profile image is too large')
+], async (req, res) => {
+  try {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        errors: errors.array()
+      });
+    }
+
+    const { profileImage } = req.body;
+    const userId = req.user._id;
+
+    // Validate base64 image format
+    if (!profileImage.startsWith('data:image/')) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid image format. Only images are allowed.'
+      });
+    }
+
+    // Update user profile image
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { profileImage },
+      { new: true, runValidators: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    console.log(`✅ Profile image updated for user: ${user.email}`);
+
+    res.json({
+      success: true,
+      message: 'Profile image updated successfully',
+      user
+    });
+
+  } catch (error) {
+    console.error('Update profile image error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error updating profile image'
+    });
+  }
+});
+
+// @route   DELETE /api/auth/profile-image
+// @desc    Delete user profile image
+// @access  Private
+router.delete('/profile-image', auth, async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    // Update user to remove profile image
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { profileImage: null },
+      { new: true, runValidators: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    console.log(`✅ Profile image deleted for user: ${user.email}`);
+
+    res.json({
+      success: true,
+      message: 'Profile image deleted successfully',
+      user
+    });
+
+  } catch (error) {
+    console.error('Delete profile image error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error deleting profile image'
     });
   }
 });

@@ -44,6 +44,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Security answer is required']
   },
+  profileImage: {
+    type: String,
+    default: null // Base64 encoded image or URL
+  },
   isActive: {
     type: Boolean,
     default: true

@@ -7,7 +7,7 @@ import estrellaImage from '../assets/img/estrella.png';
 import medallaImage from '../assets/img/medalla.jpeg';
 import { useAuth } from '../contexts/AuthContext';
 import { useGameProgress } from '../contexts/GameProgressContext';
-import { progressService } from '../services/api';
+import { progressService, authService } from '../services/api';
 import { grammarTopics } from '../data/grammarTopics';
 
 interface UserStats {
@@ -55,7 +55,7 @@ interface Achievement {
 }
 
 const ProfilePage: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, refreshUser } = useAuth();
   const navigate = useNavigate();
   const { 
     isLevelCompleted, 
@@ -96,6 +96,7 @@ const ProfilePage: React.FC = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [profileImage, setProfileImage] = useState<string>(perfilImage);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -428,31 +429,95 @@ const ProfilePage: React.FC = () => {
     return `${hours}h ${minutes}m`;
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Por favor selecciona un archivo de imagen válido.');
+      return;
+    }
+
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('La imagen es demasiado grande. Máximo 5MB.');
+      return;
+    }
+
+    try {
+      setIsUploadingImage(true);
+      
       const reader = new FileReader();
-      reader.onload = (e) => {
-        const imageData = e.target?.result as string;
-        setProfileImage(imageData);
-        // Save to localStorage for persistence
-        localStorage.setItem('userProfileImage', imageData);
+      reader.onload = async (e) => {
+        try {
+          const imageData = e.target?.result as string;
+          
+          // Upload to backend
+          const response = await authService.updateProfileImage(imageData);
+          
+          if (response.success) {
+            setProfileImage(imageData);
+            // Refresh user data to update the user context
+            await refreshUser();
+            console.log('✅ Profile image updated successfully');
+          } else {
+            throw new Error(response.message || 'Error updating profile image');
+          }
+        } catch (error) {
+          console.error('❌ Error uploading image:', error);
+          alert('Error al subir la imagen. Por favor intenta de nuevo.');
+        } finally {
+          setIsUploadingImage(false);
+        }
       };
+      
       reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('❌ Error processing image:', error);
+      alert('Error al procesar la imagen.');
+      setIsUploadingImage(false);
     }
   };
 
   const triggerImageUpload = () => {
-    fileInputRef.current?.click();
+    if (!isUploadingImage) {
+      fileInputRef.current?.click();
+    }
   };
 
-  // Load saved profile image on component mount
-  useEffect(() => {
-    const savedImage = localStorage.getItem('userProfileImage');
-    if (savedImage) {
-      setProfileImage(savedImage);
+  const handleDeleteProfileImage = async () => {
+    if (isUploadingImage) return;
+    
+    try {
+      setIsUploadingImage(true);
+      
+      const response = await authService.deleteProfileImage();
+      
+      if (response.success) {
+        setProfileImage(perfilImage); // Reset to default image
+        // Refresh user data to update the user context
+        await refreshUser();
+        console.log('✅ Profile image deleted successfully');
+      } else {
+        throw new Error(response.message || 'Error deleting profile image');
+      }
+    } catch (error) {
+      console.error('❌ Error deleting image:', error);
+      alert('Error al eliminar la imagen.');
+    } finally {
+      setIsUploadingImage(false);
     }
-  }, []);
+  };
+
+  // Load profile image from backend when user data is available
+  useEffect(() => {
+    if (user?.profileImage) {
+      setProfileImage(user.profileImage);
+    } else {
+      setProfileImage(perfilImage); // Use default image
+    }
+  }, [user]);
 
   if (!user) {
     return (
@@ -495,12 +560,33 @@ const ProfilePage: React.FC = () => {
               {/* Edit Button */}
               <button
                 onClick={triggerImageUpload}
-                className="mt-3 flex items-center space-x-1 px-3 py-2 bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                disabled={isUploadingImage}
+                className={`mt-3 flex items-center space-x-1 px-3 py-2 rounded-full transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                  isUploadingImage
+                    ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
+                    : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                }`}
                 aria-label="Edit profile picture"
               >
                 <Edit2 className="w-4 h-4" />
-                <span>Edit Photo</span>
+                <span>{isUploadingImage ? 'Uploading...' : 'Edit Photo'}</span>
               </button>
+
+              {/* Delete Button (show if user has custom image OR if local image is different from default) */}
+              {(profileImage !== perfilImage) && (
+                <button
+                  onClick={handleDeleteProfileImage}
+                  disabled={isUploadingImage}
+                  className={`mt-2 flex items-center space-x-1 px-3 py-1 rounded-full transition-colors text-xs font-medium ${
+                    isUploadingImage
+                      ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
+                      : 'bg-red-100 text-red-700 hover:bg-red-200'
+                  }`}
+                  aria-label="Delete profile picture"
+                >
+                  <span>Reset to Default</span>
+                </button>
+              )}
               
               <input
                 ref={fileInputRef}

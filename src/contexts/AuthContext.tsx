@@ -6,6 +6,7 @@ interface User {
   first_name: string;
   last_name: string;
   email: string;
+  profileImage?: string; // Base64 encoded image or null
   gameProgress: {
     levels: any[];
     unlockedDifficulties: string[];
