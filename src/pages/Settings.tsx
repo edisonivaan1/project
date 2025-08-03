@@ -67,18 +67,47 @@ const Settings: React.FC = () => {
   
   return (
     <div className="max-w-2xl mx-auto py-8 animate-fade-in">
-      <h1 className="text-3xl font-bold mb-8 text-center">SETTINGS</h1>
+      <header className="mb-8 text-center">
+        <h1 
+          className="text-3xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+          tabIndex={0}
+          role="heading"
+          aria-level={1}
+        >
+          SETTINGS
+        </h1>
+      </header>
       
       <Card>
         <CardHeader>
-          <h2 className="text-xl font-bold">Game Settings</h2>
-          <p className="text-gray-600 text-sm">Customize your game experience</p>
+          <h2 
+            className="text-xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+            tabIndex={0}
+            role="heading"
+            aria-level={2}
+          >
+            Game Settings
+          </h2>
+          <p 
+            className="text-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+            tabIndex={0}
+            role="text"
+          >
+            Customize your game experience
+          </p>
         </CardHeader>
         
         <CardBody className="space-y-6">
           {/* Audio Settings */}
           <div>
-            <h3 className="text-lg font-bold mb-4">Audio</h3>
+            <h3 
+              className="text-lg font-bold mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+              tabIndex={0}
+              role="heading"
+              aria-level={3}
+            >
+              Audio
+            </h3>
             {!isUserAuthenticated && (
               <div className="mb-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700">
                 <p className="text-sm">🔐 Audio controls available after login</p>
@@ -131,7 +160,14 @@ const Settings: React.FC = () => {
           
           {/* Visual Settings */}
           <div>
-            <h3 className="text-lg font-bold mb-4">Visual</h3>
+            <h3 
+              className="text-lg font-bold mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+              tabIndex={0}
+              role="heading"
+              aria-level={3}
+            >
+              Visual
+            </h3>
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <div className="flex items-center">

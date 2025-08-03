@@ -45,7 +45,14 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
           )}
         </div>
       )}
-      <div className={`w-full bg-gray-200 rounded-full ${sizeClasses[size]}`}>
+      <div 
+        className={`w-full bg-gray-200 rounded-full ${sizeClasses[size]}`}
+        role="progressbar"
+        aria-valuenow={value}
+        aria-valuemin={0}
+        aria-valuemax={max}
+        aria-label={label || `Progress: ${percentage} percent complete`}
+      >
         <div
           className={`${colorClasses[color]} rounded-full transition-all duration-500 ease-out ${sizeClasses[size]}`}
           style={{ width: `${percentage}%` }}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown, ChevronUp, Send, ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react';
+import { ChevronDown, ChevronUp, ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react';
 import Card, { CardBody, CardHeader } from '../components/UI/Card';
 import Button from '../components/UI/Button';
 import { supportService } from '../services/api';
@@ -149,10 +149,26 @@ const Help: React.FC = () => {
       )}
 
       <div className="bg-[rgb(var(--color-background-card))] rounded-xl shadow-md p-6">
-        <h1 className="text-3xl font-bold mb-8">Help & Support</h1>
+        <header className="mb-8">
+          <h1 
+            className="text-3xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+            tabIndex={0}
+            role="heading"
+            aria-level={1}
+          >
+            Help & Support
+          </h1>
+        </header>
         
         <section className="mb-8">
-          <h2 className="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+          <h2 
+            className="text-2xl font-bold mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+            tabIndex={0}
+            role="heading"
+            aria-level={2}
+          >
+            Frequently Asked Questions
+          </h2>
           <div className="space-y-4">
             {faqItems.map((item, index) => (
               <Card key={index} className="overflow-hidden">

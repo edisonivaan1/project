@@ -1181,7 +1181,15 @@ const Game: React.FC = () => {
             {/* Question and Controls */}
             <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold flex-1">{currentQuestion.text}</h2>
+                <h2 
+                  className="text-2xl font-bold flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+                  tabIndex={0}
+                  role="heading"
+                  aria-level={2}
+                  aria-label={`Question: ${currentQuestion.text}`}
+                >
+                  {currentQuestion.text}
+                </h2>
                 <div className="flex items-center gap-2 ml-4">
                   {/* Botón de Música de Fondo */}
                   <IconButton
@@ -1213,10 +1221,15 @@ const Game: React.FC = () => {
 
               {/* Question Image */}
               {currentQuestion.image && (
-                <div className="flex justify-center mb-6">
+                <div 
+                  className="flex justify-center mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                  tabIndex={0}
+                  role="img"
+                  aria-label={currentQuestion.alt || `Grammar question illustration for: ${currentQuestion.text.substring(0, 50)}...`}
+                >
                   <img 
                     src={getImage(currentQuestion.image)?.default}
-                    alt={currentQuestion.alt || "Question illustration"}
+                    alt={currentQuestion.alt || `Grammar question illustration for: ${currentQuestion.text.substring(0, 50)}...`}
                     className="rounded-lg shadow-md"
                     style={{
                       width: '300px',

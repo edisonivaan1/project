@@ -124,17 +124,26 @@ const TopicsPage: React.FC = () => {
 
   return (
     <div className="animate-fade-in max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <section className="mb-16 text-center">
-        <h1 className="font-extrabold text-5xl md:text-6xl mb-6 text-primary tracking-tight">
+      <header className="mb-16 text-center">
+        <h1 
+          className="font-extrabold text-5xl md:text-6xl mb-6 text-primary tracking-tight focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+          tabIndex={0}
+          role="heading"
+          aria-level={1}
+        >
           GRAMMAR MASTER PRO
         </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        <p 
+          className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+          tabIndex={0}
+          role="text"
+          aria-label="Application description: Master English Grammar Through Interactive Games And Activities Designed For B1-Level Learners"
+        >
           Master English Grammar Through Interactive Games And Activities Designed For B1-Level Learners.
         </p>
         
 
-
-        <div className="flex justify-center mt-8 space-x-4">
+        <div className="flex justify-center mt-8 space-x-4" role="toolbar" aria-label="Audio and help controls">
           <IconButton
             icon={!isUserAuthenticated ? <VolumeX className="h-6 w-6 opacity-50" /> : (isMusicEnabled ? <Volume2 className="h-6 w-6 text-blue-600" /> : <VolumeX className="h-6 w-6" />)}
             variant="outline"
@@ -150,24 +159,35 @@ const TopicsPage: React.FC = () => {
             variant="outline"
             size="lg"
             tooltip="Help"
-            aria-label="Help"
+            aria-label="Get help and support"
             onClick={() => navigate('/help')}
             className="hover:scale-105 transition-transform"
           />
         </div>
-      </section>
+      </header>
       
-      {Object.entries(topicsByDifficulty).map(([difficulty, topics]) => (
-        <section key={difficulty} className="mb-12">
-          <h2 className="text-3xl font-bold mb-8 text-gray-900 capitalize">
-            {difficulty} Level
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {topics.map((topic) => {
-              const progress = getLevelPercentage(topic.id, topic.difficulty as 'easy' | 'medium' | 'hard');
-              const status = getTopicStatus(topic.id, topic.difficulty as 'easy' | 'medium' | 'hard');
-              const colors = difficultyColors[topic.difficulty] || difficultyColors.easy;
-              const isLocked = status === 'locked';
+      <main>
+        {Object.entries(topicsByDifficulty).map(([difficulty, topics]) => (
+          <section key={difficulty} className="mb-12">
+            <h2 
+              className="text-3xl font-bold mb-8 text-gray-900 capitalize focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+              tabIndex={0}
+              role="heading"
+              aria-level={2}
+              aria-label={`${difficulty} difficulty level section`}
+            >
+              {difficulty} Level
+            </h2>
+            <div 
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              role="grid"
+              aria-label={`${difficulty} level topics grid`}
+            >
+              {topics.map((topic) => {
+                const progress = getLevelPercentage(topic.id, topic.difficulty as 'easy' | 'medium' | 'hard');
+                const status = getTopicStatus(topic.id, topic.difficulty as 'easy' | 'medium' | 'hard');
+                const colors = difficultyColors[topic.difficulty] || difficultyColors.easy;
+                const isLocked = status === 'locked';
               const isCompleted = status === 'completed';
               
               return (
@@ -175,44 +195,103 @@ const TopicsPage: React.FC = () => {
                   key={topic.id} 
                   className={`transition-all duration-300 ${!isLocked ? 'hover:shadow-lg hover:-translate-y-1 cursor-pointer' : 'opacity-60'} ${colors.border} border-2 ${isCompleted ? 'ring-2 ring-green-400' : ''}`}
                   onClick={() => !isLocked && navigate(`/tutorial/${topic.id}?difficulty=${topic.difficulty}`)}
+                  tabIndex={isLocked ? -1 : 0}
+                  onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
+                    if ((e.key === 'Enter' || e.key === ' ') && !isLocked) {
+                      e.preventDefault();
+                      navigate(`/tutorial/${topic.id}?difficulty=${topic.difficulty}`);
+                    }
+                  }}
+                  role="button"
+                  aria-label={`${topic.title} - ${topic.difficulty} level. ${isLocked ? 'Locked - Complete previous topics to unlock' : isCompleted ? 'Completed' : `${progress}% progress`}`}
+                  aria-disabled={isLocked}
                 >
                   <CardBody className="flex flex-col h-full relative">
                     {isLocked && (
-                      <div className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 shadow-lg border-2 border-gray-300">
-                        <Lock className="h-8 w-8 text-gray-600" />
+                      <div 
+                        className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 shadow-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                        tabIndex={0}
+                        role="img"
+                        aria-label="Topic is locked - complete previous topics to unlock"
+                      >
+                        <Lock className="h-8 w-8 text-gray-600" aria-hidden="true" />
                       </div>
                     )}
                     {isCompleted && (
-                      <div className="absolute top-4 right-4 z-10">
-                        <Check className="h-6 w-6 text-green-500" />
+                      <div 
+                        className="absolute top-4 right-4 z-10 focus:outline-none focus:ring-2 focus:ring-green-500 rounded" 
+                        tabIndex={0}
+                        role="img"
+                        aria-label="Topic completed successfully"
+                      >
+                        <Check className="h-6 w-6 text-green-500" aria-hidden="true" />
                       </div>
                     )}
                     
                     <div className="flex justify-between items-start mb-4">
-                      <h3 className={`text-xl font-bold ${isLocked ? 'text-gray-400' : 'text-gray-900'}`}>
+                      <h3 
+                        className={`text-xl font-bold ${isLocked ? 'text-gray-400' : 'text-gray-900'} focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1`}
+                        tabIndex={0}
+                        role="heading"
+                        aria-level={3}
+                      >
                         {topic.title}
                       </h3>
                       <div className="flex items-center space-x-2">
-                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${colors.text} ${colors.bg}`}>
+                        <span 
+                          className={`px-2 py-1 rounded-full text-xs font-semibold ${colors.text} ${colors.bg} focus:outline-none focus:ring-2 focus:ring-blue-500`} 
+                          tabIndex={0}
+                          role="text"
+                          aria-label={`Difficulty level: ${topic.difficulty}`}
+                        >
                           {topic.difficulty.toUpperCase()}
                         </span>
                         {progress === 100 && (
-                          <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                          <div
+                            className="focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded"
+                            tabIndex={0}
+                            role="img"
+                            aria-label="Perfect score achieved - star rating"
+                          >
+                            <Star className="h-4 w-4 text-yellow-500 fill-current" aria-hidden="true" />
+                          </div>
                         )}
                       </div>
                     </div>
                     
-                    <p className={`mb-6 flex-grow ${isLocked ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <p 
+                      className={`mb-6 flex-grow ${isLocked ? 'text-gray-400' : 'text-gray-600'} focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1`}
+                      tabIndex={0}
+                      role="text"
+                      aria-label={`Topic description: ${topic.description}`}
+                    >
                       {topic.description}
                     </p>
                     
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
+                        <div 
+                          className="flex justify-between text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                          tabIndex={0}
+                          role="text"
+                          aria-label={`Progress information: ${progress} percent complete`}
+                        >
                           <span className="text-gray-500">Progress</span>
                           <span className="font-medium">{progress}%</span>
                         </div>
-                        <ProgressBar value={progress} max={100} className="h-2" />
+                        <div
+                          tabIndex={0}
+                          role="region"
+                          aria-label="Progress visualization"
+                          className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                        >
+                          <ProgressBar 
+                            value={progress} 
+                            max={100} 
+                            className="h-2" 
+                            aria-label={`Topic progress: ${progress} percent complete`}
+                          />
+                        </div>
                       </div>
                       
                       <div className="space-y-2">
@@ -266,6 +345,7 @@ const TopicsPage: React.FC = () => {
           </div>
         </section>
       ))}
+      </main>
     </div>
   );
 };
