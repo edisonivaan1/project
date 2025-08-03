@@ -354,14 +354,14 @@ export const conditionalsQuestions: QuestionType[] = [
 export const prepositionsQuestions: QuestionType[] = [
   {
     id: 'prep-1',
-    text: 'That movie was incredibly ______. I couldn\'t stop watching it!',
-    correctAnswer: 'boring',
-    explanation: 'The movie is the source of the feeling, so it takes the -ing form.',
-    hint: 'Does the movie feel something, or does it make you feel something?',
+    text: 'The adventure movie was so ______! After watching it, I felt really ______ to travel the world.',
+    correctAnswer: ['exciting', 'inspired'],
+    explanation: 'The movie creates excitement (exciting), and as a result, the person feels inspired (inspired).',
+    hint: 'What quality does the movie have, and how does it make you feel afterwards?',
     image: 'questions/prepositions/pre_1.png',
-    alt: 'Una persona viendo una película',
+    alt: 'Una persona viendo una película de aventuras',
     isDragAndDrop: true,
-    dragOptions: ['bored', 'boring'],
+    dragOptions: ['exciting', 'excited', 'inspired', 'inspiring'],
     audio: '/src/assets/audio_questions/prepositions/question1_audio.mp3'
   },
   {

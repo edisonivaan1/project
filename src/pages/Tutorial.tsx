@@ -5,7 +5,15 @@ import Card, { CardBody, CardFooter } from '../components/UI/Card';
 import Button from '../components/UI/Button';
 import YouTubePlayer from '../components/UI/YouTubePlayer';
 import { grammarTopics } from '../data/grammarTopics';
-import { presentTensesQuestions } from '../data/sampleQuestions';
+import { 
+  presentTensesQuestions, 
+  pastTensesQuestions, 
+  conditionalsQuestions,
+  prepositionsQuestions,
+  articlesQuestions,
+  modalVerbsQuestions 
+} from '../data/sampleQuestions';
+import { QuestionType } from '../types';
 
 const Tutorial: React.FC = () => {
   const { topicId } = useParams<{ topicId: string }>();
@@ -60,8 +68,181 @@ const Tutorial: React.FC = () => {
     setVideoError(false);
   };
   
-  // Example question for this topic (normally would be loaded based on topicId)
-  const exampleQuestion = presentTensesQuestions[0];
+  // Get questions based on topic ID
+  const getQuestions = (): QuestionType[] => {
+    switch (topicId) {
+      case 'present-tenses':
+        return presentTensesQuestions;
+      case 'past-tenses':
+        return pastTensesQuestions;
+      case 'conditionals':
+        return conditionalsQuestions;
+      case 'prepositions':
+        return prepositionsQuestions;
+      case 'articles':
+        return articlesQuestions;
+      case 'modal-verbs':
+        return modalVerbsQuestions;
+      default:
+        return presentTensesQuestions;
+    }
+  };
+
+  // Get example question for this topic
+  const questions = getQuestions();
+  const exampleQuestion = questions[0];
+
+  // Determine question type
+  const getQuestionType = (question: QuestionType): 'multiple-choice' | 'fill-in-blank' | 'drag-and-drop' => {
+    if (question.isDragAndDrop) return 'drag-and-drop';
+    if (question.isFillInTheBlank) return 'fill-in-blank';
+    return 'multiple-choice';
+  };
+
+  const questionType = getQuestionType(exampleQuestion);
+  
+  // Tutorial components for different question types
+  const MultipleChoiceTutorial = ({ question }: { question: QuestionType }) => (
+    <div className="bg-gray-100 p-6 rounded-lg my-6">
+      <h4 className="font-bold mb-2">Example Question:</h4>
+      <p className="mb-4 text-lg">{question.text}</p>
+      <div className="grid grid-cols-2 gap-3 mb-4">
+        {question.options?.map((option, index) => (
+          <button 
+            key={index}
+            className={`p-3 rounded-lg border-2 transition-all 
+              ${option === question.correctAnswer 
+                ? 'border-success bg-success/10 font-medium' 
+                : 'border-gray-200 hover:border-primary/50'}`}
+          >
+            {option}
+          </button>
+        ))}
+      </div>
+      <div className="bg-success/10 border border-success/30 p-4 rounded-lg mt-4">
+        <h5 className="font-bold text-success mb-1">Explanation:</h5>
+        <p>{question.explanation}</p>
+      </div>
+    </div>
+  );
+
+  const FillInBlankTutorial = ({ question }: { question: QuestionType }) => (
+    <div className="bg-gray-100 p-6 rounded-lg my-6">
+      <h4 className="font-bold mb-2">Example Question:</h4>
+      <p className="mb-4 text-lg">{question.text}</p>
+      <div className="mb-4">
+        <input
+          type="text"
+          value={Array.isArray(question.correctAnswer) ? question.correctAnswer[0] : question.correctAnswer}
+          readOnly
+          className="p-3 border-2 border-success bg-success/10 rounded-lg w-full font-medium"
+          placeholder="Type your answer here..."
+        />
+      </div>
+      <div className="bg-success/10 border border-success/30 p-4 rounded-lg mt-4">
+        <h5 className="font-bold text-success mb-1">Correct Answer:</h5>
+        <p className="font-medium mb-2">
+          {Array.isArray(question.correctAnswer) ? question.correctAnswer.join(', ') : question.correctAnswer}
+        </p>
+        <h5 className="font-bold text-success mb-1">Explanation:</h5>
+        <p>{question.explanation}</p>
+      </div>
+    </div>
+  );
+
+  const DragAndDropTutorial = ({ question }: { question: QuestionType }) => {
+    const textParts = question.text.split('______');
+    const correctAnswers = Array.isArray(question.correctAnswer) 
+      ? question.correctAnswer 
+      : [question.correctAnswer];
+
+    return (
+      <div className="bg-gray-100 p-6 rounded-lg my-6">
+        <h4 className="font-bold mb-2">Example Question:</h4>
+        
+        {/* Sentence with blanks filled */}
+        <div className="mb-4 p-4 bg-white rounded-lg border-2 border-dashed border-gray-300">
+          <div className="text-lg text-center">
+            {textParts.map((part, index) => (
+              <React.Fragment key={index}>
+                <span>{part}</span>
+                {index < textParts.length - 1 && (
+                  <span className="inline-block mx-2 px-3 py-1 bg-success/20 border-2 border-success rounded-lg font-medium">
+                    {correctAnswers[index] || '______'}
+                  </span>
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+
+        {/* Available options */}
+        <div className="mb-4">
+          <p className="text-sm font-medium text-gray-700 mb-2">Available words:</p>
+          <div className="flex flex-wrap gap-2">
+            {question.dragOptions?.map((option, index) => (
+              <div
+                key={index}
+                className={`px-3 py-2 rounded-lg border-2 transition-all
+                  ${correctAnswers.includes(option)
+                    ? 'border-success bg-success/10 font-medium'
+                    : 'border-gray-200 bg-gray-50'
+                  }`}
+              >
+                {option}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-success/10 border border-success/30 p-4 rounded-lg mt-4">
+          <h5 className="font-bold text-success mb-1">Explanation:</h5>
+          <p>{question.explanation}</p>
+        </div>
+      </div>
+    );
+  };
+
+  // Get tutorial description based on question type
+  const getTutorialDescription = (type: string, topicTitle: string) => {
+    switch (type) {
+      case 'multiple-choice':
+        return `In this game, you will practice using ${topicTitle.toLowerCase()} correctly in different contexts. You'll be shown sentences with missing words and need to select the correct option from multiple choices.`;
+      case 'fill-in-blank':
+        return `In this game, you will practice using ${topicTitle.toLowerCase()} correctly by typing the complete sentences. You'll be given sentence structures with hints, and you need to write the full correct sentence.`;
+      case 'drag-and-drop':
+        return `In this game, you will practice using ${topicTitle.toLowerCase()} correctly by dragging words into the right positions. You'll be shown sentences with blank spaces and need to drag the correct words from the available options.`;
+      default:
+        return `In this game, you will practice using ${topicTitle.toLowerCase()} correctly in different contexts.`;
+    }
+  };
+
+  // Get game features based on question type
+  const getGameFeatures = (type: string) => {
+    const commonFeatures = [
+      "You'll receive immediate feedback on your answers",
+      "If you're stuck, you can use the hint button",
+      "Track your progress with the progress bar",
+      "See your final score at the end of the game"
+    ];
+
+    switch (type) {
+      case 'drag-and-drop':
+        return [
+          ...commonFeatures,
+          "Drag words from the options area to the blank spaces",
+          "Use keyboard shortcuts: Ctrl+1/2/3 to select words, 1/2 to place them"
+        ];
+      case 'fill-in-blank':
+        return [
+          ...commonFeatures,
+          "Type complete sentences using proper grammar",
+          "Press Enter to submit your answer"
+        ];
+      default:
+        return commonFeatures;
+    }
+  };
   
   // Extraer el ID del video de YouTube
   const videoId = topic.youtubeUrl ? extractVideoId(topic.youtubeUrl) : '';
@@ -123,38 +304,19 @@ const Tutorial: React.FC = () => {
           
           <h3 className="text-xl font-bold mb-4">How this Game Works</h3>
           <p className="mb-4">
-            In this game, you will practice using {topic.title.toLowerCase()} correctly in different contexts. 
-            You'll be shown sentences with missing words and need to select the correct option.
+            {getTutorialDescription(questionType, topic.title)}
           </p>
           
-          <div className="bg-gray-100 p-6 rounded-lg my-6">
-            <h4 className="font-bold mb-2">Example Question:</h4>
-            <p className="mb-4 text-lg">{exampleQuestion.text}</p>
-            <div className="grid grid-cols-2 gap-3 mb-4">
-              {exampleQuestion.options?.map((option, index) => (
-                <button 
-                  key={index}
-                  className={`p-3 rounded-lg border-2 transition-all 
-                    ${option === exampleQuestion.correctAnswer 
-                      ? 'border-success bg-success/10 font-medium' 
-                      : 'border-gray-200 hover:border-primary/50'}`}
-                >
-                  {option}
-                </button>
-              ))}
-            </div>
-            <div className="bg-success/10 border border-success/30 p-4 rounded-lg mt-4">
-              <h5 className="font-bold text-success mb-1">Explanation:</h5>
-              <p>{exampleQuestion.explanation}</p>
-            </div>
-          </div>
+          {/* Dynamic tutorial component based on question type */}
+          {questionType === 'multiple-choice' && <MultipleChoiceTutorial question={exampleQuestion} />}
+          {questionType === 'fill-in-blank' && <FillInBlankTutorial question={exampleQuestion} />}
+          {questionType === 'drag-and-drop' && <DragAndDropTutorial question={exampleQuestion} />}
           
           <h3 className="text-xl font-bold mb-3">Game Features:</h3>
           <ul className="list-disc pl-5 space-y-2 mb-4">
-            <li>You'll receive immediate feedback on your answers</li>
-            <li>If you're stuck, you can use the hint button</li>
-            <li>Track your progress with the progress bar</li>
-            <li>See your final score at the end of the game</li>
+            {getGameFeatures(questionType).map((feature, index) => (
+              <li key={index}>{feature}</li>
+            ))}
           </ul>
           
           <p className="font-medium">

@@ -43,15 +43,12 @@ const HintIcon = () => (
   </svg>
 );
 
-// Icono personalizado para audio de pregunta (play con línea)
+// Icono simple de play para audio de pregunta
 const QuestionAudioIcon = ({ className = "", isPlaying = false }: { className?: string; isPlaying?: boolean }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" className={className}>
     {!isPlaying ? (
-      // Icono de play con línea en medio para audio de pregunta
-      <>
-        <path d="M8 5v14l11-7z" fill="currentColor" />
-        <line x1="2" y1="12" x2="6" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      </>
+      // Icono de play simple
+      <path d="M8 5v14l11-7z" fill="currentColor" />
     ) : (
       // Icono de pausa para cuando está reproduciéndose
       <>
@@ -65,7 +62,6 @@ const QuestionAudioIcon = ({ className = "", isPlaying = false }: { className?: 
 const QuestionAudioIconDisabled = ({ className = "" }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" className={className}>
     <path d="M8 5v14l11-7z" fill="currentColor" opacity="0.3" />
-    <line x1="2" y1="12" x2="6" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.3" />
     <line x1="3" y1="3" x2="21" y2="21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
   </svg>
 );
@@ -109,6 +105,12 @@ const Game: React.FC = () => {
   const [timePerQuestion, setTimePerQuestion] = useState<Record<number, number>>({});
   const [hintsPerQuestion, setHintsPerQuestion] = useState<Record<number, number>>({});
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  
+  // Estados para accesibilidad del drag and drop
+  const [selectedWordIndex, setSelectedWordIndex] = useState<number | null>(null); // Índice de palabra seleccionada de la lista de opciones
+  const [selectedSpaceIndex, setSelectedSpaceIndex] = useState<number | null>(null); // Índice del espacio seleccionado en la oración
+  const [accessibilityAnnouncement, setAccessibilityAnnouncement] = useState<string>(''); // Mensajes para lectores de pantalla
+  const [isKeyboardMode, setIsKeyboardMode] = useState(false); // Indica si el usuario está usando navegación por teclado
   
   const topic = grammarTopics.find(t => t.id === topicId);
   
@@ -289,14 +291,213 @@ const Game: React.FC = () => {
     playSoundEffect(isCorrect ? 'correct' : 'wrong');
   };
 
-  // Navegación con teclado
+  // ==================== FUNCIONES DE ACCESIBILIDAD PARA DRAG AND DROP ====================
+  
+  /**
+   * Anuncia mensajes a lectores de pantalla usando aria-live
+   * @param message - Mensaje a anunciar
+   */
+  const announceToScreenReader = (message: string) => {
+    setAccessibilityAnnouncement(message);
+    setTimeout(() => setAccessibilityAnnouncement(''), 100);
+  };
+
+  /**
+   * Selecciona una palabra de la lista de opciones disponibles
+   * Se activa con Ctrl + número (1-3)
+   * @param wordIndex - Índice de la palabra en dragOptions
+   */
+  const selectWordFromList = (wordIndex: number) => {
+    if (!currentQuestion.dragOptions || wordIndex >= currentQuestion.dragOptions.length) return;
+    
+    const word = currentQuestion.dragOptions[wordIndex];
+    
+    // Verificar si la palabra ya está colocada en los espacios en blanco
+    const isWordAlreadyUsed = draggedAnswers.includes(word);
+    
+    if (isWordAlreadyUsed) {
+      announceToScreenReader(`La palabra "${word}" ya está colocada en un espacio.`);
+      return;
+    }
+    
+    setSelectedWordIndex(wordIndex);
+    setSelectedSpaceIndex(null);
+    announceToScreenReader(`Palabra "${word}" seleccionada. Presiona 1 o 2 para colocarla en un espacio.`);
+  };
+
+  /**
+   * Selecciona una palabra que ya está colocada en un espacio de la oración
+   * Se activa con Shift + número (1-2)
+   * @param spaceIndex - Índice del espacio en la oración
+   */
+  const selectWordFromSpace = (spaceIndex: number) => {
+    const word = draggedAnswers[spaceIndex];
+    if (!word) {
+      announceToScreenReader(`El espacio ${spaceIndex + 1} está vacío.`);
+      return;
+    }
+    
+    setSelectedSpaceIndex(spaceIndex);
+    setSelectedWordIndex(null);
+    announceToScreenReader(`Palabra "${word}" seleccionada del espacio ${spaceIndex + 1}. Presiona 1 o 2 para moverla.`);
+  };
+
+  /**
+   * Coloca la palabra seleccionada en el espacio objetivo
+   * Se activa con número solo (1-2) después de seleccionar una palabra
+   * @param targetSpaceIndex - Índice del espacio donde colocar la palabra
+   */
+  const placeWordInSpace = (targetSpaceIndex: number) => {
+    if (selectedWordIndex !== null && currentQuestion.dragOptions) {
+      // Colocar palabra de la lista en un espacio
+      const word = currentQuestion.dragOptions[selectedWordIndex];
+      const newAnswers = [...draggedAnswers];
+      
+      if (newAnswers[targetSpaceIndex]) {
+        announceToScreenReader(`Reemplazando "${newAnswers[targetSpaceIndex]}" con "${word}" en el espacio ${targetSpaceIndex + 1}.`);
+      } else {
+        announceToScreenReader(`Colocando "${word}" en el espacio ${targetSpaceIndex + 1}.`);
+      }
+      
+      newAnswers[targetSpaceIndex] = word;
+      setDraggedAnswers(newAnswers);
+      
+      setSelectedWordIndex(null);
+    } else if (selectedSpaceIndex !== null) {
+      // Mover palabra de un espacio a otro
+      const word = draggedAnswers[selectedSpaceIndex];
+      const newAnswers = [...draggedAnswers];
+      
+      // Intercambiar palabras si el espacio de destino tiene una palabra
+      if (newAnswers[targetSpaceIndex]) {
+        const targetWord = newAnswers[targetSpaceIndex];
+        newAnswers[selectedSpaceIndex] = targetWord;
+        newAnswers[targetSpaceIndex] = word;
+        announceToScreenReader(`Intercambiando "${word}" con "${targetWord}".`);
+      } else {
+        // Solo mover la palabra
+        newAnswers[selectedSpaceIndex] = '';
+        newAnswers[targetSpaceIndex] = word;
+        announceToScreenReader(`Moviendo "${word}" al espacio ${targetSpaceIndex + 1}.`);
+      }
+      
+      setDraggedAnswers(newAnswers);
+      setSelectedSpaceIndex(null);
+    }
+  };
+
+  /**
+   * Elimina una palabra de un espacio específico
+   * Se activa con Delete/Backspace cuando hay un espacio seleccionado
+   * @param spaceIndex - Índice del espacio a limpiar
+   */
+  const clearSpace = (spaceIndex: number) => {
+    const word = draggedAnswers[spaceIndex];
+    if (word) {
+      const newAnswers = [...draggedAnswers];
+      newAnswers[spaceIndex] = '';
+      setDraggedAnswers(newAnswers);
+      announceToScreenReader(`Palabra "${word}" eliminada del espacio ${spaceIndex + 1}.`);
+    }
+  };
+
+  // ==================== MANEJADOR DE EVENTOS DE TECLADO ====================
   useEffect(() => {
+    /**
+     * Maneja todos los eventos de teclado para accesibilidad y navegación
+     * Combinaciones implementadas:
+     * - Ctrl+1/2/3: Seleccionar palabra de la lista
+     * - Shift+1/2: Seleccionar palabra de un espacio
+     * - 1/2: Colocar palabra seleccionada en espacio
+     * - Escape: Cancelar selección
+     * - Delete/Backspace: Limpiar espacio seleccionado
+     * - Flechas: Navegar entre preguntas
+     */
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Solo procesar si no estamos en un input o textarea
+      // Solo procesar si no estamos en un input o textarea (excepto para drag and drop)
       if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+        // Para drag and drop, permitir navegación por teclado incluso en inputs
+        if (!currentQuestion.isDragAndDrop) {
+        return;
+        }
+      }
+
+      // ==================== ESCAPE - SIEMPRE DISPONIBLE ====================
+      // Escape: cancelar cualquier selección activa (funciona en cualquier momento)
+      if (event.key === 'Escape' && currentQuestion.isDragAndDrop && !isAnswerSubmitted) {
+        event.preventDefault();
+        event.stopPropagation();
+        setSelectedWordIndex(null);
+        setSelectedSpaceIndex(null);
+        announceToScreenReader('Selección cancelada.');
         return;
       }
 
+      // ==================== COMBINACIONES PARA DRAG AND DROP ====================
+      if (currentQuestion.isDragAndDrop && !isAnswerSubmitted) {
+        // Ctrl + número: seleccionar palabra de la lista de opciones disponibles
+        if (event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
+          const key = event.key;
+          if (key >= '1' && key <= '3') {
+            const wordIndex = parseInt(key) - 1; // Convertir 1-3 a índices 0-2
+            
+            // Verificar que el índice sea válido y la palabra esté disponible
+            if (currentQuestion.dragOptions && wordIndex < currentQuestion.dragOptions.length) {
+              const word = currentQuestion.dragOptions[wordIndex];
+              const isWordAlreadyUsed = draggedAnswers.includes(word);
+              
+              if (!isWordAlreadyUsed) {
+                event.preventDefault();
+                event.stopPropagation();
+                selectWordFromList(wordIndex);
+                setIsKeyboardMode(true);
+                return;
+              } else {
+                // Si la palabra ya está en uso, no hacer nada pero anunciar al usuario
+                announceToScreenReader(`La palabra "${word}" ya está colocada.`);
+                return;
+              }
+            }
+          }
+        }
+        
+        // Shift + número: seleccionar palabra ya colocada en un espacio
+        if (event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) {
+          const key = event.key;
+          // Para Shift+número, el key puede ser diferente (!, @, etc), usar event.code en su lugar
+          if (event.code === 'Digit1' || event.code === 'Digit2') {
+            const spaceIndex = event.code === 'Digit1' ? 0 : 1;
+            event.preventDefault();
+            event.stopPropagation();
+            selectWordFromSpace(spaceIndex);
+            setIsKeyboardMode(true);
+            return;
+          }
+        }
+        
+        // Número solo: colocar palabra seleccionada en el espacio objetivo
+        if (!event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey && (selectedWordIndex !== null || selectedSpaceIndex !== null)) {
+          const key = event.key;
+          if (key >= '1' && key <= '2') {
+            const targetSpace = parseInt(key) - 1; // Convertir 1-2 a índices 0-1
+            event.preventDefault();
+            event.stopPropagation();
+            placeWordInSpace(targetSpace);
+            return;
+          }
+        }
+
+        // Delete/Backspace: limpiar espacio si hay uno seleccionado
+        if ((event.key === 'Delete' || event.key === 'Backspace') && selectedSpaceIndex !== null) {
+          event.preventDefault();
+          event.stopPropagation();
+          clearSpace(selectedSpaceIndex);
+          setSelectedSpaceIndex(null);
+          return;
+        }
+      }
+
+      // ==================== NAVEGACIÓN GENERAL DE PREGUNTAS ====================
       switch (event.key) {
         case 'ArrowLeft':
           event.preventDefault();
@@ -317,7 +518,7 @@ const Game: React.FC = () => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [currentQuestionIndex, questions.length]);
+  }, [currentQuestionIndex, questions.length, currentQuestion, isAnswerSubmitted, selectedWordIndex, selectedSpaceIndex, draggedAnswers]);
   
   // Función para mezclar las opciones
   const shuffleOptions = (options: string[]) => {
@@ -346,6 +547,14 @@ const Game: React.FC = () => {
   // Actualizar tiempo cuando cambia la pregunta
   useEffect(() => {
     setQuestionStartTime(Date.now());
+  }, [currentQuestionIndex]);
+
+  // Limpiar estados de accesibilidad cuando cambia la pregunta
+  useEffect(() => {
+    setSelectedWordIndex(null);
+    setSelectedSpaceIndex(null);
+    setAccessibilityAnnouncement('');
+    setIsKeyboardMode(false);
   }, [currentQuestionIndex]);
 
   // Registrar tiempo cuando se responde una pregunta
@@ -1003,29 +1212,67 @@ const Game: React.FC = () => {
               ) : currentQuestion.isDragAndDrop ? (
                 <div className="mb-6">
                   <div className="space-y-6">
-                    {/* Drag and Drop Area */}
+                    {/* Región de anuncios para lectores de pantalla */}
+                    <div
+                      aria-live="polite"
+                      aria-atomic="true"
+                      className="sr-only"
+                      role="status"
+                    >
+                      {accessibilityAnnouncement}
+                    </div>
+
+                    {/* Área de Drag and Drop principal */}
                     <div className="bg-gray-50 p-4 rounded-lg border-2 border-dashed border-gray-300">
                       <div className="text-center mb-4">
                         <p className="text-sm text-gray-600 mb-2">Drag the words into the blank spaces</p>
-                        <div className="flex flex-wrap gap-2 justify-center">
+                        <div 
+                          className="flex flex-wrap gap-2 justify-center"
+                          role="application"
+                          aria-label="Área de construcción de oraciones"
+                        >
                           {(() => {
                             const textParts = currentQuestion.text.split('______');
-
                             
                             return textParts.map((part, index) => (
                               <React.Fragment key={index}>
-                                <span className="text-lg">{part}</span>
+                                <span className="text-lg" role="text">{part}</span>
                                 {index < textParts.length - 1 && (
                                   <div
-                                    className="inline-block w-32 h-10 border-2 border-dashed border-gray-400 rounded-lg flex items-center justify-center bg-white"
+                                    className={`inline-block w-32 h-10 border-2 border-dashed rounded-lg flex items-center justify-center bg-white transition-all
+                                      ${selectedSpaceIndex === index ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200' : 'border-gray-400'}
+                                      ${draggedAnswers[index] ? 'border-green-400 bg-green-50' : ''}
+                                    `}
                                     onDragOver={handleDragOver}
                                     onDrop={(e) => handleDrop(e, index)}
+                                    onClick={() => !isAnswerSubmitted && selectWordFromSpace(index)}
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        !isAnswerSubmitted && selectWordFromSpace(index);
+                                      }
+                                    }}
+                                    tabIndex={!isAnswerSubmitted ? 0 : -1}
+                                    role="button"
+                                    aria-label={`Espacio ${index + 1}: ${draggedAnswers[index] || 'vacío'}. ${!isAnswerSubmitted ? 'Presiona Enter para seleccionar.' : ''}`}
+                                    aria-describedby={`space-${index}-description`}
                                   >
                                     {draggedAnswers[index] ? (
-                                      <span className="text-sm font-medium text-gray-700">{draggedAnswers[index]}</span>
+                                      <span className="text-sm font-medium text-gray-700">
+                                        {draggedAnswers[index]}
+                                      </span>
                                     ) : (
-                                      <span className="text-xs text-gray-400">Soltar aquí</span>
+                                      <span className="text-xs text-gray-400">Espacio {index + 1}</span>
                                     )}
+                                  </div>
+                                )}
+                                {/* Descripción para cada espacio (oculta visualmente) */}
+                                {index < textParts.length - 1 && (
+                                  <div 
+                                    id={`space-${index}-description`} 
+                                    className="sr-only"
+                                  >
+                                    Espacio número {index + 1} para colocar una palabra.
                                   </div>
                                 )}
                               </React.Fragment>
@@ -1035,41 +1282,61 @@ const Game: React.FC = () => {
                       </div>
                     </div>
                     
-                    {/* Drag Options */}
+                    {/* Lista de opciones disponibles */}
                     <div className="bg-white p-4 rounded-lg border-2 border-gray-200">
-                      <p className="text-sm font-medium text-gray-700 mb-3">Available options:</p>
-                      <div className="flex flex-wrap gap-3">
+                      <p className="text-sm font-medium text-gray-700 mb-3">Palabras disponibles:</p>
+                      <div 
+                        className="flex flex-wrap gap-3"
+                        role="group"
+                        aria-label="Lista de palabras disponibles para arrastrar"
+                      >
                         {currentQuestion.dragOptions?.map((option, index) => {
                           const isUsed = draggedAnswers.includes(option);
-                          const usedCount = draggedAnswers.filter(answer => answer === option).length;
-                          const availableCount = currentQuestion.dragOptions?.filter(opt => opt === option).length || 0;
-                          const isAvailable = !isUsed || usedCount < availableCount;
+                          const isAvailable = !isUsed; // Simplificado: si ya está usada, no está disponible
+                          const isSelected = selectedWordIndex === index;
                           
                           return (
                             <div
                               key={`${option}-${index}`}
                               draggable={isAvailable && !isAnswerSubmitted}
                               onDragStart={(e) => handleDragStart(e, option)}
-                              className={`px-4 py-2 rounded-lg border-2 cursor-move transition-all ${
-                                isAvailable && !isAnswerSubmitted
-                                  ? 'border-blue-300 bg-blue-50 hover:border-blue-400 hover:bg-blue-100'
+                              onClick={() => !isAnswerSubmitted && isAvailable && selectWordFromList(index)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  e.preventDefault();
+                                  !isAnswerSubmitted && isAvailable && selectWordFromList(index);
+                                }
+                              }}
+                              tabIndex={isAvailable && !isAnswerSubmitted ? 0 : -1}
+                              className={`px-4 py-2 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500
+                                ${isSelected ? 'border-blue-500 bg-blue-100 ring-2 ring-blue-300' : ''}
+                                ${isAvailable && !isAnswerSubmitted
+                                  ? 'border-blue-300 bg-blue-50 hover:border-blue-400 hover:bg-blue-100 cursor-pointer'
                                   : 'border-gray-200 bg-gray-100 cursor-not-allowed opacity-50'
-                              }`}
+                                }
+                              `}
+                              role="button"
+                              aria-label={`Palabra ${index + 1}: ${option}. ${isAvailable && !isAnswerSubmitted ? 'Presiona Ctrl+' + (index + 1) + ' para seleccionar.' : 'No disponible.'}`}
+                              aria-pressed={isSelected}
+                              aria-disabled={!isAvailable || isAnswerSubmitted}
                             >
-                              <span className="text-sm font-medium">{option}</span>
+                              <span className="text-sm font-medium">
+                                {index + 1}. {option}
+                              </span>
                             </div>
                           );
                         })}
                       </div>
                     </div>
                     
-                    {/* Submit Button */}
+                    {/* Botón de verificación */}
                     {!isAnswerSubmitted && (
                       <div className="flex justify-center">
                         <Button
                           onClick={handleDragAndDropSubmit}
-                          disabled={draggedAnswers.length === 0}
+                          disabled={draggedAnswers.filter(answer => answer.trim()).length === 0}
                           className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000]"
+                          aria-label="Verificar respuesta de arrastrar y soltar"
                         >
                           Verificar Respuesta
                         </Button>
