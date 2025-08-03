@@ -5,6 +5,11 @@ interface CardProps {
   className?: string;
   onClick?: () => void;
   hoverEffect?: boolean;
+  tabIndex?: number;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
+  role?: string;
+  'aria-label'?: string;
+  'aria-disabled'?: boolean;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -12,6 +17,10 @@ const Card: React.FC<CardProps> = ({
   className = '',
   onClick,
   hoverEffect = true,
+  tabIndex,
+  onKeyDown,
+  role,
+  ...props
 }) => {
   const hoverClasses = hoverEffect 
     ? 'transition-transform duration-300 hover:translate-y-[-4px]' 
@@ -21,6 +30,10 @@ const Card: React.FC<CardProps> = ({
     <div 
       className={`bg-white rounded-xl shadow-md overflow-hidden ${hoverClasses} ${className}`}
       onClick={onClick}
+      tabIndex={tabIndex}
+      onKeyDown={onKeyDown}
+      role={role}
+      {...props}
     >
       {children}
     </div>

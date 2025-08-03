@@ -15,14 +15,14 @@ const IconButton: React.FC<IconButtonProps> = ({
   className = '',
   ...props
 }) => {
-  const baseClasses = 'inline-flex items-center justify-center rounded-full transition-all duration-300 focus:outline-none';
+  const baseClasses = 'inline-flex items-center justify-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2';
   
   const variantClasses = {
-    primary: 'bg-primary text-white hover:bg-primary/90 focus:ring-2 focus:ring-primary/50',
-    secondary: 'bg-secondary text-white hover:bg-secondary/90 focus:ring-2 focus:ring-secondary/50',
-    accent: 'bg-accent text-text hover:bg-accent/90 focus:ring-2 focus:ring-accent/50',
-    outline: 'border-2 border-primary text-primary hover:bg-primary/10 focus:ring-2 focus:ring-primary/50',
-    ghost: 'text-primary hover:bg-primary/10 focus:ring-2 focus:ring-primary/50',
+    primary: 'bg-primary text-white hover:bg-primary/90 focus:ring-primary/50',
+    secondary: 'bg-secondary text-white hover:bg-secondary/90 focus:ring-secondary/50',
+    accent: 'bg-accent text-text hover:bg-accent/90 focus:ring-accent/50',
+    outline: 'border-2 border-primary text-primary hover:bg-primary/10 focus:ring-primary/50',
+    ghost: 'text-primary hover:bg-primary/10 focus:ring-primary/50',
   };
   
   const sizeClasses = {
@@ -41,9 +41,14 @@ const IconButton: React.FC<IconButtonProps> = ({
     <button
       className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
       title={tooltip}
+      aria-label={props['aria-label'] || tooltip}
+      tabIndex={props.disabled ? -1 : 0}
       {...props}
     >
-      <span className={iconSizeClasses[size]}>{icon}</span>
+      <span className={iconSizeClasses[size]} aria-hidden="true">{icon}</span>
+      {tooltip && !props['aria-label'] && (
+        <span className="sr-only">{tooltip}</span>
+      )}
     </button>
   );
 };

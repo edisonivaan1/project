@@ -125,7 +125,7 @@ const SignUpPage: React.FC = () => {
       <div className="hidden lg:flex lg:w-1/2 relative">
         <img 
           src={bgLogin} 
-          alt="Students studying" 
+          alt="Students studying English grammar in a modern classroom environment with interactive learning materials" 
           className="absolute inset-0 w-full h-full object-cover"
         />
       </div>
@@ -134,7 +134,7 @@ const SignUpPage: React.FC = () => {
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
           <div className="text-left w-full mb-8">
-            <img src={logo} alt="Grammar Master Pro Logo" className="h-36 w-auto mb-6" />
+            <img src={logo} alt="Grammar Master Pro - English Learning Platform Logo" className="h-36 w-auto mb-6" />
             <h1 className="text-4xl font-bold text-[#007AA2E8] mb-2">Sign Up</h1>
             <p className="text-gray-600 text-sm">Create your account to get started</p>
           </div>

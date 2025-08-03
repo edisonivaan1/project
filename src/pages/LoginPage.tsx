@@ -232,7 +232,7 @@ const LoginPage: React.FC = () => {
       <div className="hidden lg:flex lg:w-1/2 relative">
         <img 
           src={bgLogin} 
-          alt="Students studying" 
+          alt="Students studying English grammar in a modern classroom environment with interactive learning materials" 
           className="absolute inset-0 w-full h-full object-cover"
         />
       </div>
