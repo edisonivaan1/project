@@ -28,6 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/progress', require('./routes/progress'));
+app.use('/api/achievements', require('./routes/achievements'));
 
 // Health check route
 app.get('/api/health', (req, res) => {

@@ -8,6 +8,7 @@ import { grammarTopics } from '../data/grammarTopics';
 import { useAttempt } from '../contexts/AttemptContext';
 import { useQuestionStatus } from '../contexts/QuestionStatusContext';
 import { useGameProgress } from '../contexts/GameProgressContext';
+import { useAchievements } from '../contexts/AchievementContext';
 
 const Results: React.FC = () => {
   const { topicId } = useParams<{ topicId: string }>();
@@ -18,6 +19,7 @@ const Results: React.FC = () => {
   const { getCurrentAttempt, getAttemptHistory, resetAttempt, getAttemptScore } = useAttempt();
   const { getQuestionStatus } = useQuestionStatus();
   const { getLevelProgress, getLevelPercentage } = useGameProgress();
+  const { checkForNewAchievements } = useAchievements();
 
   const topic = grammarTopics.find(t => t.id === topicId);
   const attempt = topicId ? getCurrentAttempt(topicId) : null;
@@ -53,6 +55,21 @@ const Results: React.FC = () => {
   };
 
   const isPerfectScore = percentage === 100;
+
+  // Check for new achievements when results are loaded
+  useEffect(() => {
+    const checkAchievements = async () => {
+      try {
+        await checkForNewAchievements(undefined);
+      } catch (error) {
+        console.error('Error checking achievements in Results:', error);
+      }
+    };
+    
+    // Small delay to ensure all context data is loaded
+    const timer = setTimeout(checkAchievements, 1000);
+    return () => clearTimeout(timer);
+  }, [checkForNewAchievements, percentage, isPerfectScore]);
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">

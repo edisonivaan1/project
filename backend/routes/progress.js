@@ -4,6 +4,7 @@ const auth = require('../middleware/auth');
 const User = require('../models/User');
 const Attempt = require('../models/Attempt');
 const Progress = require('../models/Progress');
+const AchievementService = require('../services/achievementService');
 
 const router = express.Router();
 
@@ -288,6 +289,30 @@ router.post('/complete-level', [
       console.log('🎉 Nuevas dificultades desbloqueadas:', newUnlocks);
     }
 
+    // Check for new achievements after level completion
+    let newAchievements = [];
+    try {
+      const achievementContext = {
+        topicId,
+        difficulty,
+        score: percentage,
+        attemptId: newAttempt._id
+      };
+      
+      const achievementResult = await AchievementService.checkAndAwardAchievements(
+        req.user._id, 
+        achievementContext
+      );
+      
+      if (achievementResult.success && achievementResult.newAchievements.length > 0) {
+        newAchievements = achievementResult.newAchievements;
+        console.log('🏆 Nuevos achievements ganados:', newAchievements.map(a => a.name));
+      }
+    } catch (achievementError) {
+      console.error('❌ Error checking achievements:', achievementError);
+      // Don't fail the entire request if achievement checking fails
+    }
+
     res.json({
       success: true,
       message: 'Progreso actualizado exitosamente',
@@ -295,7 +320,8 @@ router.post('/complete-level', [
         attempt: newAttempt,
         levelProgress,
         unlockedDifficulties: newUnlockedDifficulties,
-        newUnlocks: newUnlocks.length > 0 ? newUnlocks : undefined
+        newUnlocks: newUnlocks.length > 0 ? newUnlocks : undefined,
+        newAchievements: newAchievements.length > 0 ? newAchievements : undefined
       }
     });
 

@@ -232,6 +232,116 @@ export const progressService = {
   },
 };
 
+// Achievement Service
+export const achievementService = {
+  // Obtener todos los achievements disponibles
+  getAllAchievements: async () => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest('/achievements', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+
+  // Obtener achievements del usuario
+  getUserAchievements: async (includeAll: boolean = true) => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest(`/achievements/user?includeAll=${includeAll}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+
+  // Obtener estadísticas de achievements del usuario
+  getUserAchievementStats: async () => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest('/achievements/user/stats', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+
+  // Obtener achievements no notificados
+  getUnnotifiedAchievements: async () => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest('/achievements/user/unnotified', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+
+  // Verificar achievements manualmente
+  checkAchievements: async (context?: any) => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest('/achievements/check', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ context }),
+    });
+  },
+
+  // Marcar achievements como notificados
+  markAsNotified: async (achievementIds: string[]) => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest('/achievements/mark-notified', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ achievementIds }),
+    });
+  },
+
+  // Obtener leaderboard de achievements
+  getLeaderboard: async (limit: number = 10) => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest(`/achievements/leaderboard?limit=${limit}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+
+  // Obtener achievements por categoría
+  getAchievementsByCategory: async (category: string) => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest(`/achievements/category/${category}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+
+  // ADMIN/DEV endpoints
+  initializeAchievements: async () => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest('/achievements/initialize', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+
+  resetUserAchievements: async () => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest('/achievements/reset-user', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+};
+
 // Helper para manejar errores de autenticación
 export const handleAuthError = (error: any): string => {
   switch (error.status) {
@@ -258,4 +368,4 @@ export const handleAuthError = (error: any): string => {
   }
 };
 
-export default { authService, progressService, handleAuthError }; 
+export default { authService, progressService, achievementService, handleAuthError }; 

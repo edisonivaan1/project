@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Info, Volume2, Lock, Check, Star } from 'lucide-react';
 import Card, { CardBody } from '../components/UI/Card';
@@ -6,10 +6,8 @@ import Button from '../components/UI/Button';
 import ProgressBar from '../components/UI/ProgressBar';
 import IconButton from '../components/UI/IconButton';
 import { grammarTopics } from '../data/grammarTopics';
-import { useProgress } from '../contexts/ProgressContext';
 import { useAttempt } from '../contexts/AttemptContext';
 import { useGameProgress } from '../contexts/GameProgressContext';
-import { useAuth } from '../contexts/AuthContext';
 
 const difficultyColors: Record<string, { bg: string; text: string; border: string; button: string }> = {
   easy: {
@@ -34,8 +32,6 @@ const difficultyColors: Record<string, { bg: string; text: string; border: strin
 
 const TopicsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const { getProgress } = useProgress();
   const { hasInProgressAttempt, hasCompletedAttempt } = useAttempt();
   const { 
     canAccessDifficulty, 
@@ -97,34 +93,7 @@ const TopicsPage: React.FC = () => {
           Master English Grammar Through Interactive Games And Activities Designed For B1-Level Learners.
         </p>
         
-        {/* Información del usuario */}
-        {user && (
-          <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              Welcome back, {user.first_name}!
-            </h2>
-            <div className="flex justify-center space-x-8 text-sm text-gray-600">
-              <div className="text-center">
-                <div className="font-bold text-lg text-blue-600">
-                  {canAccessDifficulty('easy') ? '✓' : '○'} Easy
-                </div>
-                <div className="text-xs">Unlocked</div>
-              </div>
-              <div className="text-center">
-                <div className="font-bold text-lg text-blue-600">
-                  {canAccessDifficulty('medium') ? '✓' : '🔒'} Medium
-                </div>
-                <div className="text-xs">{canAccessDifficulty('medium') ? 'Unlocked' : 'Locked'}</div>
-              </div>
-              <div className="text-center">
-                <div className="font-bold text-lg text-blue-600">
-                  {canAccessDifficulty('hard') ? '✓' : '🔒'} Hard
-                </div>
-                <div className="text-xs">{canAccessDifficulty('hard') ? 'Unlocked' : 'Locked'}</div>
-              </div>
-            </div>
-          </div>
-        )}
+
 
         <div className="flex justify-center mt-8 space-x-4">
           <IconButton

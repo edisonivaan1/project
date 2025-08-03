@@ -10,7 +10,7 @@ interface MainLayoutProps {
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const location = useLocation();
 
-  const hideHeader = ['/', '/login', '/signup'].includes(location.pathname);
+  const hideHeader = ['/login', '/signup'].includes(location.pathname);
   const hideFooter = ['/login', '/signup'].includes(location.pathname);
   
   return (

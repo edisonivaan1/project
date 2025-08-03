@@ -23,6 +23,8 @@ import { useQuestionStatus } from '../contexts/QuestionStatusContext';
 import { useAttempt } from '../contexts/AttemptContext';
 import { useAudio } from '../contexts/AudioContext';
 import { useGameProgress } from '../contexts/GameProgressContext';
+import { useAchievements } from '../contexts/AchievementContext';
+import AchievementToastManager from '../components/UI/AchievementToastManager';
 import { toast } from 'react-toastify';
 
 // Importar todas las imágenes
@@ -59,6 +61,7 @@ const Game: React.FC = () => {
   } = useAttempt();
   const { playBackgroundMusic, stopBackgroundMusic } = useAudio();
   const { completeLevel, canAccessDifficulty } = useGameProgress();
+  const { checkForNewAchievements } = useAchievements();
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -106,6 +109,15 @@ const Game: React.FC = () => {
         setTimePerQuestion({});
         setHintsPerQuestion({});
         setQuestionStartTime(Date.now());
+
+        // Check for achievements when starting a new game (attempts-based achievements)
+        setTimeout(async () => {
+          try {
+            await checkForNewAchievements(undefined);
+          } catch (error) {
+            console.error('Error checking achievements at game start:', error);
+          }
+        }, 500);
       }
     }
   }, [topicId]);
@@ -235,6 +247,15 @@ const Game: React.FC = () => {
       ...prev,
       [currentQuestionIndex]: (prev[currentQuestionIndex] || 0) + 1
     }));
+
+    // Check for hint-related achievements (asynchronously, non-blocking)
+    setTimeout(async () => {
+      try {
+        await checkForNewAchievements(undefined);
+      } catch (error) {
+        console.error('Error checking achievements after hint usage:', error);
+      }
+    }, 100);
   };
   
   const handleAnswerSelect = (answer: string) => {
@@ -261,6 +282,15 @@ const Game: React.FC = () => {
       const newScore = score + (isAnswerCorrect ? 1 : 0);
       setProgress(topicId, newScore, questions.length);
       setLastQuestionIndex(topicId, nextQuestionIndex);
+
+      // Check for achievements after each answer (asynchronously, non-blocking)
+      setTimeout(async () => {
+        try {
+          await checkForNewAchievements(undefined);
+        } catch (error) {
+          console.error('Error checking achievements after answer:', error);
+        }
+      }, 100);
     }
   };
 
@@ -291,6 +321,15 @@ const Game: React.FC = () => {
       const newScore = score + (isAnswerCorrect ? 1 : 0);
       setProgress(topicId, newScore, questions.length);
       setLastQuestionIndex(topicId, nextQuestionIndex);
+
+      // Check for achievements after each answer (asynchronously, non-blocking)
+      setTimeout(async () => {
+        try {
+          await checkForNewAchievements(undefined);
+        } catch (error) {
+          console.error('Error checking achievements after answer:', error);
+        }
+      }, 100);
     }
   };
 
@@ -340,6 +379,15 @@ const Game: React.FC = () => {
       const newScore = score + (isAnswerCorrect ? 1 : 0);
       setProgress(topicId, newScore, questions.length);
       setLastQuestionIndex(topicId, nextQuestionIndex);
+
+      // Check for achievements after each answer (asynchronously, non-blocking)
+      setTimeout(async () => {
+        try {
+          await checkForNewAchievements(undefined);
+        } catch (error) {
+          console.error('Error checking achievements after answer:', error);
+        }
+      }, 100);
     }
   };
   
@@ -430,6 +478,13 @@ const Game: React.FC = () => {
                 position: "top-center",
                 autoClose: 2000
               });
+            }
+
+            // Check for new achievements after completing a level
+            try {
+              await checkForNewAchievements(undefined);
+            } catch (error) {
+              console.error('Error checking achievements after level completion:', error);
             }
           }
         } catch (error) {
@@ -553,6 +608,9 @@ const Game: React.FC = () => {
     
     return (
       <div className="min-h-screen bg-background flex flex-col">
+        {/* Achievement Toast Manager for completion screen */}
+        <AchievementToastManager enabled={true} />
+        
         <div className="flex-grow flex items-center justify-center p-4">
           <div className="bg-white rounded-xl shadow-lg max-w-lg w-full p-8 animate-slide-up">
             <div className="text-center mb-6">
@@ -627,6 +685,9 @@ const Game: React.FC = () => {
   
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      {/* Achievement Toast Manager */}
+      <AchievementToastManager enabled={true} />
+      
       {/* Game Content */}
       <div className="flex-grow container-custom py-8">
         <div className="max-w-3xl mx-auto">

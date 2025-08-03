@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './components/Layout/MainLayout';
 import Home from './pages/Home';
@@ -10,6 +10,7 @@ import Settings from './pages/Settings';
 import Help from './pages/Help';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
+import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Contextos
@@ -20,19 +21,21 @@ import { ProgressProvider } from './contexts/ProgressContext';
 import { QuestionStatusProvider } from './contexts/QuestionStatusContext';
 import { AttemptProvider } from './contexts/AttemptContext';
 import { AudioProvider } from './contexts/AudioContext';
+import { AchievementProvider } from './contexts/AchievementContext';
 
 function App() {
   return (
     <AuthProvider>
       <GameProgressProvider>
-        <ProgressProvider>
-          <GameProvider>
-            <QuestionStatusProvider>
-              <AttemptProvider>
-                <AudioProvider>
-                  <Router>
-                    <MainLayout>
-                      <Routes>
+        <AchievementProvider>
+          <ProgressProvider>
+            <GameProvider>
+              <QuestionStatusProvider>
+                <AttemptProvider>
+                  <AudioProvider>
+                    <Router>
+                      <MainLayout>
+                        <Routes>
                         {/* Rutas públicas */}
                         <Route path="/" element={<Home />} />
                         <Route path="/login" element={<LoginPage />} />
@@ -65,6 +68,11 @@ function App() {
                             <Settings />
                           </ProtectedRoute>
                         } />
+                        <Route path="/profile" element={
+                          <ProtectedRoute>
+                            <ProfilePage />
+                          </ProtectedRoute>
+                        } />
                         
                         {/* Redirección por defecto */}
                         <Route path="*" element={<Navigate to="/" replace />} />
@@ -76,8 +84,9 @@ function App() {
             </QuestionStatusProvider>
           </GameProvider>
         </ProgressProvider>
-      </GameProgressProvider>
-    </AuthProvider>
+      </AchievementProvider>
+    </GameProgressProvider>
+  </AuthProvider>
   );
 }
 

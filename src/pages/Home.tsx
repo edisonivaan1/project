@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, BookOpen, BarChart2, Users } from 'lucide-react';
+import { BookOpen, BarChart2, Users } from 'lucide-react';
 import Button from '../components/UI/Button';
-import logo from '../assets/logo_GrammarMasterPro.png';
 import { useAuth } from '../contexts/AuthContext';
 
 const Home: React.FC = () => {
@@ -48,21 +47,9 @@ const Home: React.FC = () => {
 
   return (
     <div className="py-0 mb-0">
-      {/* Logo y botón */}
-      <div className="bg-[rgba(0,12,234,0.11)] flex justify-between px-20">
-        <img src={logo} alt="Grammar Master Pro Logo" className="h-24 w-auto" />
-        <Button 
-          onClick={() => navigate('/login')}
-          className="bg-white text-[#000DFF] px-32 py-1 text-base font-black tracking-wider rounded-full flex items-center h-8 mt-4"
-          variant="custom"
-        >
-          LOGIN
-        </Button>
-      </div>
-
       {/* Hero Section */}
       <main className="flex-grow">
-        <section className="bg-[rgba(0,12,234,0.11)] pt-4 pb-12">
+        <section className="bg-[rgba(0,12,234,0.11)] pt-8 pb-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row items-center">
               {/* Texto y botón */}

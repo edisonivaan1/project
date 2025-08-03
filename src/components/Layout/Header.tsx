@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Settings, HelpCircle, Home, LogOut, User } from 'lucide-react';
-import logo from '../../Assets/logo_GrammarMasterPro.png';
+import logo from '../../assets/logo_GrammarMasterPro.png';
 import { useAuth } from '../../contexts/AuthContext';
 
 const Header: React.FC = () => {
@@ -33,10 +33,13 @@ const Header: React.FC = () => {
   // Componente para el usuario autenticado
   const userSection = isAuthenticated && user ? (
     <div className="flex items-center space-x-4">
-      <div className="flex items-center space-x-2 text-gray-700">
+      <Link 
+        to="/profile"
+        className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors"
+      >
         <User className="h-5 w-5" />
         <span className="font-medium">{user.first_name} {user.last_name}</span>
-      </div>
+      </Link>
       <button
         onClick={handleLogout}
         className="flex items-center space-x-1 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
