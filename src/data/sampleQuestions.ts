@@ -202,7 +202,7 @@ export const pastTensesQuestions: QuestionType[] = [
     id: 'past-8',
     text: 'What _____ you _____ when I called?',
     options: ['did / do', 'were / doing', 'had / done', 'have / done'],
-    correctAnswer: 'were / doing',
+    correctAnswer: 'were/doing',
     explanation: 'Past Continuous Describes The Activity In Progress During The Interruption.',
     hint: 'Focus On Ongoing Action. What were you doing?',
     image: 'questions/pastTense/pat-8.png',

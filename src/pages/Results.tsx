@@ -207,13 +207,13 @@ const Results: React.FC = () => {
 
           <div className="flex justify-center space-x-4">
             <Button
-              variant="primary"
+              variant="custom"
               onClick={handleTryAgain}
-              className="flex items-center"
+              className="flex items-center bg-blue-500 hover:bg-blue-600 text-white border-2 border-black"
             >
               <RefreshCw className="w-5 h-5 mr-2" />
               Try Again
-            </Button>
+            </Button> 
             <Button
               variant="outline"
               onClick={() => navigate('/topics')}

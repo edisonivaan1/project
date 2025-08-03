@@ -3,7 +3,7 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   ArrowLeft, Volume2, VolumeX, RefreshCw, Home, 
   ChevronRight, CheckCircle, XCircle, Play, Pause, Trophy,
-  AudioLines, VolumeOff
+  AudioLines
 } from 'lucide-react';
 import Button from '../components/UI/Button';
 import IconButton from '../components/UI/IconButton';
@@ -1085,9 +1085,9 @@ const Game: React.FC = () => {
                 {isRestarting ? 'Restarting...' : 'Try Again'}
               </Button>
               <Button
-                variant="outline"
+                variant="custom"
                 onClick={() => navigate('/topics')}
-                className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000] flex items-center justify-center"
+                className="h-[40px] w-[225px] bg-blue-500 hover:bg-blue-600 text-white border-2 border-black flex items-center justify-center"
               >
                 <Home className="h-5 w-5 mr-2 text-white" />
                 BACK TO TOPICS
@@ -1383,9 +1383,10 @@ const Game: React.FC = () => {
                     {!isAnswerSubmitted && (
                       <div className="flex justify-center">
                         <Button
+                          variant="custom"
                           onClick={handleDragAndDropSubmit}
                           disabled={draggedAnswers.filter(answer => answer.trim()).length === 0}
-                          className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000]"
+                          className="h-[40px] w-[225px] bg-blue-500 hover:bg-blue-600 text-white border-2 border-black"
                           aria-label="Check drag and drop answer"
                         >
                           Check Answer
