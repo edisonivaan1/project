@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Info, Volume2, Lock, Check, Star } from 'lucide-react';
+import { Info, Volume2, VolumeX, Lock, Check, Star } from 'lucide-react';
 import Card, { CardBody } from '../components/UI/Card';
 import Button from '../components/UI/Button';
 import ProgressBar from '../components/UI/ProgressBar';
@@ -8,6 +8,7 @@ import IconButton from '../components/UI/IconButton';
 import { grammarTopics } from '../data/grammarTopics';
 import { useAttempt } from '../contexts/AttemptContext';
 import { useGameProgress } from '../contexts/GameProgressContext';
+import { useAudio } from '../contexts/AudioContext';
 
 const difficultyColors: Record<string, { bg: string; text: string; border: string; button: string }> = {
   easy: {
@@ -38,6 +39,7 @@ const TopicsPage: React.FC = () => {
     isLevelCompleted, 
     getLevelPercentage
   } = useGameProgress();
+  const { isMusicEnabled, toggleMusic, isUserAuthenticated } = useAudio();
   
   // Estado para rastrear intentos en progreso por tema y dificultad
   const [inProgressAttempts, setInProgressAttempts] = useState<Record<string, boolean>>({});
@@ -134,13 +136,14 @@ const TopicsPage: React.FC = () => {
 
         <div className="flex justify-center mt-8 space-x-4">
           <IconButton
-            icon={<Volume2 className="h-6 w-6" />}
+            icon={!isUserAuthenticated ? <VolumeX className="h-6 w-6 opacity-50" /> : (isMusicEnabled ? <Volume2 className="h-6 w-6 text-blue-600" /> : <VolumeX className="h-6 w-6" />)}
             variant="outline"
             size="lg"
-            tooltip="Sound Settings"
-            aria-label="Sound Settings"
-            onClick={() => navigate('/settings')}
-            className="hover:scale-105 transition-transform"
+            tooltip={!isUserAuthenticated ? "🔐 Background Music (Login Required)" : (isMusicEnabled ? "🎵 Mute Background Music" : "🎵 Enable Background Music")}
+            aria-label={!isUserAuthenticated ? "Background Music - Login Required" : (isMusicEnabled ? "Mute Background Music" : "Enable Background Music")}
+            onClick={isUserAuthenticated ? toggleMusic : undefined}
+            disabled={!isUserAuthenticated}
+            className={`transition-transform ${isUserAuthenticated ? 'hover:scale-105' : 'opacity-50 cursor-not-allowed'}`}
           />
           <IconButton
             icon={<Info className="h-6 w-6" />}

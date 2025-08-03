@@ -11,7 +11,8 @@ const Settings: React.FC = () => {
     isMusicEnabled, 
     isSoundEffectsEnabled, 
     toggleMusic, 
-    toggleSoundEffects 
+    toggleSoundEffects,
+    isUserAuthenticated
   } = useAudio();
   
   interface SettingsState {
@@ -78,33 +79,50 @@ const Settings: React.FC = () => {
           {/* Audio Settings */}
           <div>
             <h3 className="text-lg font-bold mb-4">Audio</h3>
-            <div className="space-y-4">
+            {!isUserAuthenticated && (
+              <div className="mb-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700">
+                <p className="text-sm">🔐 Audio controls available after login</p>
+              </div>
+            )}
+            <div className={`space-y-4 ${!isUserAuthenticated ? 'opacity-50' : ''}`}>
               <div className="flex justify-between items-center">
                 <div className="flex items-center">
-                  <Volume2 className="h-5 w-5 mr-3 text-gray-700" />
+                  {!isUserAuthenticated ? (
+                    <VolumeX className="h-5 w-5 mr-3 text-gray-400" />
+                  ) : isMusicEnabled ? (
+                    <Volume2 className="h-5 w-5 mr-3 text-blue-600" />
+                  ) : (
+                    <VolumeX className="h-5 w-5 mr-3 text-gray-700" />
+                  )}
                   <span>Background Music</span>
                 </div>
                 <div 
-                  className={`w-12 h-6 rounded-full p-1 transition-colors ${isMusicEnabled ? 'bg-primary' : 'bg-gray-300'}`}
-                  onClick={toggleMusic}
+                  className={`w-12 h-6 rounded-full p-1 transition-colors ${isUserAuthenticated && isMusicEnabled ? 'bg-primary' : 'bg-gray-300'} ${!isUserAuthenticated ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                  onClick={isUserAuthenticated ? toggleMusic : undefined}
                 >
                   <div 
-                    className={`bg-white h-4 w-4 rounded-full shadow-md transform transition-transform ${isMusicEnabled ? 'translate-x-6' : 'translate-x-0'}`} 
+                    className={`bg-white h-4 w-4 rounded-full shadow-md transform transition-transform ${isUserAuthenticated && isMusicEnabled ? 'translate-x-6' : 'translate-x-0'}`} 
                   />
                 </div>
               </div>
               
               <div className="flex justify-between items-center">
                 <div className="flex items-center">
-                  <VolumeX className="h-5 w-5 mr-3 text-gray-700" />
-                  <span>Sound Effects</span>
+                  {!isUserAuthenticated ? (
+                    <VolumeX className="h-5 w-5 mr-3 text-gray-400" />
+                  ) : isSoundEffectsEnabled ? (
+                    <Volume2 className="h-5 w-5 mr-3 text-green-600" />
+                  ) : (
+                    <VolumeX className="h-5 w-5 mr-3 text-gray-700" />
+                  )}
+                  <span>Question Audio</span>
                 </div>
                 <div 
-                  className={`w-12 h-6 rounded-full p-1 transition-colors ${isSoundEffectsEnabled ? 'bg-primary' : 'bg-gray-300'}`}
-                  onClick={toggleSoundEffects}
+                  className={`w-12 h-6 rounded-full p-1 transition-colors ${isUserAuthenticated && isSoundEffectsEnabled ? 'bg-primary' : 'bg-gray-300'} ${!isUserAuthenticated ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                  onClick={isUserAuthenticated ? toggleSoundEffects : undefined}
                 >
                   <div 
-                    className={`bg-white h-4 w-4 rounded-full shadow-md transform transition-transform ${isSoundEffectsEnabled ? 'translate-x-6' : 'translate-x-0'}`} 
+                    className={`bg-white h-4 w-4 rounded-full shadow-md transform transition-transform ${isUserAuthenticated && isSoundEffectsEnabled ? 'translate-x-6' : 'translate-x-0'}`} 
                   />
                 </div>
               </div>
@@ -151,7 +169,7 @@ const Settings: React.FC = () => {
                   <div className="flex-1 mx-4">
                     <div className="relative pt-1">
                       <div className="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
-                        {['small', 'medium', 'large'].map((size, index) => (
+                        {['small', 'medium', 'large'].map((size) => (
                           <div
                             key={size}
                             className={`shadow-none flex flex-col text-center whitespace-nowrap justify-center ${settings.textSize === size ? 'bg-primary' : 'bg-gray-300'}`}

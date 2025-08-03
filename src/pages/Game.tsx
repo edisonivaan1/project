@@ -30,10 +30,6 @@ import { toast } from 'react-toastify';
 // Importar todas las imágenes
 const images = import.meta.glob('../assets/questions/**/*.png', { eager: true });
 
-// Importar archivos de audio para feedback
-import correctAudioFile from '../assets/audio/CorrectAnswer.mp3';
-import wrongAudioFile from '../assets/audio/WrongAnswer.mp3';
-
 // Función para obtener la imagen
 const getImage = (imagePath: string) => {
   const path = `../assets/${imagePath}`;
@@ -64,7 +60,7 @@ const Game: React.FC = () => {
     loadInProgressAttempt,
     resetAttempt
   } = useAttempt();
-  const { playBackgroundMusic, stopBackgroundMusic } = useAudio();
+  const { playSoundEffect, isSoundEffectsEnabled, isMusicEnabled, toggleMusic, isUserAuthenticated } = useAudio();
   const { checkForNewAchievements } = useAchievements();
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -75,7 +71,6 @@ const Game: React.FC = () => {
   const [score, setScore] = useState(0);
   const [showHint, setShowHint] = useState(false);
   const [attempts, setAttempts] = useState(0);
-  const [soundEnabled, setSoundEnabled] = useState(true);
   const [isGameCompleted, setIsGameCompleted] = useState(false);
   const [isRestarting, setIsRestarting] = useState(false);
 
@@ -86,8 +81,6 @@ const Game: React.FC = () => {
   const [timePerQuestion, setTimePerQuestion] = useState<Record<number, number>>({});
   const [hintsPerQuestion, setHintsPerQuestion] = useState<Record<number, number>>({});
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const correctAudioRef = useRef<HTMLAudioElement | null>(null);
-  const wrongAudioRef = useRef<HTMLAudioElement | null>(null);
   
   const topic = grammarTopics.find(t => t.id === topicId);
   
@@ -260,42 +253,12 @@ const Game: React.FC = () => {
 
 
 
-  // Inicializar audios de feedback
-  useEffect(() => {
-    // Audio para respuesta correcta
-    const correctAudio = new Audio(correctAudioFile);
-    correctAudio.volume = 0.6;
-    correctAudioRef.current = correctAudio;
 
-    // Audio para respuesta incorrecta  
-    const wrongAudio = new Audio(wrongAudioFile);
-    wrongAudio.volume = 0.6;
-    wrongAudioRef.current = wrongAudio;
 
-    // Cleanup al desmontar
-    return () => {
-      if (correctAudioRef.current) {
-        correctAudioRef.current.pause();
-        correctAudioRef.current = null;
-      }
-      if (wrongAudioRef.current) {
-        wrongAudioRef.current.pause();
-        wrongAudioRef.current = null;
-      }
-    };
-  }, []);
-
-  // Función para reproducir audio de feedback
+  // Función para reproducir audio de feedback usando AudioContext
   const playFeedbackAudio = (isCorrect: boolean) => {
-    if (!soundEnabled) return;
-    
-    const audioToPlay = isCorrect ? correctAudioRef.current : wrongAudioRef.current;
-    if (audioToPlay) {
-      audioToPlay.currentTime = 0; // Reiniciar al inicio
-      audioToPlay.play().catch(error => {
-        console.error('Error playing feedback audio:', error);
-      });
-    }
+    if (!isSoundEffectsEnabled) return;
+    playSoundEffect(isCorrect ? 'correct' : 'wrong');
   };
 
   // Navegación con teclado
@@ -690,14 +653,8 @@ const Game: React.FC = () => {
     }
   };
   
-  // Efecto para manejar la reproducción de música
-  useEffect(() => {
-    if (isPlaying) {
-      playBackgroundMusic();
-    } else {
-      stopBackgroundMusic();
-    }
-  }, [isPlaying]);
+  // La música de fondo se controla globalmente desde AudioContext
+  // No necesitamos controlarla aquí basada en isPlaying
 
   // Efecto para manejar la reproducción de audio de la pregunta
   useEffect(() => {
@@ -756,14 +713,12 @@ const Game: React.FC = () => {
   }, [isPlaying]);
 
   const togglePlayPause = () => {
-    if (currentQuestion?.audio) {
+    if (currentQuestion?.audio && isUserAuthenticated && isSoundEffectsEnabled) {
       setIsPlaying(!isPlaying);
     }
   };
   
-  const toggleSound = () => {
-    setSoundEnabled(!soundEnabled);
-  };
+
   
   if (!topic || !currentQuestion) {
     return (
@@ -941,20 +896,25 @@ const Game: React.FC = () => {
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold flex-1">{currentQuestion.text}</h2>
                 <div className="flex items-center gap-2 ml-4">
+                  {/* Botón de Música de Fondo */}
                   <IconButton
-                    icon={soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
-                    onClick={toggleSound}
-                    tooltip={soundEnabled ? "Mute Sound" : "Unmute Sound"}
-                    aria-label={soundEnabled ? "Mute Sound" : "Unmute Sound"}
+                    icon={!isUserAuthenticated ? <VolumeX size={20} className="opacity-50" /> : (isMusicEnabled ? <Volume2 size={20} className="text-blue-600" /> : <VolumeX size={20} />)}
+                    onClick={isUserAuthenticated ? toggleMusic : undefined}
+                    tooltip={!isUserAuthenticated ? "Music available after login" : (isMusicEnabled ? "Mute Background Music" : "Enable Background Music")}
+                    aria-label={!isUserAuthenticated ? "Music available after login" : (isMusicEnabled ? "Mute Background Music" : "Enable Background Music")}
                     variant="ghost"
+                    disabled={!isUserAuthenticated}
+                    className={!isUserAuthenticated ? 'opacity-50 cursor-not-allowed' : ''}
                   />
                   {currentQuestion?.audio && (
                     <IconButton
-                      icon={isPlaying ? <Pause size={20} /> : <Play size={20} />}
-                      onClick={togglePlayPause}
-                      tooltip={isPlaying ? "Stop Audio" : "Play Audio"}
-                      aria-label={isPlaying ? "Stop Audio" : "Play Audio"}
+                      icon={!isUserAuthenticated ? <VolumeX size={20} className="opacity-50" /> : !isSoundEffectsEnabled ? <VolumeX size={20} /> : (isPlaying ? <Pause size={20} /> : <Play size={20} />)}
+                      onClick={isUserAuthenticated && isSoundEffectsEnabled ? togglePlayPause : undefined}
+                      tooltip={!isUserAuthenticated ? "Question audio available after login" : !isSoundEffectsEnabled ? "Enable Question Audio in Settings" : (isPlaying ? "Stop Audio" : "Play Audio")}
+                      aria-label={!isUserAuthenticated ? "Question audio available after login" : !isSoundEffectsEnabled ? "Enable Question Audio in Settings" : (isPlaying ? "Stop Audio" : "Play Audio")}
                       variant="ghost"
+                      disabled={!isUserAuthenticated || !isSoundEffectsEnabled}
+                      className={(!isUserAuthenticated || !isSoundEffectsEnabled) ? 'opacity-50 cursor-not-allowed' : ''}
                     />
                   )}
                 </div>
