@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   ArrowLeft, Volume2, VolumeX, RefreshCw, Home, 
-  ChevronRight, CheckCircle, XCircle, Play, Pause, Trophy
+  ChevronRight, CheckCircle, XCircle, Play, Pause, Trophy,
+  AudioLines, VolumeOff
 } from 'lucide-react';
 import Button from '../components/UI/Button';
 import IconButton from '../components/UI/IconButton';
@@ -39,6 +40,33 @@ const getImage = (imagePath: string) => {
 const HintIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 45 46" fill="none" className="mr-2">
     <path d="M11.2499 2.375V6.125H16.8749V12.5L7.70615 8.7125L2.68115 20.825L13.0687 25.1375L22.3874 32.0375L25.8561 33.4813L33.0374 16.1563L29.5687 14.7125L20.6249 13.3812V6.125H26.2499V2.375H11.2499ZM40.8937 12.2937L36.5624 14.0938L37.9874 17.5625L42.3186 15.7625L40.8937 12.2937ZM37.0874 25.9437L35.6249 29.4125L40.8562 31.5687L42.2811 28.1L37.0874 25.9437ZM30.3562 35.9938L26.8874 37.4188L28.6874 41.75L32.1561 40.3062L30.3562 35.9938Z" fill="currentColor"/>
+  </svg>
+);
+
+// Icono personalizado para audio de pregunta (play con línea)
+const QuestionAudioIcon = ({ className = "", isPlaying = false }: { className?: string; isPlaying?: boolean }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" className={className}>
+    {!isPlaying ? (
+      // Icono de play con línea en medio para audio de pregunta
+      <>
+        <path d="M8 5v14l11-7z" fill="currentColor" />
+        <line x1="2" y1="12" x2="6" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      </>
+    ) : (
+      // Icono de pausa para cuando está reproduciéndose
+      <>
+        <rect x="6" y="4" width="4" height="16" fill="currentColor" />
+        <rect x="14" y="4" width="4" height="16" fill="currentColor" />
+      </>
+    )}
+  </svg>
+);
+
+const QuestionAudioIconDisabled = ({ className = "" }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M8 5v14l11-7z" fill="currentColor" opacity="0.3" />
+    <line x1="2" y1="12" x2="6" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.3" />
+    <line x1="3" y1="3" x2="21" y2="21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
   </svg>
 );
 
@@ -900,21 +928,25 @@ const Game: React.FC = () => {
                   <IconButton
                     icon={!isUserAuthenticated ? <VolumeX size={20} className="opacity-50" /> : (isMusicEnabled ? <Volume2 size={20} className="text-blue-600" /> : <VolumeX size={20} />)}
                     onClick={isUserAuthenticated ? toggleMusic : undefined}
-                    tooltip={!isUserAuthenticated ? "Music available after login" : (isMusicEnabled ? "Mute Background Music" : "Enable Background Music")}
-                    aria-label={!isUserAuthenticated ? "Music available after login" : (isMusicEnabled ? "Mute Background Music" : "Enable Background Music")}
+                    tooltip={!isUserAuthenticated ? "Música disponible después del login" : (isMusicEnabled ? "Silenciar Música de Fondo" : "Activar Música de Fondo")}
+                    aria-label={!isUserAuthenticated ? "Música disponible después del login" : (isMusicEnabled ? "Silenciar Música de Fondo" : "Activar Música de Fondo")}
                     variant="ghost"
                     disabled={!isUserAuthenticated}
                     className={!isUserAuthenticated ? 'opacity-50 cursor-not-allowed' : ''}
                   />
+                  {/* Botón de Audio de Pregunta */}
                   {currentQuestion?.audio && (
                     <IconButton
-                      icon={!isUserAuthenticated ? <VolumeX size={20} className="opacity-50" /> : !isSoundEffectsEnabled ? <VolumeX size={20} /> : (isPlaying ? <Pause size={20} /> : <Play size={20} />)}
+                      icon={!isUserAuthenticated || !isSoundEffectsEnabled ? 
+                        <QuestionAudioIconDisabled className="text-gray-400" /> : 
+                        <QuestionAudioIcon className="text-orange-600" isPlaying={isPlaying} />
+                      }
                       onClick={isUserAuthenticated && isSoundEffectsEnabled ? togglePlayPause : undefined}
-                      tooltip={!isUserAuthenticated ? "Question audio available after login" : !isSoundEffectsEnabled ? "Enable Question Audio in Settings" : (isPlaying ? "Stop Audio" : "Play Audio")}
-                      aria-label={!isUserAuthenticated ? "Question audio available after login" : !isSoundEffectsEnabled ? "Enable Question Audio in Settings" : (isPlaying ? "Stop Audio" : "Play Audio")}
+                      tooltip={!isUserAuthenticated ? "🔊 Audio de pregunta disponible después del login" : !isSoundEffectsEnabled ? "🔊 Activar Audio de Pregunta en Configuración" : (isPlaying ? "⏸️ Parar Audio de Pregunta" : "▶️ Reproducir Audio de Pregunta")}
+                      aria-label={!isUserAuthenticated ? "Audio de pregunta disponible después del login" : !isSoundEffectsEnabled ? "Activar Audio de Pregunta en Configuración" : (isPlaying ? "Parar Audio de Pregunta" : "Reproducir Audio de Pregunta")}
                       variant="ghost"
                       disabled={!isUserAuthenticated || !isSoundEffectsEnabled}
-                      className={(!isUserAuthenticated || !isSoundEffectsEnabled) ? 'opacity-50 cursor-not-allowed' : ''}
+                      className={(!isUserAuthenticated || !isSoundEffectsEnabled) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-orange-50'}
                     />
                   )}
                 </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Info, Volume2, VolumeX, Lock, Check, Star } from 'lucide-react';
+import { Info, Volume2, VolumeX, Lock, Check, Star, BookOpen } from 'lucide-react';
 import Card, { CardBody } from '../components/UI/Card';
 import Button from '../components/UI/Button';
 import ProgressBar from '../components/UI/ProgressBar';
@@ -139,8 +139,8 @@ const TopicsPage: React.FC = () => {
             icon={!isUserAuthenticated ? <VolumeX className="h-6 w-6 opacity-50" /> : (isMusicEnabled ? <Volume2 className="h-6 w-6 text-blue-600" /> : <VolumeX className="h-6 w-6" />)}
             variant="outline"
             size="lg"
-            tooltip={!isUserAuthenticated ? "🔐 Background Music (Login Required)" : (isMusicEnabled ? "🎵 Mute Background Music" : "🎵 Enable Background Music")}
-            aria-label={!isUserAuthenticated ? "Background Music - Login Required" : (isMusicEnabled ? "Mute Background Music" : "Enable Background Music")}
+            tooltip={!isUserAuthenticated ? "🔐 Música de Fondo (Login Requerido)" : (isMusicEnabled ? "🎵 Silenciar Música de Fondo" : "🎵 Activar Música de Fondo")}
+            aria-label={!isUserAuthenticated ? "Música de Fondo - Login Requerido" : (isMusicEnabled ? "Silenciar Música de Fondo" : "Activar Música de Fondo")}
             onClick={isUserAuthenticated ? toggleMusic : undefined}
             disabled={!isUserAuthenticated}
             className={`transition-transform ${isUserAuthenticated ? 'hover:scale-105' : 'opacity-50 cursor-not-allowed'}`}
@@ -149,8 +149,8 @@ const TopicsPage: React.FC = () => {
             icon={<Info className="h-6 w-6" />}
             variant="outline"
             size="lg"
-            tooltip="Help"
-            aria-label="Help"
+            tooltip="Ayuda"
+            aria-label="Ayuda"
             onClick={() => navigate('/help')}
             className="hover:scale-105 transition-transform"
           />
@@ -178,8 +178,8 @@ const TopicsPage: React.FC = () => {
                 >
                   <CardBody className="flex flex-col h-full relative">
                     {isLocked && (
-                      <div className="absolute top-4 right-4 z-10">
-                        <Lock className="h-6 w-6 text-gray-400" />
+                      <div className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 shadow-lg border-2 border-gray-300">
+                        <Lock className="h-8 w-8 text-gray-600" />
                       </div>
                     )}
                     {isCompleted && (
@@ -225,8 +225,8 @@ const TopicsPage: React.FC = () => {
                         >
                           {isLocked ? (
                             <div className="flex items-center justify-center">
-                              <Lock className="h-4 w-4 mr-2" />
-                              LOCKED
+                              <Lock className="h-5 w-5 mr-2 text-white" />
+                               BLOQUEADO
                             </div>
                           ) : (
                             getButtonText(topic.id, topic.difficulty)
@@ -243,6 +243,20 @@ const TopicsPage: React.FC = () => {
                             VIEW RESULTS
                           </Button>
                         )}
+                        
+                        {/* Botón Tutorial siempre visible */}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          icon={<BookOpen className="h-4 w-4" />}
+                          className="w-full border-2 border-green-500 text-green-700 hover:bg-green-50 hover:border-green-600 hover:text-green-800 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/tutorial/${topic.id}?difficulty=${topic.difficulty}`);
+                          }}
+                        >
+                          📘 Tutorial
+                        </Button>
                       </div>
                     </div>
                   </CardBody>
