@@ -579,7 +579,7 @@ const Help: React.FC = () => {
                     type="submit"
                     variant="custom"
                     disabled={!supportMessage.trim() || isSubmitting}
-                    className={`h-[40px] w-[150px] border-2 rounded-lg transition-all font-medium ${
+                    className={`h-[40px] w-[150px] border-2 rounded-lg transition-all font-medium flex items-center justify-center ${
                       isSubmitting 
                         ? 'bg-gray-400 border-gray-500 cursor-not-allowed text-gray-200' 
                         : 'bg-blue-600 hover:bg-blue-700 border-blue-600 hover:border-blue-700 text-white shadow-sm hover:shadow-md'

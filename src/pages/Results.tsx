@@ -115,21 +115,8 @@ const Results: React.FC = () => {
   if (!topic) {
     return (
       <div className="text-center py-12">
-        <h2 
-          className="text-2xl font-bold mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
-          tabIndex={0}
-          role="heading"
-          aria-level={2}
-        >
-          Topic not found
-        </h2>
-        <Button 
-          onClick={() => navigate('/topics')}
-          tabIndex={0}
-          aria-label="Volver a la página de temas"
-        >
-          Return to Topics
-        </Button>
+        <h2 className="text-2xl font-bold mb-4">Topic not found</h2>
+        <Button onClick={() => navigate('/topics')}>Return to Topics</Button>
       </div>
     );
   }
@@ -175,10 +162,7 @@ const Results: React.FC = () => {
         <CardBody>
           <div className="text-center mb-6">
             {isPerfectScore && (
-              <Trophy 
-                className="h-16 w-16 text-yellow-500 mx-auto mb-4" 
-                aria-hidden="true"
-              />
+              <Trophy className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
             )}
             <h1 
               className="text-3xl font-bold mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
@@ -194,7 +178,7 @@ const Results: React.FC = () => {
                 tabIndex={0}
                 role="text"
               >
-                ¡Perfecto! Nivel Completado
+                Perfect! Level Completed
               </p>
             )}
           </div>
@@ -233,16 +217,20 @@ const Results: React.FC = () => {
               className={`p-4 rounded-lg ${isPerfectScore ? 'bg-green-100' : 'bg-blue-100'} focus:outline-none focus:ring-2 focus:ring-blue-500`}
               tabIndex={0}
               role="region"
-              aria-label="Status message about your performance"
+              aria-label="Status message"
             >
-              <p className={`font-medium ${isPerfectScore ? 'text-green-800' : 'text-blue-800'}`}>
+              <p 
+                className={`font-medium ${isPerfectScore ? 'text-green-800' : 'text-blue-800'} focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2`}
+                tabIndex={0}
+                role="text"
+              >
                 {isPerfectScore 
-                  ? "¡Excelente! Has dominado completamente este nivel."
+                  ? "Excellent! You have completely mastered this level."
                   : percentage >= 80
-                  ? "¡Muy bien! Casi perfecto. Necesitas 100% para desbloquear el siguiente nivel."
+                  ? "Very good! Almost perfect. You need 100% to unlock the next level."
                   : percentage >= 50
-                  ? "Buen intento. Sigue practicando para alcanzar el 100%."
-                  : "Sigue practicando. Puedes intentarlo de nuevo hasta conseguir el 100%."}
+                  ? "Nice try. Keep practicing to reach 100%."
+                  : "Keep practicing. You can try again until you get 100%."}
               </p>
             </div>
           </div>
@@ -251,21 +239,17 @@ const Results: React.FC = () => {
             <Button
               variant="custom"
               onClick={handleTryAgain}
-              className="flex items-center bg-blue-500 hover:bg-blue-600 text-white border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              tabIndex={0}
-              aria-label="Intentar el juego de nuevo"
+              icon={<RefreshCw className="w-5 h-5" />}
+              className="h-[40px] w-[225px] bg-blue-500 hover:bg-blue-600 text-white border-2 border-black"
             >
-              <RefreshCw className="w-5 h-5 mr-2" aria-hidden="true" />
               Try Again
-            </Button> 
+            </Button>
             <Button
               variant="outline"
               onClick={() => navigate('/topics')}
-              className="flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              tabIndex={0}
-              aria-label="Volver a la página de temas"
+              icon={<Home className="w-5 h-5" />}
+              className="h-[40px] min-w-[160px]"
             >
-              <Home className="w-5 h-5 mr-2" aria-hidden="true" />
               Back to Topics
             </Button>
           </div>
@@ -276,7 +260,7 @@ const Results: React.FC = () => {
         <Card>
           <CardBody>
             <h2 
-              className="text-2xl font-bold mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+              className="text-2xl font-bold mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
               tabIndex={0}
               role="heading"
               aria-level={2}
@@ -284,7 +268,7 @@ const Results: React.FC = () => {
               My Attempts
               {backendAttempts.length > 5 && (
                 <span 
-                  className="text-sm font-normal text-gray-500 ml-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                  className="text-sm font-normal text-gray-500 ml-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
                   tabIndex={0}
                   role="text"
                 >
@@ -306,14 +290,11 @@ const Results: React.FC = () => {
                       isBestAttempt 
                         ? 'bg-green-50 border-2 border-green-200' 
                         : 'bg-gray-50'
-                    } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                    tabIndex={0}
-                    role="region"
-                    aria-label={`Attempt ${backendAttempts.length - index}: ${attempt.correct} out of ${attempt.total} correct, ${attempt.percentage} percent${isBestAttempt ? ' - Best attempt' : ''}`}
+                    }`}
                   >
                     {isBestAttempt && (
                       <div className="absolute top-2 right-2">
-                        <Trophy className="h-5 w-5 text-yellow-500" aria-hidden="true" />
+                        <Trophy className="h-5 w-5 text-yellow-500" />
                       </div>
                     )}
                     <div>
@@ -324,7 +305,11 @@ const Results: React.FC = () => {
                       >
                         Attempt #{backendAttempts.length - index}
                         {isBestAttempt && (
-                          <span className="ml-2 text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
+                          <span 
+                            className="ml-2 text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            tabIndex={0}
+                            role="text"
+                          >
                             BEST
                           </span>
                         )}
@@ -360,6 +345,7 @@ const Results: React.FC = () => {
                         className={`text-lg font-bold ${isBestAttempt ? 'text-green-700' : ''} focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1`}
                         tabIndex={0}
                         role="text"
+                        aria-label={`Score: ${attempt.correct} out of ${attempt.total} correct answers`}
                       >
                         {attempt.correct} / {attempt.total}
                       </div>
@@ -367,6 +353,7 @@ const Results: React.FC = () => {
                         className={`text-sm ${isBestAttempt ? 'text-green-600' : 'text-gray-600'} focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1`}
                         tabIndex={0}
                         role="text"
+                        aria-label={`Percentage: ${attempt.percentage} percent`}
                       >
                         {attempt.percentage}%
                       </div>

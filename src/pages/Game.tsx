@@ -843,12 +843,12 @@ const Game: React.FC = () => {
           if (result.success) {
             const percentage = Math.round((score / questions.length) * 100);
             if (result.newUnlocks && result.newUnlocks.length > 0) {
-              toast.success(`¡Progreso guardado! Has desbloqueado: ${result.newUnlocks.join(', ').toUpperCase()}`, {
+              toast.success(`Progress saved! You've unlocked: ${result.newUnlocks.join(', ').toUpperCase()}`, {
                 position: "top-center",
                 autoClose: 4000
               });
             } else if (percentage === 100) {
-              toast.success('¡Perfecto! Nivel completado al 100%', {
+              toast.success('Perfect! Level completed 100%!', {
                 position: "top-center",
                 autoClose: 2000
               });

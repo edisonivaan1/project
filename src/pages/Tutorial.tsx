@@ -509,20 +509,25 @@ const Tutorial: React.FC = () => {
         </CardBody>
         <CardFooter className="flex justify-between">
           <Button 
-            variant="outline"
+            variant="custom"
             icon={<ArrowLeft className="text-white" />}
             onClick={() => navigate('/')}
-            className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="h-[40px] w-[225px] bg-blue-500 hover:bg-blue-600 text-white border-2 border-black"
             tabIndex={0}
             aria-label="Volver a la página de temas"
           >
             Back to Topics
           </Button>
           <Button 
-            variant="primary"
+            variant="custom"
             icon={<PlayCircle />}
             onClick={handleStartGame}
             disabled={!isWatched}
+            className={`h-[40px] w-[225px] border-2 border-black ${
+              isWatched 
+                ? 'bg-blue-500 hover:bg-blue-600 text-white' 
+                : 'bg-gray-400 border-gray-500 cursor-not-allowed text-gray-200'
+            }`}
             tabIndex={0}
             aria-label={isWatched ? "Iniciar juego de práctica" : "Debes ver el tutorial primero"}
           >
