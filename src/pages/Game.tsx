@@ -24,6 +24,7 @@ import { useAttempt } from '../contexts/AttemptContext';
 import { useAudio } from '../contexts/AudioContext';
 import { useAchievements } from '../contexts/AchievementContext';
 import AchievementToastManager from '../components/UI/AchievementToastManager';
+import { inProgressAttemptService } from '../services/api';
 import { toast } from 'react-toastify';
 
 // Importar todas las imágenes
@@ -60,7 +61,8 @@ const Game: React.FC = () => {
     completeAttempt, 
     hasInProgressAttempt,
     recordHintUsage,
-    getUsedHints
+    loadInProgressAttempt,
+    resetAttempt
   } = useAttempt();
   const { playBackgroundMusic, stopBackgroundMusic } = useAudio();
   const { checkForNewAchievements } = useAchievements();
@@ -75,6 +77,7 @@ const Game: React.FC = () => {
   const [attempts, setAttempts] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [isGameCompleted, setIsGameCompleted] = useState(false);
+  const [isRestarting, setIsRestarting] = useState(false);
 
   const [isCorrect, setIsCorrect] = useState(false);
   const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
@@ -82,7 +85,6 @@ const Game: React.FC = () => {
   const [questionStartTime, setQuestionStartTime] = useState<number>(Date.now());
   const [timePerQuestion, setTimePerQuestion] = useState<Record<number, number>>({});
   const [hintsPerQuestion, setHintsPerQuestion] = useState<Record<number, number>>({});
-  const [isFreshRestart, setIsFreshRestart] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const correctAudioRef = useRef<HTMLAudioElement | null>(null);
   const wrongAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -120,20 +122,19 @@ const Game: React.FC = () => {
     }
   }, [difficulty, canAccessDifficulty, navigate]);
   
-  // Detectar fresh restart al montar el componente
-  useEffect(() => {
-    const isFreshStart = searchParams.get('fresh') === 'true';
-    setIsFreshRestart(isFreshStart);
-  }, []);
+
 
   // Initialize attempt if needed
   useEffect(() => {
-    if (topicId) {
+    const initializeAttempt = async () => {
+      if (!topicId) return;
+
       const isFreshStart = searchParams.get('fresh') === 'true';
-      if (!hasInProgressAttempt(topicId) || isFreshStart) {
-        // Reset all states for a new attempt
+      
+      // Si es un reinicio fresco, crear nuevo intento
+      if (isFreshStart) {
         resetQuestionStatuses(topicId);
-        startNewAttempt(topicId);
+        await startNewAttempt(topicId, difficulty, questions.length);
         setCurrentQuestionIndex(0);
         setScore(0);
         setAttempts(0);
@@ -149,57 +150,115 @@ const Game: React.FC = () => {
         setIsGameCompleted(false);
         setIsCorrect(false);
 
-        // Limpiar el parámetro fresh del URL si está presente
-        if (isFreshStart) {
-          const newSearchParams = new URLSearchParams(searchParams);
-          newSearchParams.delete('fresh');
-          const newURL = newSearchParams.toString() 
-            ? `${window.location.pathname}?${newSearchParams.toString()}`
-            : window.location.pathname;
-          window.history.replaceState({}, '', newURL);
-          setIsFreshRestart(false); // Reset the flag after cleaning
-        }
+        // Limpiar el parámetro fresh del URL
+        const newSearchParams = new URLSearchParams(searchParams);
+        newSearchParams.delete('fresh');
+        const newURL = newSearchParams.toString() 
+          ? `${window.location.pathname}?${newSearchParams.toString()}`
+          : window.location.pathname;
+        window.history.replaceState({}, '', newURL);
 
-        // Check for achievements when starting a new game (attempts-based achievements)
-        setTimeout(() => {
-          checkForNewAchievements(undefined).catch(error => {
-            console.error('Error checking achievements at game start:', error);
-          });
-        }, 1000); // Dar más tiempo para que se inicialice el contexto
+        return;
       }
-    }
-  }, [topicId, searchParams]);
 
-  // Load attempt state
-  useEffect(() => {
-    if (topicId && !isFreshRestart) {
-      // Solo restaurar estado si NO es un fresh restart
-      const attempt = getCurrentAttempt(topicId);
-      if (attempt) {
-        // Restore answers and hints
-        Object.entries(attempt.answers).forEach(([index, answer]) => {
+      // Intentar cargar un intento en progreso desde el backend
+      const existingAttempt = await loadInProgressAttempt(topicId, difficulty);
+      
+      if (existingAttempt) {
+        // Restaurar estado desde el backend
+        console.log('🔄 Restaurando intento desde backend:', existingAttempt);
+        
+        // Calcular el puntaje actual basado en las respuestas guardadas
+        let currentScore = 0;
+        Object.entries(existingAttempt.answers).forEach(([index, answer]) => {
           const questionIndex = parseInt(index);
-          if (answer === questions[questionIndex].correctAnswer) {
-            updateQuestionStatus(topicId, questionIndex, 'correct');
-          } else {
-            updateQuestionStatus(topicId, questionIndex, 'incorrect');
+          if (questionIndex < questions.length) {
+            const question = questions[questionIndex];
+            const isCorrect = answer === question.correctAnswer;
+            if (isCorrect) {
+              currentScore++;
+              updateQuestionStatus(topicId, questionIndex, 'correct');
+            } else {
+              updateQuestionStatus(topicId, questionIndex, 'incorrect');
+            }
           }
         });
 
-        // Set current question to first unanswered question
-        const firstUnansweredIndex = questions.findIndex((_, index) => !attempt.answers[index]);
+        setScore(currentScore);
+        setTimePerQuestion(existingAttempt.timePerQuestion);
+        setHintsPerQuestion(existingAttempt.hintsPerQuestion);
+
+        // Encontrar la primera pregunta sin responder
+        const firstUnansweredIndex = questions.findIndex((_, index) => 
+          !existingAttempt.answers.hasOwnProperty(index.toString())
+        );
+        
+        let targetQuestionIndex;
         if (firstUnansweredIndex !== -1) {
-          setCurrentQuestionIndex(firstUnansweredIndex);
+          // Ir a la primera pregunta sin responder
+          targetQuestionIndex = firstUnansweredIndex;
+        } else {
+          // Todas las preguntas están respondidas, ir a la última
+          targetQuestionIndex = questions.length - 1;
         }
 
-        // Restore hint states
-        const usedHints = getUsedHints(topicId);
-        if (usedHints.includes(currentQuestionIndex)) {
-          setShowHint(true);
+        setCurrentQuestionIndex(targetQuestionIndex);
+
+        // Configurar estado SOLO para la pregunta objetivo SI ya está respondida
+        const targetAnswer = existingAttempt.answers ? existingAttempt.answers[targetQuestionIndex] : undefined;
+        if (targetAnswer) {
+          // Esta pregunta ya fue respondida, mostrar la respuesta
+          setSelectedAnswer(targetAnswer);
+          setWrittenAnswer(targetAnswer);
+          setDraggedAnswers(targetAnswer.split(', '));
+          setIsAnswerSubmitted(true);
+          
+          const isCorrect = targetAnswer === questions[targetQuestionIndex].correctAnswer;
+          setIsCorrect(isCorrect);
+        } else {
+          // Esta pregunta NO está respondida, mantener estado limpio
+          setSelectedAnswer(null);
+          setWrittenAnswer('');
+          setDraggedAnswers([]);
+          setIsAnswerSubmitted(false);
+          setIsCorrect(false);
         }
+
+        console.log('✅ Estado restaurado desde backend');
+      } else if (!hasInProgressAttempt(topicId)) {
+        // No hay intento en progreso, crear uno nuevo
+        resetQuestionStatuses(topicId);
+        await startNewAttempt(topicId, difficulty, questions.length);
+        setCurrentQuestionIndex(0);
+        setScore(0);
+        setAttempts(0);
+        setShowHint(false);
+        setIsAnswerSubmitted(false);
+        setSelectedAnswer(null);
+        setWrittenAnswer('');
+        setDraggedAnswers([]);
+        setIsPlaying(false);
+        setTimePerQuestion({});
+        setHintsPerQuestion({});
+        setQuestionStartTime(Date.now());
+        setIsGameCompleted(false);
+        setIsCorrect(false);
+
+        console.log('✨ Nuevo intento creado');
       }
-    }
-  }, [topicId, isFreshRestart, questions]);
+
+      // Check for achievements when starting/resuming a game
+      setTimeout(() => {
+        checkForNewAchievements(undefined).catch(error => {
+          console.error('Error checking achievements at game start:', error);
+        });
+      }, 1000);
+    };
+
+    initializeAttempt();
+  }, [topicId, difficulty, searchParams]);
+
+
 
   // Inicializar audios de feedback
   useEffect(() => {
@@ -348,7 +407,7 @@ const Game: React.FC = () => {
     });
   };
   
-  const handleAnswerSelect = (answer: string) => {
+  const handleAnswerSelect = async (answer: string) => {
     if (!isAnswerSubmitted && topicId) {
       setSelectedAnswer(answer);
       setIsAnswerSubmitted(true);
@@ -368,7 +427,8 @@ const Game: React.FC = () => {
       }
 
       // Save answer to attempt
-      submitAnswer(topicId, currentQuestionIndex, answer);
+      const timeSpent = Math.round((Date.now() - questionStartTime) / 1000);
+      await submitAnswer(topicId, currentQuestionIndex, answer, timeSpent, showHint ? 1 : 0);
 
       // Update progress with current score
 
@@ -382,7 +442,7 @@ const Game: React.FC = () => {
     }
   };
 
-  const handleWrittenAnswerSubmit = () => {
+  const handleWrittenAnswerSubmit = async () => {
     if (!isAnswerSubmitted && topicId && writtenAnswer.trim()) {
       setIsAnswerSubmitted(true);
       
@@ -405,7 +465,8 @@ const Game: React.FC = () => {
       }
 
       // Save answer to attempt
-      submitAnswer(topicId, currentQuestionIndex, writtenAnswer.trim());
+      const timeSpent = Math.round((Date.now() - questionStartTime) / 1000);
+      await submitAnswer(topicId, currentQuestionIndex, writtenAnswer.trim(), timeSpent, showHint ? 1 : 0);
 
       // Update progress with current score
 
@@ -438,7 +499,7 @@ const Game: React.FC = () => {
     });
   };
 
-  const handleDragAndDropSubmit = () => {
+  const handleDragAndDropSubmit = async () => {
     if (!isAnswerSubmitted && topicId && draggedAnswers.length > 0) {
       setIsAnswerSubmitted(true);
       
@@ -461,7 +522,8 @@ const Game: React.FC = () => {
       }
 
       // Save answer to attempt
-      submitAnswer(topicId, currentQuestionIndex, draggedAnswers.join(', '));
+      const timeSpent = Math.round((Date.now() - questionStartTime) / 1000);
+      await submitAnswer(topicId, currentQuestionIndex, draggedAnswers.join(', '), timeSpent, showHint ? 1 : 0);
 
       // Update progress with current score
 
@@ -533,6 +595,14 @@ const Game: React.FC = () => {
             }
           );
 
+          // Eliminar el intento en progreso del backend ya que está completado
+          try {
+            await inProgressAttemptService.deleteInProgressAttempt(topicId, difficulty);
+            console.log('🗑️ Intento en progreso eliminado tras completar el nivel');
+          } catch (deleteError) {
+            console.warn('Warning: Could not delete in-progress attempt:', deleteError);
+          }
+
           if (result.success) {
             const percentage = Math.round((score / questions.length) * 100);
             if (result.newUnlocks && result.newUnlocks.length > 0) {
@@ -582,16 +652,42 @@ const Game: React.FC = () => {
     }
   };
   
-  const handleRestartGame = () => {
-    setCurrentQuestionIndex(0);
-    setSelectedAnswer(null);
-    setWrittenAnswer('');
-    setDraggedAnswers([]);
-    setIsAnswerSubmitted(false);
-    setScore(0);
-    setShowHint(false);
-    setAttempts(0);
-    setIsGameCompleted(false);
+  const handleRestartGame = async () => {
+    if (!topicId || isRestarting) return;
+
+    setIsRestarting(true);
+    
+    try {
+      // 1. Eliminar el intento actual del backend
+      await resetAttempt(topicId);
+      
+      // 2. Resetear el estado de las preguntas
+      resetQuestionStatuses(topicId);
+      
+      // 3. Crear un nuevo intento limpio en el backend
+      await startNewAttempt(topicId, difficulty, questions.length);
+      
+      // 4. Reiniciar todo el estado local
+      setCurrentQuestionIndex(0);
+      setSelectedAnswer(null);
+      setWrittenAnswer('');
+      setDraggedAnswers([]);
+      setIsAnswerSubmitted(false);
+      setScore(0);
+      setShowHint(false);
+      setAttempts(0);
+      setIsGameCompleted(false);
+      setIsCorrect(false);
+      setTimePerQuestion({});
+      setHintsPerQuestion({});
+      setQuestionStartTime(Date.now());
+      
+      console.log('🔄 Nuevo intento iniciado tras "Try Again"');
+    } catch (error) {
+      console.error('Error al reiniciar el juego:', error);
+    } finally {
+      setIsRestarting(false);
+    }
   };
   
   // Efecto para manejar la reproducción de música
@@ -740,10 +836,11 @@ const Game: React.FC = () => {
               <Button
                 variant="outline"
                 onClick={handleRestartGame}
+                disabled={isRestarting}
                 className="h-[40px] w-[225px] border-2 border-black flex items-center justify-center"
               >
-                <RefreshCw className="h-5 w-5 mr-2" />
-                Try Again
+                <RefreshCw className={`h-5 w-5 mr-2 ${isRestarting ? 'animate-spin' : ''}`} />
+                {isRestarting ? 'Restarting...' : 'Try Again'}
               </Button>
               <Button
                 variant="outline"

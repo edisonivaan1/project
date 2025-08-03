@@ -4,6 +4,7 @@ const auth = require('../middleware/auth');
 const User = require('../models/User');
 const Attempt = require('../models/Attempt');
 const Progress = require('../models/Progress');
+const InProgressAttempt = require('../models/InProgressAttempt');
 const AchievementService = require('../services/achievementService');
 
 const router = express.Router();
@@ -13,6 +14,7 @@ console.log('🔍 Verificando modelos:');
 console.log('- User model:', !!User);
 console.log('- Attempt model:', !!Attempt);
 console.log('- Progress model:', !!Progress);
+console.log('- InProgressAttempt model:', !!InProgressAttempt);
 
 // @route   GET /api/progress
 // @desc    Obtener el progreso completo del usuario
@@ -526,6 +528,291 @@ router.post('/reset', auth, async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error del servidor al reiniciar progreso'
+    });
+  }
+});
+
+// =====================================================
+// RUTAS PARA INTENTOS EN PROGRESO
+// =====================================================
+
+// @route   GET /api/progress/in-progress/:topicId/:difficulty
+// @desc    Obtener intento en progreso del usuario
+// @access  Private
+router.get('/in-progress/:topicId/:difficulty', auth, async (req, res) => {
+  try {
+    const { topicId, difficulty } = req.params;
+    
+    const inProgressAttempt = await InProgressAttempt.findUserAttempt(
+      req.user._id,
+      topicId,
+      difficulty
+    );
+    
+    if (!inProgressAttempt) {
+      return res.json({
+        success: true,
+        data: null,
+        message: 'No hay intento en progreso'
+      });
+    }
+    
+    res.json({
+      success: true,
+      data: inProgressAttempt.toFrontendFormat()
+    });
+    
+  } catch (error) {
+    console.error('Error getting in-progress attempt:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error del servidor al obtener intento en progreso'
+    });
+  }
+});
+
+// @route   POST /api/progress/in-progress
+// @desc    Crear o actualizar intento en progreso
+// @access  Private
+router.post('/in-progress', auth, [
+  body('topicId')
+    .notEmpty()
+    .withMessage('ID del tema es requerido')
+    .isIn(['present-tenses', 'past-tenses', 'conditionals', 'prepositions', 'articles', 'modal-verbs'])
+    .withMessage('ID del tema no válido'),
+  body('difficulty')
+    .notEmpty()
+    .withMessage('Dificultad es requerida')
+    .isIn(['easy', 'medium', 'hard'])
+    .withMessage('Dificultad no válida'),
+  body('totalQuestions')
+    .isInt({ min: 1 })
+    .withMessage('Total de preguntas debe ser un número positivo'),
+  body('currentQuestionIndex')
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage('Índice de pregunta actual debe ser un número no negativo'),
+  body('answers')
+    .optional()
+    .isObject()
+    .withMessage('Respuestas deben ser un objeto'),
+  body('usedHints')
+    .optional()
+    .isArray()
+    .withMessage('Pistas usadas deben ser un array'),
+  body('timePerQuestion')
+    .optional()
+    .isObject()
+    .withMessage('Tiempo por pregunta debe ser un objeto'),
+  body('hintsPerQuestion')
+    .optional()
+    .isObject()
+    .withMessage('Pistas por pregunta debe ser un objeto')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Errores de validación',
+        errors: errors.array()
+      });
+    }
+    
+    const {
+      topicId,
+      difficulty,
+      totalQuestions,
+      currentQuestionIndex = 0,
+      answers = {},
+      usedHints = [],
+      timePerQuestion = {},
+      hintsPerQuestion = {}
+    } = req.body;
+    
+    // Buscar intento existente
+    let inProgressAttempt = await InProgressAttempt.findUserAttempt(
+      req.user._id,
+      topicId,
+      difficulty
+    );
+    
+    if (inProgressAttempt) {
+      // Actualizar intento existente
+      inProgressAttempt.currentQuestionIndex = currentQuestionIndex;
+      inProgressAttempt.usedHints = usedHints;
+      
+      // Actualizar respuestas
+      for (const [questionIndex, answer] of Object.entries(answers)) {
+        inProgressAttempt.answers.set(questionIndex, answer);
+      }
+      
+      // Actualizar tiempo por pregunta
+      for (const [questionIndex, time] of Object.entries(timePerQuestion)) {
+        inProgressAttempt.timePerQuestion.set(questionIndex, time);
+      }
+      
+      // Actualizar pistas por pregunta
+      for (const [questionIndex, hints] of Object.entries(hintsPerQuestion)) {
+        inProgressAttempt.hintsPerQuestion.set(questionIndex, hints);
+      }
+      
+      await inProgressAttempt.save();
+      console.log('📝 Intento en progreso actualizado:', inProgressAttempt._id);
+      
+    } else {
+      // Crear nuevo intento
+      inProgressAttempt = new InProgressAttempt({
+        userId: req.user._id,
+        topicId,
+        difficulty,
+        totalQuestions,
+        currentQuestionIndex,
+        usedHints
+      });
+      
+      // Establecer respuestas iniciales
+      for (const [questionIndex, answer] of Object.entries(answers)) {
+        inProgressAttempt.answers.set(questionIndex, answer);
+      }
+      
+      // Establecer tiempo por pregunta inicial
+      for (const [questionIndex, time] of Object.entries(timePerQuestion)) {
+        inProgressAttempt.timePerQuestion.set(questionIndex, time);
+      }
+      
+      // Establecer pistas por pregunta inicial
+      for (const [questionIndex, hints] of Object.entries(hintsPerQuestion)) {
+        inProgressAttempt.hintsPerQuestion.set(questionIndex, hints);
+      }
+      
+      await inProgressAttempt.save();
+      console.log('✨ Nuevo intento en progreso creado:', inProgressAttempt._id);
+    }
+    
+    res.json({
+      success: true,
+      data: inProgressAttempt.toFrontendFormat(),
+      message: inProgressAttempt.isNew ? 'Intento creado' : 'Intento actualizado'
+    });
+    
+  } catch (error) {
+    console.error('Error saving in-progress attempt:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error del servidor al guardar intento en progreso'
+    });
+  }
+});
+
+// @route   DELETE /api/progress/in-progress/:topicId/:difficulty
+// @desc    Eliminar intento en progreso (al completar o cancelar)
+// @access  Private
+router.delete('/in-progress/:topicId/:difficulty', auth, async (req, res) => {
+  try {
+    const { topicId, difficulty } = req.params;
+    
+    const result = await InProgressAttempt.findOneAndDelete({
+      userId: req.user._id,
+      topicId,
+      difficulty,
+      isActive: true
+    });
+    
+    if (!result) {
+      return res.json({
+        success: true,
+        message: 'No había intento en progreso para eliminar'
+      });
+    }
+    
+    console.log('🗑️ Intento en progreso eliminado:', result._id);
+    
+    res.json({
+      success: true,
+      message: 'Intento en progreso eliminado exitosamente'
+    });
+    
+  } catch (error) {
+    console.error('Error deleting in-progress attempt:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error del servidor al eliminar intento en progreso'
+    });
+  }
+});
+
+// @route   PUT /api/progress/in-progress/:topicId/:difficulty/answer
+// @desc    Guardar respuesta de una pregunta específica
+// @access  Private
+router.put('/in-progress/:topicId/:difficulty/answer', auth, [
+  body('questionIndex')
+    .isInt({ min: 0 })
+    .withMessage('Índice de pregunta debe ser un número no negativo'),
+  body('answer')
+    .notEmpty()
+    .withMessage('Respuesta es requerida'),
+  body('timeSpent')
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage('Tiempo debe ser un número no negativo'),
+  body('hintsUsed')
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage('Pistas usadas debe ser un número no negativo')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Errores de validación',
+        errors: errors.array()
+      });
+    }
+    
+    const { topicId, difficulty } = req.params;
+    const { questionIndex, answer, timeSpent = 0, hintsUsed = 0 } = req.body;
+    
+    const inProgressAttempt = await InProgressAttempt.findUserAttempt(
+      req.user._id,
+      topicId,
+      difficulty
+    );
+    
+    if (!inProgressAttempt) {
+      return res.status(404).json({
+        success: false,
+        message: 'No se encontró intento en progreso'
+      });
+    }
+    
+    // Guardar la respuesta
+    inProgressAttempt.answers.set(questionIndex.toString(), answer);
+    
+    // Guardar tiempo si se proporciona
+    if (timeSpent > 0) {
+      inProgressAttempt.timePerQuestion.set(questionIndex.toString(), timeSpent);
+    }
+    
+    // Guardar pistas si se proporcionan
+    if (hintsUsed > 0) {
+      inProgressAttempt.hintsPerQuestion.set(questionIndex.toString(), hintsUsed);
+    }
+    
+    await inProgressAttempt.save();
+    
+    res.json({
+      success: true,
+      data: inProgressAttempt.toFrontendFormat(),
+      message: 'Respuesta guardada exitosamente'
+    });
+    
+  } catch (error) {
+    console.error('Error saving answer:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error del servidor al guardar respuesta'
     });
   }
 });

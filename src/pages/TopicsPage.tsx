@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Info, Volume2, Lock, Check, Star } from 'lucide-react';
 import Card, { CardBody } from '../components/UI/Card';
@@ -32,12 +32,16 @@ const difficultyColors: Record<string, { bg: string; text: string; border: strin
 
 const TopicsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { hasInProgressAttempt, hasCompletedAttempt } = useAttempt();
+  const { hasInProgressAttemptForDifficulty, hasCompletedAttempt } = useAttempt();
   const { 
     canAccessDifficulty, 
     isLevelCompleted, 
     getLevelPercentage
   } = useGameProgress();
+  
+  // Estado para rastrear intentos en progreso por tema y dificultad
+  const [inProgressAttempts, setInProgressAttempts] = useState<Record<string, boolean>>({});
+  const [isLoadingAttempts, setIsLoadingAttempts] = useState(true);
   
   // Group topics by difficulty
   const topicsByDifficulty = grammarTopics.reduce((acc, topic) => {
@@ -48,8 +52,37 @@ const TopicsPage: React.FC = () => {
     return acc;
   }, {} as Record<string, typeof grammarTopics>);
 
-  const getButtonText = (topicId: string) => {
-    if (hasInProgressAttempt(topicId)) {
+  // Cargar intentos en progreso al montar el componente
+  useEffect(() => {
+    const loadInProgressAttempts = async () => {
+      setIsLoadingAttempts(true);
+      const attemptPromises: Record<string, boolean> = {};
+      
+      // Verificar cada tema y dificultad
+      for (const topic of grammarTopics) {
+        const key = `${topic.id}-${topic.difficulty}`;
+        try {
+          const hasAttempt = await hasInProgressAttemptForDifficulty(topic.id, topic.difficulty);
+          attemptPromises[key] = hasAttempt;
+        } catch (error) {
+          console.error(`Error checking attempt for ${topic.id}-${topic.difficulty}:`, error);
+          attemptPromises[key] = false;
+        }
+      }
+      
+      setInProgressAttempts(attemptPromises);
+      setIsLoadingAttempts(false);
+    };
+
+    loadInProgressAttempts();
+  }, [hasInProgressAttemptForDifficulty]);
+
+  const getButtonText = (topicId: string, difficulty: string) => {
+    const key = `${topicId}-${difficulty}`;
+    if (isLoadingAttempts) {
+      return 'LOADING...';
+    }
+    if (inProgressAttempts[key]) {
       return 'CONTINUE ATTEMPT';
     }
     return 'START PRACTICE';
@@ -193,7 +226,7 @@ const TopicsPage: React.FC = () => {
                               LOCKED
                             </div>
                           ) : (
-                            getButtonText(topic.id)
+                            getButtonText(topic.id, topic.difficulty)
                           )}
                         </Button>
                         

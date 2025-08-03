@@ -424,4 +424,68 @@ export const handleAuthError = (error: any): string => {
   }
 };
 
-export default { authService, progressService, achievementService, handleAuthError }; 
+// Servicios para intentos en progreso
+export const inProgressAttemptService = {
+  // Obtener intento en progreso
+  getInProgressAttempt: async (topicId: string, difficulty: string) => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest(`/progress/in-progress/${topicId}/${difficulty}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+
+  // Crear o actualizar intento en progreso
+  saveInProgressAttempt: async (attemptData: {
+    topicId: string;
+    difficulty: string;
+    totalQuestions: number;
+    currentQuestionIndex?: number;
+    answers?: Record<string, string>;
+    usedHints?: number[];
+    timePerQuestion?: Record<string, number>;
+    hintsPerQuestion?: Record<string, number>;
+  }) => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest('/progress/in-progress', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(attemptData),
+    });
+  },
+
+  // Eliminar intento en progreso
+  deleteInProgressAttempt: async (topicId: string, difficulty: string) => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest(`/progress/in-progress/${topicId}/${difficulty}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+
+  // Guardar respuesta individual
+  saveAnswer: async (topicId: string, difficulty: string, answerData: {
+    questionIndex: number;
+    answer: string;
+    timeSpent?: number;
+    hintsUsed?: number;
+  }) => {
+    const token = localStorage.getItem('authToken');
+    return apiRequest(`/progress/in-progress/${topicId}/${difficulty}/answer`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(answerData),
+    });
+  }
+};
+
+export default { authService, progressService, achievementService, inProgressAttemptService, handleAuthError }; 
