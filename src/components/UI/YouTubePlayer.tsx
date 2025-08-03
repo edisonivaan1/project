@@ -93,14 +93,30 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
 
   return (
     <div className={`relative bg-black rounded-lg overflow-hidden ${className}`}>
-      {!isReady && (
-        <div className="absolute inset-0 bg-gray-800 flex items-center justify-center z-10">
-          <div className="text-white text-center">
-            <div className="text-xl mb-2">Cargando video...</div>
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
+              {!isReady && (
+          <div 
+            className="absolute inset-0 bg-gray-800 flex items-center justify-center z-10 focus:outline-none focus:ring-2 focus:ring-white rounded"
+            tabIndex={0}
+            role="text"
+            aria-label="Loading video content"
+          >
+            <div className="text-white text-center">
+              <div 
+                className="text-xl mb-2 focus:outline-none focus:ring-2 focus:ring-white rounded px-1"
+                tabIndex={0}
+                role="text"
+              >
+                Cargando video...
+              </div>
+              <div 
+                className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto focus:outline-none focus:ring-2 focus:ring-white rounded"
+                tabIndex={0}
+                role="img"
+                aria-label="Loading spinner"
+              ></div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       <iframe
         ref={playerRef}
@@ -117,15 +133,35 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity pointer-events-none">
         {/* Progress bar */}
         <div className="absolute bottom-16 left-0 right-0 px-4 pointer-events-auto">
-          <div className="w-full h-1 bg-gray-600 rounded-lg relative">
+          <div 
+            className="w-full h-1 bg-gray-600 rounded-lg relative focus:outline-none focus:ring-2 focus:ring-white rounded"
+            tabIndex={0}
+            role="progressbar"
+            aria-valuenow={progress}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label={`Video progress: ${Math.floor(progress)}% completed`}
+          >
             <div 
               className="h-full bg-primary rounded-lg transition-all duration-300" 
               style={{ width: `${progress}%` }} 
             />
           </div>
           <div className="flex justify-between text-white text-sm mt-1">
-            <span>{Math.floor(progress)}% completado</span>
-            <span>{isWatched ? 'Completado' : 'En progreso'}</span>
+            <span 
+              className="focus:outline-none focus:ring-2 focus:ring-white rounded px-1"
+              tabIndex={0}
+              role="text"
+            >
+              {Math.floor(progress)}% completado
+            </span>
+            <span 
+              className="focus:outline-none focus:ring-2 focus:ring-white rounded px-1"
+              tabIndex={0}
+              role="text"
+            >
+              {isWatched ? 'Completado' : 'En progreso'}
+            </span>
           </div>
         </div>
 
@@ -159,7 +195,12 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
 
       {/* Completion overlay */}
       {isWatched && (
-        <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center">
+        <div 
+          className="absolute inset-0 bg-green-500/20 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-green-500 rounded"
+          tabIndex={0}
+          role="text"
+          aria-label="Tutorial completed successfully"
+        >
           <div className="bg-green-500 text-white px-4 py-2 rounded-lg">
             ✅ Tutorial Completado
           </div>

@@ -115,8 +115,21 @@ const Results: React.FC = () => {
   if (!topic) {
     return (
       <div className="text-center py-12">
-        <h2 className="text-2xl font-bold mb-4">Topic not found</h2>
-        <Button onClick={() => navigate('/topics')}>Return to Topics</Button>
+        <h2 
+          className="text-2xl font-bold mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+          tabIndex={0}
+          role="heading"
+          aria-level={2}
+        >
+          Topic not found
+        </h2>
+        <Button 
+          onClick={() => navigate('/topics')}
+          tabIndex={0}
+          aria-label="Volver a la página de temas"
+        >
+          Return to Topics
+        </Button>
       </div>
     );
   }
@@ -162,21 +175,45 @@ const Results: React.FC = () => {
         <CardBody>
           <div className="text-center mb-6">
             {isPerfectScore && (
-              <Trophy className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
+              <Trophy 
+                className="h-16 w-16 text-yellow-500 mx-auto mb-4" 
+                aria-hidden="true"
+              />
             )}
-            <h1 className="text-3xl font-bold mb-2">
+            <h1 
+              className="text-3xl font-bold mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+              tabIndex={0}
+              role="heading"
+              aria-level={1}
+            >
               {topic.title} - {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} Results
             </h1>
             {isPerfectScore && (
-              <p className="text-green-600 font-semibold text-lg">¡Perfecto! Nivel Completado</p>
+              <p 
+                className="text-green-600 font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+                tabIndex={0}
+                role="text"
+              >
+                ¡Perfecto! Nivel Completado
+              </p>
             )}
           </div>
           
           <div className="text-center mb-8">
-            <div className="text-6xl font-bold mb-2 text-primary">
+            <div 
+              className="text-6xl font-bold mb-2 text-primary focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+              tabIndex={0}
+              role="text"
+              aria-label={`Score: ${currentScore.correct} out of ${currentScore.total} correct answers`}
+            >
               {currentScore.correct} / {currentScore.total}
             </div>
-            <div className="text-xl text-gray-600">
+            <div 
+              className="text-xl text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+              tabIndex={0}
+              role="text"
+              aria-label={`Percentage: ${percentage} percent correct`}
+            >
               {percentage}% Correct
             </div>
           </div>
@@ -192,7 +229,12 @@ const Results: React.FC = () => {
 
           {/* Status Message */}
           <div className="text-center mb-8">
-            <div className={`p-4 rounded-lg ${isPerfectScore ? 'bg-green-100' : 'bg-blue-100'}`}>
+            <div 
+              className={`p-4 rounded-lg ${isPerfectScore ? 'bg-green-100' : 'bg-blue-100'} focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              tabIndex={0}
+              role="region"
+              aria-label="Status message about your performance"
+            >
               <p className={`font-medium ${isPerfectScore ? 'text-green-800' : 'text-blue-800'}`}>
                 {isPerfectScore 
                   ? "¡Excelente! Has dominado completamente este nivel."
@@ -209,17 +251,21 @@ const Results: React.FC = () => {
             <Button
               variant="custom"
               onClick={handleTryAgain}
-              className="flex items-center bg-blue-500 hover:bg-blue-600 text-white border-2 border-black"
+              className="flex items-center bg-blue-500 hover:bg-blue-600 text-white border-2 border-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              tabIndex={0}
+              aria-label="Intentar el juego de nuevo"
             >
-              <RefreshCw className="w-5 h-5 mr-2" />
+              <RefreshCw className="w-5 h-5 mr-2" aria-hidden="true" />
               Try Again
             </Button> 
             <Button
               variant="outline"
               onClick={() => navigate('/topics')}
-              className="flex items-center"
+              className="flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              tabIndex={0}
+              aria-label="Volver a la página de temas"
             >
-              <Home className="w-5 h-5 mr-2" />
+              <Home className="w-5 h-5 mr-2" aria-hidden="true" />
               Back to Topics
             </Button>
           </div>
@@ -229,10 +275,19 @@ const Results: React.FC = () => {
       {!isLoadingAttempts && backendAttempts.length > 0 && (
         <Card>
           <CardBody>
-            <h2 className="text-2xl font-bold mb-6">
+            <h2 
+              className="text-2xl font-bold mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+              tabIndex={0}
+              role="heading"
+              aria-level={2}
+            >
               My Attempts
               {backendAttempts.length > 5 && (
-                <span className="text-sm font-normal text-gray-500 ml-2">
+                <span 
+                  className="text-sm font-normal text-gray-500 ml-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                  tabIndex={0}
+                  role="text"
+                >
                   ({backendAttempts.length} total - scroll to see all)
                 </span>
               )}
@@ -251,15 +306,22 @@ const Results: React.FC = () => {
                       isBestAttempt 
                         ? 'bg-green-50 border-2 border-green-200' 
                         : 'bg-gray-50'
-                    }`}
+                    } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                    tabIndex={0}
+                    role="region"
+                    aria-label={`Attempt ${backendAttempts.length - index}: ${attempt.correct} out of ${attempt.total} correct, ${attempt.percentage} percent${isBestAttempt ? ' - Best attempt' : ''}`}
                   >
                     {isBestAttempt && (
                       <div className="absolute top-2 right-2">
-                        <Trophy className="h-5 w-5 text-yellow-500" />
+                        <Trophy className="h-5 w-5 text-yellow-500" aria-hidden="true" />
                       </div>
                     )}
                     <div>
-                      <div className={`font-semibold ${isBestAttempt ? 'text-green-800' : ''}`}>
+                      <div 
+                        className={`font-semibold ${isBestAttempt ? 'text-green-800' : ''} focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1`}
+                        tabIndex={0}
+                        role="text"
+                      >
                         Attempt #{backendAttempts.length - index}
                         {isBestAttempt && (
                           <span className="ml-2 text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
@@ -267,23 +329,45 @@ const Results: React.FC = () => {
                           </span>
                         )}
                       </div>
-                      <div className="text-sm text-gray-600">{formatDate(attempt.completedAt)}</div>
+                      <div 
+                        className="text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                        tabIndex={0}
+                        role="text"
+                      >
+                        {formatDate(attempt.completedAt)}
+                      </div>
                       {attempt.timeSpent > 0 && (
-                        <div className="text-xs text-gray-500">
+                        <div 
+                          className="text-xs text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                          tabIndex={0}
+                          role="text"
+                        >
                           Time: {Math.round(attempt.timeSpent / 60)}m {attempt.timeSpent % 60}s
                         </div>
                       )}
                       {attempt.hintsUsed > 0 && (
-                        <div className="text-xs text-gray-500">
+                        <div 
+                          className="text-xs text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                          tabIndex={0}
+                          role="text"
+                        >
                           Hints used: {attempt.hintsUsed}
                         </div>
                       )}
                     </div>
                     <div className="text-right">
-                      <div className={`text-lg font-bold ${isBestAttempt ? 'text-green-700' : ''}`}>
+                      <div 
+                        className={`text-lg font-bold ${isBestAttempt ? 'text-green-700' : ''} focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1`}
+                        tabIndex={0}
+                        role="text"
+                      >
                         {attempt.correct} / {attempt.total}
                       </div>
-                      <div className={`text-sm ${isBestAttempt ? 'text-green-600' : 'text-gray-600'}`}>
+                      <div 
+                        className={`text-sm ${isBestAttempt ? 'text-green-600' : 'text-gray-600'} focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1`}
+                        tabIndex={0}
+                        role="text"
+                      >
                         {attempt.percentage}%
                       </div>
                     </div>
@@ -304,7 +388,13 @@ const Results: React.FC = () => {
         <Card>
           <CardBody>
             <div className="text-center py-8">
-              <div className="text-gray-500">Loading attempts...</div>
+              <div 
+                className="text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+                tabIndex={0}
+                role="text"
+              >
+                Loading attempts...
+              </div>
             </div>
           </CardBody>
         </Card>

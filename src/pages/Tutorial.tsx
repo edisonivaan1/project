@@ -47,8 +47,21 @@ const Tutorial: React.FC = () => {
   if (!topic) {
     return (
       <div className="text-center py-12">
-        <h2 className="text-2xl font-bold mb-4">Topic not found</h2>
-        <Button onClick={() => navigate('/')}>Return to Home</Button>
+        <h2 
+          className="text-2xl font-bold mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+          tabIndex={0}
+          role="heading"
+          aria-level={2}
+        >
+          Topic not found
+        </h2>
+        <Button 
+          onClick={() => navigate('/')}
+          tabIndex={0}
+          aria-label="Volver a la página de inicio"
+        >
+          Return to Home
+        </Button>
       </div>
     );
   }
@@ -104,48 +117,115 @@ const Tutorial: React.FC = () => {
   // Tutorial components for different question types
   const MultipleChoiceTutorial = ({ question }: { question: QuestionType }) => (
     <div className="bg-gray-100 p-6 rounded-lg my-6">
-      <h4 className="font-bold mb-2">Example Question:</h4>
-      <p className="mb-4 text-lg">{question.text}</p>
+      <h4 
+        className="font-bold mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+        tabIndex={0}
+        role="heading"
+        aria-level={4}
+      >
+        Example Question:
+      </h4>
+      <p 
+        className="mb-4 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+        tabIndex={0}
+        role="text"
+      >
+        {question.text}
+      </p>
       <div className="grid grid-cols-2 gap-3 mb-4">
         {question.options?.map((option, index) => (
           <button 
             key={index}
-            className={`p-3 rounded-lg border-2 transition-all 
+            className={`p-3 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
               ${option === question.correctAnswer 
                 ? 'border-success bg-success/10 font-medium' 
                 : 'border-gray-200 hover:border-primary/50'}`}
+            tabIndex={0}
+            aria-label={`Option ${index + 1}: ${option} ${option === question.correctAnswer ? '(Correct answer)' : ''}`}
           >
             {option}
           </button>
         ))}
       </div>
       <div className="bg-success/10 border border-success/30 p-4 rounded-lg mt-4">
-        <h5 className="font-bold text-success mb-1">Explanation:</h5>
-        <p>{question.explanation}</p>
+        <h5 
+          className="font-bold text-success mb-1 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+          tabIndex={0}
+          role="heading"
+          aria-level={5}
+        >
+          Explanation:
+        </h5>
+        <p 
+          className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+          tabIndex={0}
+          role="text"
+        >
+          {question.explanation}
+        </p>
       </div>
     </div>
   );
 
   const FillInBlankTutorial = ({ question }: { question: QuestionType }) => (
     <div className="bg-gray-100 p-6 rounded-lg my-6">
-      <h4 className="font-bold mb-2">Example Question:</h4>
-      <p className="mb-4 text-lg">{question.text}</p>
+      <h4 
+        className="font-bold mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+        tabIndex={0}
+        role="heading"
+        aria-level={4}
+      >
+        Example Question:
+      </h4>
+      <p 
+        className="mb-4 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+        tabIndex={0}
+        role="text"
+      >
+        {question.text}
+      </p>
       <div className="mb-4">
         <input
           type="text"
           value={Array.isArray(question.correctAnswer) ? question.correctAnswer[0] : question.correctAnswer}
           readOnly
-          className="p-3 border-2 border-success bg-success/10 rounded-lg w-full font-medium"
+          className="p-3 border-2 border-success bg-success/10 rounded-lg w-full font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Type your answer here..."
+          tabIndex={0}
+          aria-label="Example answer field showing correct response"
         />
       </div>
       <div className="bg-success/10 border border-success/30 p-4 rounded-lg mt-4">
-        <h5 className="font-bold text-success mb-1">Correct Answer:</h5>
-        <p className="font-medium mb-2">
+        <h5 
+          className="font-bold text-success mb-1 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+          tabIndex={0}
+          role="heading"
+          aria-level={5}
+        >
+          Correct Answer:
+        </h5>
+        <p 
+          className="font-medium mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+          tabIndex={0}
+          role="text"
+        >
           {Array.isArray(question.correctAnswer) ? question.correctAnswer.join(', ') : question.correctAnswer}
         </p>
-        <h5 className="font-bold text-success mb-1">Explanation:</h5>
-        <p>{question.explanation}</p>
+        <h5 
+          className="font-bold text-success mb-1 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+          tabIndex={0}
+          role="heading"
+          aria-level={5}
+        >
+          Explanation:
+        </h5>
+        <p 
+          className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+          tabIndex={0}
+          role="text"
+        >
+          {question.explanation}
+        </p>
       </div>
     </div>
   );
@@ -158,10 +238,22 @@ const Tutorial: React.FC = () => {
 
     return (
       <div className="bg-gray-100 p-6 rounded-lg my-6">
-        <h4 className="font-bold mb-2">Example Question:</h4>
+        <h4 
+          className="font-bold mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+          tabIndex={0}
+          role="heading"
+          aria-level={4}
+        >
+          Example Question:
+        </h4>
         
         {/* Sentence with blanks filled */}
-        <div className="mb-4 p-4 bg-white rounded-lg border-2 border-dashed border-gray-300">
+        <div 
+          className="mb-4 p-4 bg-white rounded-lg border-2 border-dashed border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          tabIndex={0}
+          role="region"
+          aria-label="Example sentence with filled blanks"
+        >
           <div className="text-lg text-center">
             {textParts.map((part, index) => (
               <React.Fragment key={index}>
@@ -178,16 +270,25 @@ const Tutorial: React.FC = () => {
 
         {/* Available options */}
         <div className="mb-4">
-          <p className="text-sm font-medium text-gray-700 mb-2">Available words:</p>
+          <p 
+            className="text-sm font-medium text-gray-700 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+            tabIndex={0}
+            role="text"
+          >
+            Available words:
+          </p>
           <div className="flex flex-wrap gap-2">
             {question.dragOptions?.map((option, index) => (
               <div
                 key={index}
-                className={`px-3 py-2 rounded-lg border-2 transition-all
+                className={`px-3 py-2 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500
                   ${correctAnswers.includes(option)
                     ? 'border-success bg-success/10 font-medium'
                     : 'border-gray-200 bg-gray-50'
                   }`}
+                tabIndex={0}
+                role="text"
+                aria-label={`Word option ${index + 1}: ${option} ${correctAnswers.includes(option) ? '(Correct answer)' : ''}`}
               >
                 {option}
               </div>
@@ -196,8 +297,21 @@ const Tutorial: React.FC = () => {
         </div>
 
         <div className="bg-success/10 border border-success/30 p-4 rounded-lg mt-4">
-          <h5 className="font-bold text-success mb-1">Explanation:</h5>
-          <p>{question.explanation}</p>
+          <h5 
+            className="font-bold text-success mb-1 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+            tabIndex={0}
+            role="heading"
+            aria-level={5}
+          >
+            Explanation:
+          </h5>
+          <p 
+            className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+            tabIndex={0}
+            role="text"
+          >
+            {question.explanation}
+          </p>
         </div>
       </div>
     );
@@ -249,7 +363,14 @@ const Tutorial: React.FC = () => {
   
   return (
     <div className="max-w-3xl mx-auto animate-fade-in">
-      <h1 className="text-3xl font-bold mb-6 text-center">{topic.title} - Tutorial</h1>
+      <h1 
+        className="text-3xl font-bold mb-6 text-center focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+        tabIndex={0}
+        role="heading"
+        aria-level={1}
+      >
+        {topic.title} - Tutorial
+      </h1>
       
       <Card className="mb-8">
         <CardBody>
@@ -257,12 +378,26 @@ const Tutorial: React.FC = () => {
             {videoError ? (
               <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
                 <div className="text-white text-center">
-                  <div className="text-xl mb-2">Video no disponible</div>
-                  <div className="mb-4">El video de tutorial no se pudo cargar</div>
+                  <div 
+                    className="text-xl mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
+                    Video no disponible
+                  </div>
+                  <div 
+                    className="mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
+                    El video de tutorial no se pudo cargar
+                  </div>
                   <Button 
                     variant="primary"
                     icon={<Rewind />}
                     onClick={handleReplayTutorial}
+                    tabIndex={0}
+                    aria-label="Reintentar cargar el video de tutorial"
                   >
                     Reintentar
                   </Button>
@@ -278,13 +413,28 @@ const Tutorial: React.FC = () => {
             ) : (
               <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
                 <div className="text-white text-center">
-                  <div className="text-xl mb-2">Tutorial Video</div>
-                  <div className="mb-4">Loading {progress}%...</div>
+                  <div 
+                    className="text-xl mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
+                    Tutorial Video
+                  </div>
+                  <div 
+                    className="mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                    aria-label={`Loading progress: ${progress} percent`}
+                  >
+                    Loading {progress}%...
+                  </div>
                   {progress < 100 && (
                     <Button 
                       variant="primary"
                       icon={<SkipForward />}
                       onClick={handleSkipTutorial}
+                      tabIndex={0}
+                      aria-label="Saltar tutorial y continuar al juego"
                     >
                       Skip Tutorial
                     </Button>
@@ -297,13 +447,29 @@ const Tutorial: React.FC = () => {
             {!isWatched && !videoError && (
               <div 
                 className="absolute bottom-0 left-0 h-1 bg-primary transition-all duration-300" 
-                style={{ width: `${progress}%` }} 
+                style={{ width: `${progress}%` }}
+                role="progressbar"
+                aria-valuenow={progress}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label={`Tutorial progress: ${progress} percent complete`}
               />
             )}
           </div>
           
-          <h3 className="text-xl font-bold mb-4">How this Game Works</h3>
-          <p className="mb-4">
+          <h3 
+            className="text-xl font-bold mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+            tabIndex={0}
+            role="heading"
+            aria-level={3}
+          >
+            How this Game Works
+          </h3>
+          <p 
+            className="mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+            tabIndex={0}
+            role="text"
+          >
             {getTutorialDescription(questionType, topic.title)}
           </p>
           
@@ -312,14 +478,32 @@ const Tutorial: React.FC = () => {
           {questionType === 'fill-in-blank' && <FillInBlankTutorial question={exampleQuestion} />}
           {questionType === 'drag-and-drop' && <DragAndDropTutorial question={exampleQuestion} />}
           
-          <h3 className="text-xl font-bold mb-3">Game Features:</h3>
+          <h3 
+            className="text-xl font-bold mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+            tabIndex={0}
+            role="heading"
+            aria-level={3}
+          >
+            Game Features:
+          </h3>
           <ul className="list-disc pl-5 space-y-2 mb-4">
             {getGameFeatures(questionType).map((feature, index) => (
-              <li key={index}>{feature}</li>
+              <li 
+                key={index}
+                className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="listitem"
+              >
+                {feature}
+              </li>
             ))}
           </ul>
           
-          <p className="font-medium">
+          <p 
+            className="font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+            tabIndex={0}
+            role="text"
+          >
             Ready to start practicing {topic.title.toLowerCase()}?
           </p>
         </CardBody>
@@ -328,7 +512,9 @@ const Tutorial: React.FC = () => {
             variant="outline"
             icon={<ArrowLeft className="text-white" />}
             onClick={() => navigate('/')}
-            className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000]"
+            className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            tabIndex={0}
+            aria-label="Volver a la página de temas"
           >
             Back to Topics
           </Button>
@@ -337,6 +523,8 @@ const Tutorial: React.FC = () => {
             icon={<PlayCircle />}
             onClick={handleStartGame}
             disabled={!isWatched}
+            tabIndex={0}
+            aria-label={isWatched ? "Iniciar juego de práctica" : "Debes ver el tutorial primero"}
           >
             {isWatched ? 'Start Game' : 'Watch Tutorial First'}
           </Button>

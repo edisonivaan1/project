@@ -45,7 +45,12 @@ export const CardHeader: React.FC<{
   className?: string;
 }> = ({ children, className = '' }) => {
   return (
-    <div className={`p-6 border-b border-gray-100 ${className}`}>
+    <div 
+      className={`p-6 border-b border-gray-100 ${className} focus:outline-none focus:ring-2 focus:ring-blue-500 rounded`}
+      tabIndex={0}
+      role="region"
+      aria-label="Card header section"
+    >
       {children}
     </div>
   );
@@ -56,7 +61,12 @@ export const CardBody: React.FC<{
   className?: string;
 }> = ({ children, className = '' }) => {
   return (
-    <div className={`p-6 ${className}`}>
+    <div 
+      className={`p-6 ${className} focus:outline-none focus:ring-2 focus:ring-blue-500 rounded`}
+      tabIndex={0}
+      role="region"
+      aria-label="Card body section"
+    >
       {children}
     </div>
   );
@@ -67,7 +77,12 @@ export const CardFooter: React.FC<{
   className?: string;
 }> = ({ children, className = '' }) => {
   return (
-    <div className={`p-6 border-t border-gray-100 ${className}`}>
+    <div 
+      className={`p-6 border-t border-gray-100 ${className} focus:outline-none focus:ring-2 focus:ring-blue-500 rounded`}
+      tabIndex={0}
+      role="region"
+      aria-label="Card footer section"
+    >
       {children}
     </div>
   );

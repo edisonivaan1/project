@@ -107,7 +107,7 @@ const Header: React.FC = () => {
                 aria-current={isActive('/topics') ? 'page' : undefined}
               >
                 <Home className={`h-6 w-6 ${isActive('/topics') ? 'text-[rgb(var(--color-button))]' : ''}`} aria-hidden="true" />
-                <span>Temas</span>
+                <span>Topics</span>
               </Link>
               <Link 
                 to="/settings" 
@@ -118,7 +118,7 @@ const Header: React.FC = () => {
                 aria-current={isActive('/settings') ? 'page' : undefined}
               >
                 <Settings className={`h-6 w-6 ${isActive('/settings') ? 'text-[rgb(var(--color-button))]' : ''}`} aria-hidden="true" />
-                <span>Configuración</span>
+                <span>Configuration</span>
               </Link>
               <Link 
                 to="/help" 
@@ -129,7 +129,7 @@ const Header: React.FC = () => {
                 aria-current={isActive('/help') ? 'page' : undefined}
               >
                 <HelpCircle className={`h-6 w-6 ${isActive('/help') ? 'text-[rgb(var(--color-button))]' : ''}`} aria-hidden="true" />
-                <span>Ayuda</span>
+                <span>Help</span>
               </Link>
             </nav>
           </div>
@@ -147,6 +147,7 @@ const Header: React.FC = () => {
               aria-label="Abrir menú de navegación móvil"
               aria-expanded="false"
               aria-controls="mobile-navigation"
+              tabIndex={0}
             >
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 

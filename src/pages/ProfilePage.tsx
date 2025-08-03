@@ -523,10 +523,18 @@ const ProfilePage: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-xl text-gray-600">No user data available</p>
+          <p 
+            className="text-xl text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+            tabIndex={0}
+            role="text"
+          >
+            No user data available
+          </p>
           <button 
             onClick={() => navigate('/login')}
-            className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            tabIndex={0}
+            aria-label="Ir a la página de inicio de sesión"
           >
             Go to Login
           </button>
@@ -539,7 +547,14 @@ const ProfilePage: React.FC = () => {
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <div className="text-center py-6 px-4">
-        <h1 className="text-3xl font-bold text-gray-900 uppercase tracking-wider">Profile</h1>
+        <h1 
+          className="text-3xl font-bold text-gray-900 uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+          tabIndex={0}
+          role="heading"
+          aria-level={1}
+        >
+          Profile
+        </h1>
       </div>
 
       {/* Profile Section */}
@@ -548,7 +563,12 @@ const ProfilePage: React.FC = () => {
           <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
             {/* Profile Image */}
             <div className="flex flex-col items-center">
-              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-2 border-gray-200">
+              <div 
+                className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                tabIndex={0}
+                role="img"
+                aria-label={`Profile picture of ${user.first_name} ${user.last_name}`}
+              >
                 <img 
                   src={profileImage} 
                   alt={`${user.first_name} ${user.last_name}'s profile picture`}
@@ -567,8 +587,9 @@ const ProfilePage: React.FC = () => {
                     : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
                 }`}
                 aria-label="Edit profile picture"
+                tabIndex={0}
               >
-                <Edit2 className="w-4 h-4" />
+                <Edit2 className="w-4 h-4" aria-hidden="true" />
                 <span>{isUploadingImage ? 'Uploading...' : 'Edit Photo'}</span>
               </button>
 
@@ -577,12 +598,13 @@ const ProfilePage: React.FC = () => {
                 <button
                   onClick={handleDeleteProfileImage}
                   disabled={isUploadingImage}
-                  className={`mt-2 flex items-center space-x-1 px-3 py-1 rounded-full transition-colors text-xs font-medium ${
+                  className={`mt-2 flex items-center space-x-1 px-3 py-1 rounded-full transition-colors text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                     isUploadingImage
                       ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
                       : 'bg-red-100 text-red-700 hover:bg-red-200'
                   }`}
                   aria-label="Delete profile picture"
+                  tabIndex={0}
                 >
                   <span>Reset to Default</span>
                 </button>
@@ -602,14 +624,36 @@ const ProfilePage: React.FC = () => {
             <div className="flex-1">
               <div className="flex flex-col md:flex-row justify-between w-full items-start gap-4">
                 <div className="flex flex-col">
-                  <h2 className="text-3xl font-bold text-gray-900">{user.first_name}</h2>
-                  <h3 className="text-2xl font-semibold text-gray-800">{user.last_name}</h3>
+                  <h2 
+                    className="text-3xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="heading"
+                    aria-level={2}
+                  >
+                    {user.first_name}
+                  </h2>
+                  <h3 
+                    className="text-2xl font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="heading"
+                    aria-level={3}
+                  >
+                    {user.last_name}
+                  </h3>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <span className="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 h-6">
+                  <span 
+                    className="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 h-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    tabIndex={0}
+                    role="text"
+                  >
                     English Level: B1 Intermediate
                   </span>
-                  <span className="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 h-6">
+                  <span 
+                    className="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 h-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    tabIndex={0}
+                    role="text"
+                  >
                     Member since {getMembershipDuration()}
                   </span>
                 </div>
@@ -620,102 +664,242 @@ const ProfilePage: React.FC = () => {
           {/* Main Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
             {/* Lessons Completed */}
-            <div className="bg-blue-50 rounded-lg p-4 flex items-center">
+            <div 
+              className="bg-blue-50 rounded-lg p-4 flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+              tabIndex={0}
+              role="region"
+              aria-label="Lessons completed statistics"
+            >
               <div className="bg-blue-100 p-3 rounded-lg mr-4">
-                <img src={trofeoImage} alt="Lessons" className="w-8 h-8" />
+                <img src={trofeoImage} alt="Lessons" className="w-8 h-8" aria-hidden="true" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-500">Lessons Completed</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p 
+                  className="text-sm font-medium text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                  tabIndex={0}
+                  role="text"
+                >
+                  Lessons Completed
+                </p>
+                <p 
+                  className="text-2xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                  tabIndex={0}
+                  role="text"
+                >
                   {isLoading ? '...' : userStats.completedLessons}
                 </p>
-                <p className="text-xs text-gray-400">
+                <p 
+                  className="text-xs text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                  tabIndex={0}
+                  role="text"
+                >
                   Level {userStats.levelInfo.currentLevel}
                 </p>
               </div>
-              <ChevronRight className="ml-auto text-gray-400" />
+              <ChevronRight className="ml-auto text-gray-400" aria-hidden="true" />
             </div>
             
             {/* Points */}
-            <div className="bg-yellow-50 rounded-lg p-4 flex items-center">
+            <div 
+              className="bg-yellow-50 rounded-lg p-4 flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+              tabIndex={0}
+              role="region"
+              aria-label="Total points statistics"
+            >
               <div className="bg-yellow-100 p-3 rounded-lg mr-4">
-                <img src={estrellaImage} alt="Points" className="w-8 h-8" />
+                <img src={estrellaImage} alt="Points" className="w-8 h-8" aria-hidden="true" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-500">Total Points</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p 
+                  className="text-sm font-medium text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                  tabIndex={0}
+                  role="text"
+                >
+                  Total Points
+                </p>
+                <p 
+                  className="text-2xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                  tabIndex={0}
+                  role="text"
+                >
                   {isLoading ? '...' : userStats.totalPoints}
                 </p>
-                <p className="text-xs text-gray-400">
+                <p 
+                  className="text-xs text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                  tabIndex={0}
+                  role="text"
+                >
                   {userStats.levelInfo.pointsToNextLevel} to next level
                 </p>
               </div>
-              <ChevronRight className="ml-auto text-gray-400" />
+              <ChevronRight className="ml-auto text-gray-400" aria-hidden="true" />
             </div>
             
             {/* Achievements */}
-            <div className="bg-purple-50 rounded-lg p-4 flex items-center">
+            <div 
+              className="bg-purple-50 rounded-lg p-4 flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+              tabIndex={0}
+              role="region"
+              aria-label="Achievements statistics"
+            >
               <div className="bg-purple-100 p-3 rounded-lg mr-4">
-                <img src={medallaImage} alt="Achievements" className="w-8 h-8 rounded-full" />
+                <img src={medallaImage} alt="Achievements" className="w-8 h-8 rounded-full" aria-hidden="true" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-500">Achievements</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p 
+                  className="text-sm font-medium text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                  tabIndex={0}
+                  role="text"
+                >
+                  Achievements
+                </p>
+                <p 
+                  className="text-2xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                  tabIndex={0}
+                  role="text"
+                >
                   {isLoading ? '...' : userStats.achievements.filter(a => a.earned).length}
                 </p>
-                <p className="text-xs text-gray-400">
+                <p 
+                  className="text-xs text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                  tabIndex={0}
+                  role="text"
+                >
                   of {userStats.achievements.length} earned
                 </p>
               </div>
-              <ChevronRight className="ml-auto text-gray-400" />
+              <ChevronRight className="ml-auto text-gray-400" aria-hidden="true" />
             </div>
           </div>
 
           {/* Detailed Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-            <div className="bg-gray-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-gray-900">
+            <div 
+              className="bg-gray-50 rounded-lg p-4 text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+              tabIndex={0}
+              role="region"
+              aria-label="Average score statistics"
+            >
+              <div 
+                className="text-2xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="text"
+              >
                 {isLoading ? '...' : userStats.averageScore}%
               </div>
-              <div className="text-sm text-gray-600">Average Score</div>
+              <div 
+                className="text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="text"
+              >
+                Average Score
+              </div>
             </div>
             
-            <div className="bg-gray-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-gray-900">
+            <div 
+              className="bg-gray-50 rounded-lg p-4 text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+              tabIndex={0}
+              role="region"
+              aria-label="Best score statistics"
+            >
+              <div 
+                className="text-2xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="text"
+              >
                 {isLoading ? '...' : userStats.bestScore}%
               </div>
-              <div className="text-sm text-gray-600">Best Score</div>
+              <div 
+                className="text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="text"
+              >
+                Best Score
+              </div>
             </div>
             
-            <div className="bg-gray-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-gray-900">
+            <div 
+              className="bg-gray-50 rounded-lg p-4 text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+              tabIndex={0}
+              role="region"
+              aria-label="Total attempts statistics"
+            >
+              <div 
+                className="text-2xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="text"
+              >
                 {isLoading ? '...' : userStats.totalAttempts}
               </div>
-              <div className="text-sm text-gray-600">Total Attempts</div>
+              <div 
+                className="text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="text"
+              >
+                Total Attempts
+              </div>
             </div>
             
-            <div className="bg-gray-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-gray-900">
+            <div 
+              className="bg-gray-50 rounded-lg p-4 text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+              tabIndex={0}
+              role="region"
+              aria-label="Time spent statistics"
+            >
+              <div 
+                className="text-2xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="text"
+              >
                 {isLoading ? '...' : formatTime(userStats.totalTimeSpent)}
               </div>
-              <div className="text-sm text-gray-600">Time Spent</div>
+              <div 
+                className="text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="text"
+              >
+                Time Spent
+              </div>
             </div>
           </div>
 
           {/* Progress Section */}
           <div className="mt-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Overall Progress</h3>
-            <div className="w-full bg-gray-200 rounded-full h-4">
+            <h3 
+              className="text-lg font-medium text-gray-900 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+              tabIndex={0}
+              role="heading"
+              aria-level={3}
+            >
+              Overall Progress
+            </h3>
+            <div 
+              className="w-full bg-gray-200 rounded-full h-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              tabIndex={0}
+              role="progressbar"
+              aria-valuenow={userStats.overallProgress}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label={`Overall progress: ${userStats.overallProgress} percent complete`}
+            >
               <div 
                 className="bg-blue-600 h-4 rounded-full transition-all duration-300" 
                 style={{ width: `${userStats.overallProgress}%` }}
               ></div>
             </div>
             <div className="flex justify-between mt-2 text-sm text-gray-500">
-              <p>
+              <p 
+                className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="text"
+              >
                 {isLoading ? 'Loading...' : `${userStats.completedTopics} of ${userStats.totalTopics} topics completed`}
               </p>
-              <p>
+              <p 
+                className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="text"
+              >
                 {isLoading ? '' : `${userStats.overallProgress}% Complete`}
               </p>
             </div>
@@ -723,19 +907,64 @@ const ProfilePage: React.FC = () => {
 
           {/* Level Progress Section */}
           <div className="mt-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Level Progress</h3>
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-6 text-white">
+            <h3 
+              className="text-lg font-medium text-gray-900 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+              tabIndex={0}
+              role="heading"
+              aria-level={3}
+            >
+              Level Progress
+            </h3>
+            <div 
+              className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-6 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              tabIndex={0}
+              role="region"
+              aria-label="Level progress information"
+            >
               <div className="flex justify-between items-center mb-4">
                 <div>
-                  <h4 className="text-2xl font-bold">Level {userStats.levelInfo.currentLevel}</h4>
-                  <p className="text-blue-100">Grammar Master</p>
+                  <h4 
+                    className="text-2xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="heading"
+                    aria-level={4}
+                  >
+                    Level {userStats.levelInfo.currentLevel}
+                  </h4>
+                  <p 
+                    className="text-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
+                    Grammar Master
+                  </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-lg font-semibold">{userStats.totalPoints} points</p>
-                  <p className="text-blue-100 text-sm">{userStats.levelInfo.pointsToNextLevel} to next level</p>
+                  <p 
+                    className="text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
+                    {userStats.totalPoints} points
+                  </p>
+                  <p 
+                    className="text-blue-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
+                    {userStats.levelInfo.pointsToNextLevel} to next level
+                  </p>
                 </div>
               </div>
-              <div className="w-full bg-blue-300 bg-opacity-30 rounded-full h-3">
+              <div 
+                className="w-full bg-blue-300 bg-opacity-30 rounded-full h-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                tabIndex={0}
+                role="progressbar"
+                aria-valuenow={userStats.levelInfo.levelProgress}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label={`Level progress: ${userStats.levelInfo.levelProgress} percent complete`}
+              >
                 <div 
                   className="bg-white h-3 rounded-full transition-all duration-500" 
                   style={{ width: `${userStats.levelInfo.levelProgress}%` }}
@@ -746,34 +975,57 @@ const ProfilePage: React.FC = () => {
 
           {/* Achievements Section */}
           <div className="mt-12">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Achievements</h3>
+            <h3 
+              className="text-lg font-semibold text-gray-900 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+              tabIndex={0}
+              role="heading"
+              aria-level={3}
+            >
+              Achievements
+            </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {userStats.achievements.map((achievement) => (
                 <div 
                   key={achievement.id} 
-                  className={`p-4 rounded-lg border-2 transition-all ${
+                  className={`p-4 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                     achievement.earned 
                       ? 'bg-yellow-50 border-yellow-200 shadow-md' 
                       : 'bg-gray-50 border-gray-200 opacity-60'
                   }`}
                   title={achievement.description}
+                  tabIndex={0}
+                  role="region"
+                  aria-label={`Achievement: ${achievement.name} - ${achievement.description} ${achievement.earned ? 'Earned' : 'Not earned yet'}`}
                 >
                   <div className="text-center">
                     <div className={`text-3xl mb-2 ${achievement.earned ? '' : 'grayscale'}`}>
                       {achievement.icon}
                     </div>
-                    <h4 className={`font-semibold text-sm mb-1 ${
-                      achievement.earned ? 'text-gray-900' : 'text-gray-500'
-                    }`}>
+                    <h4 
+                      className={`font-semibold text-sm mb-1 ${
+                        achievement.earned ? 'text-gray-900' : 'text-gray-500'
+                      } focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1`}
+                      tabIndex={0}
+                      role="heading"
+                      aria-level={4}
+                    >
                       {achievement.name}
                     </h4>
-                    <p className={`text-xs ${
-                      achievement.earned ? 'text-gray-600' : 'text-gray-400'
-                    }`}>
+                    <p 
+                      className={`text-xs ${
+                        achievement.earned ? 'text-gray-600' : 'text-gray-400'
+                      } focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1`}
+                      tabIndex={0}
+                      role="text"
+                    >
                       {achievement.description}
                     </p>
                     {achievement.earned && (
-                      <div className="mt-2 px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                      <div 
+                        className="mt-2 px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        tabIndex={0}
+                        role="text"
+                      >
                         Earned
                       </div>
                     )}
@@ -785,14 +1037,27 @@ const ProfilePage: React.FC = () => {
 
           {/* Difficulty Medals */}
           <div className="mt-12">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Difficulty Medals</h3>
+            <h3 
+              className="text-lg font-semibold text-gray-900 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+              tabIndex={0}
+              role="heading"
+              aria-level={3}
+            >
+              Difficulty Medals
+            </h3>
             <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
               {[
                 { name: 'Easy Topics', earned: userStats.easyMedal },
                 { name: 'Medium Topics', earned: userStats.mediumMedal },
                 { name: 'Hard Topics', earned: userStats.hardMedal }
               ].map((medal, i) => (
-                <div key={i} className="flex flex-col items-center">
+                <div 
+                  key={i} 
+                  className="flex flex-col items-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  tabIndex={0}
+                  role="region"
+                  aria-label={`${medal.name} medal: ${medal.earned ? 'Earned' : 'Not earned yet'}`}
+                >
                   <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-2 ${
                     medal.earned ? 'bg-yellow-100' : 'bg-gray-100'
                   }`}>
@@ -802,9 +1067,14 @@ const ProfilePage: React.FC = () => {
                       className={`w-10 h-10 object-cover rounded-full ${
                         medal.earned ? 'opacity-100' : 'opacity-30 grayscale'
                       }`}
+                      aria-hidden="true"
                     />
                   </div>
-                  <span className="text-xs text-center text-gray-600">
+                  <span 
+                    className="text-xs text-center text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
                     {medal.name}
                   </span>
                 </div>
@@ -816,7 +1086,9 @@ const ProfilePage: React.FC = () => {
           <div className="mt-8 flex justify-end">
             <button 
               onClick={handleLogout}
-              className="px-6 py-2 bg-blue-600 text-white font-medium rounded-full hover:bg-blue-700 transition-colors shadow-md"
+              className="px-6 py-2 bg-blue-600 text-white font-medium rounded-full hover:bg-blue-700 transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              tabIndex={0}
+              aria-label="Cerrar sesión de la aplicación"
             >
               Logout
             </button>

@@ -999,19 +999,81 @@ const Game: React.FC = () => {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <h2 className="text-xl font-semibold text-gray-700">Loading your progress...</h2>
-          <p className="text-gray-500 mt-2">Please wait while we restore your attempt</p>
+          <div 
+            className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+            tabIndex={0}
+            role="img"
+            aria-label="Loading spinner"
+          ></div>
+          <h2 
+            className="text-xl font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+            tabIndex={0}
+            role="heading"
+            aria-level={2}
+            aria-label="Loading your progress"
+          >
+            Loading your progress...
+          </h2>
+          <p 
+            className="text-gray-500 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+            tabIndex={0}
+            role="text"
+            aria-label="Please wait while we restore your attempt"
+          >
+            Please wait while we restore your attempt
+          </p>
         </div>
       </div>
     );
   }
   
-  if (!topic || !currentQuestion) {
+  if (!topic) {
     return (
       <div className="text-center py-12">
-        <h2 className="text-2xl font-bold mb-4">Topic not found</h2>
-        <Button onClick={() => navigate('/')}>Return to Home</Button>
+        <h2 
+          className="text-2xl font-bold mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+          tabIndex={0}
+          role="heading"
+          aria-level={2}
+        >
+          Topic not found
+        </h2>
+        <Button 
+          onClick={() => navigate('/topics')}
+          tabIndex={0}
+          aria-label="Volver a la página de temas"
+        >
+          Return to Topics
+        </Button>
+      </div>
+    );
+  }
+
+  if (!canAccessDifficulty(difficulty)) {
+    return (
+      <div className="text-center py-12">
+        <h2 
+          className="text-2xl font-bold mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+          tabIndex={0}
+          role="heading"
+          aria-level={2}
+        >
+          Access Denied
+        </h2>
+        <p 
+          className="text-gray-600 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+          tabIndex={0}
+          role="text"
+        >
+          You need to complete previous levels first.
+        </p>
+        <Button 
+          onClick={() => navigate('/topics')}
+          tabIndex={0}
+          aria-label="Volver a la página de temas"
+        >
+          Return to Topics
+        </Button>
       </div>
     );
   }
@@ -1030,22 +1092,48 @@ const Game: React.FC = () => {
           <div className="bg-white rounded-xl shadow-lg max-w-lg w-full p-8 animate-slide-up">
             <div className="text-center mb-6">
               {isPerfectScore ? (
-                <Trophy className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
+                <Trophy 
+                  className="h-16 w-16 text-yellow-500 mx-auto mb-4" 
+                  aria-hidden="true"
+                />
               ) : (
-                <div className="h-16 w-16 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <div 
+                  className="h-16 w-16 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                  tabIndex={0}
+                  role="img"
+                  aria-label="Level completion icon"
+                >
                   <span className="text-2xl">📚</span>
                 </div>
               )}
-              <h1 className="text-3xl font-bold mb-2">
+              <h1 
+                className="text-3xl font-bold mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+                tabIndex={0}
+                role="heading"
+                aria-level={1}
+                aria-label={isPerfectScore ? 'Perfect! Level Completed!' : 'Level Attempted!'}
+              >
                 {isPerfectScore ? 'Perfect! Level Completed!' : 'Level Attempted!'}
               </h1>
-              <p className="text-gray-600">
+              <p 
+                className="text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="text"
+                aria-label={`${topic?.title} - ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}`}
+              >
                 {topic?.title} - {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
               </p>
             </div>
             
             <div className="text-center mb-8">
-              <div className="text-6xl font-bold mb-2 text-primary">{score}/{questions.length}</div>
+              <div 
+                className="text-6xl font-bold mb-2 text-primary focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+                tabIndex={0}
+                role="text"
+                aria-label={`Score: ${score} out of ${questions.length} questions correct`}
+              >
+                {score}/{questions.length}
+              </div>
               <ProgressBar 
                 value={percentage} 
                 max={100}
@@ -1053,12 +1141,40 @@ const Game: React.FC = () => {
                 color={percentage === 100 ? 'success' : percentage >= 70 ? 'warning' : 'error'}
                 className="mb-2"
               />
-              <p className="text-lg">{percentage}% Correct</p>
+              <p 
+                className="text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="text"
+                aria-label={`${percentage}% Correct`}
+              >
+                {percentage}% Correct
+              </p>
             </div>
             
             <div className="bg-gray-50 rounded-lg p-4 mb-6">
-              <h3 className="font-bold mb-2">Performance Summary:</h3>
-              <p>
+              <h3 
+                className="font-bold mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="heading"
+                aria-level={3}
+                aria-label="Performance Summary"
+              >
+                Performance Summary:
+              </h3>
+              <p 
+                className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="text"
+                aria-label={
+                  isPerfectScore 
+                    ? "Excellent work! Perfect score. You've completely mastered this level." 
+                    : percentage >= 80 
+                    ? "Very good! Almost perfect. You need 100% to unlock the next level." 
+                    : percentage >= 50
+                    ? "Nice try. Keep practicing to reach 100%."
+                    : "Keep practicing. You can try again until you get 100%."
+                }
+              >
                 {isPerfectScore 
                   ? "Excellent work! Perfect score. You've completely mastered this level." 
                   : percentage >= 80 
@@ -1067,7 +1183,12 @@ const Game: React.FC = () => {
                   ? "Nice try. Keep practicing to reach 100%."
                   : "Keep practicing. You can try again until you get 100%."}
               </p>
-              <div className="mt-3 p-3 bg-blue-100 rounded-lg">
+              <div 
+                className="mt-3 p-3 bg-blue-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                tabIndex={0}
+                role="text"
+                aria-label="Progress saved successfully message"
+              >
                 <p className="text-blue-800 font-medium">
                   ✨ ¡Progreso guardado exitosamente!
                 </p>
@@ -1108,7 +1229,15 @@ const Game: React.FC = () => {
       <div className="flex-grow container-custom py-8">
         <div className="max-w-3xl mx-auto">
           {/* Topic Title */}
-          <h1 className="text-3xl font-bold text-center mb-8">{topic.title}</h1>
+          <h1 
+            className="text-3xl font-bold text-center mb-8 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+            tabIndex={0}
+            role="heading"
+            aria-level={1}
+            aria-label={`Current topic: ${topic.title}`}
+          >
+            {topic.title}
+          </h1>
           
           {/* Question Card */}
           <div className="bg-[rgb(var(--color-background-card))] rounded-xl shadow-md p-6 mb-6">
@@ -1125,7 +1254,14 @@ const Game: React.FC = () => {
                   aria-label="Back to Topics"
                   className="flex items-center"
                 />
-                <span className="text-[#000] font-['Poppins'] text-[18px] italic font-[275] leading-normal capitalize ml-2 flex items-center mt-1">Back to Topics</span>
+                <span 
+                  className="text-[#000] font-['Poppins'] text-[18px] italic font-[275] leading-normal capitalize ml-2 flex items-center mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                  tabIndex={0}
+                  role="text"
+                  aria-label="Back to Topics navigation text"
+                >
+                  Back to Topics
+                </span>
               </div>
               
               <div className="flex-1 mx-4">
@@ -1134,7 +1270,12 @@ const Game: React.FC = () => {
               </div>
 
               {/* Keyboard navigation hint */}
-              <div className="text-xs text-gray-500 flex items-center">
+              <div 
+                className="text-xs text-gray-500 flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="text"
+                aria-label="Keyboard navigation hint: Use arrow keys to navigate between questions"
+              >
                 <kbd className="px-2 py-1 bg-gray-100 border border-gray-300 rounded text-xs mr-1">←</kbd>
                 <kbd className="px-2 py-1 bg-gray-100 border border-gray-300 rounded text-xs mr-2">→</kbd>
                 <span>Navigate</span>
@@ -1159,10 +1300,20 @@ const Game: React.FC = () => {
                 return (
                   <>
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium">
+                      <span 
+                        className="text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                        tabIndex={0}
+                        role="text"
+                        aria-label={`${answeredQuestions} of ${questions.length} questions answered`}
+                      >
                         {answeredQuestions} of {questions.length} questions answered
                       </span>
-                      <span className="text-sm font-medium">
+                      <span 
+                        className="text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                        tabIndex={0}
+                        role="text"
+                        aria-label={`${percentage}% Completed`}
+                      >
                         {percentage}% Completed
                       </span>
                     </div>
@@ -1288,7 +1439,14 @@ const Game: React.FC = () => {
                     {/* Área de Drag and Drop principal */}
                     <div className="bg-gray-50 p-4 rounded-lg border-2 border-dashed border-gray-300">
                       <div className="text-center mb-4">
-                        <p className="text-sm text-gray-600 mb-2">Drag the words into the blank spaces</p>
+                        <p 
+                        className="text-sm text-gray-600 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                        tabIndex={0}
+                        role="text"
+                        aria-label="Instructions: Drag the words into the blank spaces"
+                      >
+                        Drag the words into the blank spaces
+                      </p>
                         <div 
                           className="flex flex-wrap gap-2 justify-center"
                           role="application"
@@ -1347,7 +1505,14 @@ const Game: React.FC = () => {
                     
                     {/* Lista de opciones disponibles */}
                     <div className="bg-white p-4 rounded-lg border-2 border-gray-200">
-                      <p className="text-sm font-medium text-gray-700 mb-3">Available words:</p>
+                      <p 
+                        className="text-sm font-medium text-gray-700 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                        tabIndex={0}
+                        role="text"
+                        aria-label="Available words section"
+                      >
+                        Available words:
+                      </p>
                       <div 
                         className="flex flex-wrap gap-3"
                         role="group"
@@ -1465,23 +1630,46 @@ const Game: React.FC = () => {
               {/* Explanation (shown after answer is submitted) */}
               {isAnswerSubmitted && (
                 <div className="space-y-4">
-                  <div className={`bg-${isCorrect ? 'success' : 'error'}/10 border border-${isCorrect ? 'success' : 'error'}/30 p-4 rounded-lg`}>
-                    <h3 className={`font-bold text-${isCorrect ? 'success' : 'error'} mb-2`}>
-                      {isCorrect ? 'Correct!' : "It's incorrect"}
-                    </h3>
-                    {currentQuestion.isFillInTheBlank && !isCorrect && (
-                      <p className="mb-2">
-                        <strong>Your answer:</strong> {writtenAnswer.trim()}<br/>
-                        <strong>Correct answer:</strong> {Array.isArray(currentQuestion.correctAnswer) ? currentQuestion.correctAnswer[0] : currentQuestion.correctAnswer}
+                                      <div className={`bg-${isCorrect ? 'success' : 'error'}/10 border border-${isCorrect ? 'success' : 'error'}/30 p-4 rounded-lg`}>
+                      <h3 
+                        className={`font-bold text-${isCorrect ? 'success' : 'error'} mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1`}
+                        tabIndex={0}
+                        role="heading"
+                        aria-level={3}
+                        aria-label={isCorrect ? 'Correct answer feedback' : 'Incorrect answer feedback'}
+                      >
+                        {isCorrect ? 'Correct!' : "It's incorrect"}
+                      </h3>
+                                          {currentQuestion.isFillInTheBlank && !isCorrect && (
+                        <p 
+                          className="mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                          tabIndex={0}
+                          role="text"
+                          aria-label={`Your answer: ${writtenAnswer.trim()}. Correct answer: ${Array.isArray(currentQuestion.correctAnswer) ? currentQuestion.correctAnswer[0] : currentQuestion.correctAnswer}`}
+                        >
+                          <strong>Your answer:</strong> {writtenAnswer.trim()}<br/>
+                          <strong>Correct answer:</strong> {Array.isArray(currentQuestion.correctAnswer) ? currentQuestion.correctAnswer[0] : currentQuestion.correctAnswer}
+                        </p>
+                      )}
+                      {currentQuestion.isDragAndDrop && !isCorrect && (
+                        <p 
+                          className="mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                          tabIndex={0}
+                          role="text"
+                          aria-label={`Your answer: ${draggedAnswers.join(', ')}. Correct answer: ${Array.isArray(currentQuestion.correctAnswer) ? currentQuestion.correctAnswer.join(', ') : currentQuestion.correctAnswer}`}
+                        >
+                          <strong>Your answer:</strong> {draggedAnswers.join(', ')}<br/>
+                          <strong>Correct answer:</strong> {Array.isArray(currentQuestion.correctAnswer) ? currentQuestion.correctAnswer.join(', ') : currentQuestion.correctAnswer}
+                        </p>
+                      )}
+                      <p 
+                        className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                        tabIndex={0}
+                        role="text"
+                        aria-label={`Explanation: ${currentQuestion.explanation}`}
+                      >
+                        {currentQuestion.explanation}
                       </p>
-                    )}
-                    {currentQuestion.isDragAndDrop && !isCorrect && (
-                      <p className="mb-2">
-                        <strong>Your answer:</strong> {draggedAnswers.join(', ')}<br/>
-                        <strong>Correct answer:</strong> {Array.isArray(currentQuestion.correctAnswer) ? currentQuestion.correctAnswer.join(', ') : currentQuestion.correctAnswer}
-                      </p>
-                    )}
-                    <p>{currentQuestion.explanation}</p>
                   </div>
                   <div className="flex justify-end">
                     <Button

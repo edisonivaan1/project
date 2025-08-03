@@ -39,9 +39,21 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     <div className={`w-full ${className}`}>
       {label && (
         <div className="flex justify-between items-center mb-1">
-          <span className="text-sm font-medium text-gray-700">{label}</span>
+          <span 
+            className="text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+            tabIndex={0}
+            role="text"
+          >
+            {label}
+          </span>
           {showPercentage && (
-            <span className="text-sm font-medium text-gray-500">{percentage}%</span>
+            <span 
+              className="text-sm font-medium text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+              tabIndex={0}
+              role="text"
+            >
+              {percentage}%
+            </span>
           )}
         </div>
       )}
@@ -60,7 +72,13 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
       </div>
       {!label && showPercentage && (
         <div className="mt-1 text-right">
-          <span className="text-sm font-medium text-gray-500">{percentage}%</span>
+          <span 
+            className="text-sm font-medium text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+            tabIndex={0}
+            role="text"
+          >
+            {percentage}%
+          </span>
         </div>
       )}
     </div>

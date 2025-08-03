@@ -117,17 +117,28 @@ const Settings: React.FC = () => {
               <div className="flex justify-between items-center">
                 <div className="flex items-center">
                   {!isUserAuthenticated ? (
-                    <VolumeX className="h-5 w-5 mr-3 text-gray-400" />
+                    <VolumeX className="h-5 w-5 mr-3 text-gray-400" aria-hidden="true" />
                   ) : isMusicEnabled ? (
-                    <Volume2 className="h-5 w-5 mr-3 text-blue-600" />
+                    <Volume2 className="h-5 w-5 mr-3 text-blue-600" aria-hidden="true" />
                   ) : (
-                    <VolumeX className="h-5 w-5 mr-3 text-gray-700" />
+                    <VolumeX className="h-5 w-5 mr-3 text-gray-700" aria-hidden="true" />
                   )}
-                  <span>Background Music</span>
+                  <span 
+                    className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                    aria-label="Background Music setting"
+                  >
+                    Background Music
+                  </span>
                 </div>
                 <div 
-                  className={`w-12 h-6 rounded-full p-1 transition-colors ${isUserAuthenticated && isMusicEnabled ? 'bg-primary' : 'bg-gray-300'} ${!isUserAuthenticated ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                  className={`w-12 h-6 rounded-full p-1 transition-colors ${isUserAuthenticated && isMusicEnabled ? 'bg-primary' : 'bg-gray-300'} ${!isUserAuthenticated ? 'cursor-not-allowed' : 'cursor-pointer'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded`}
                   onClick={isUserAuthenticated ? toggleMusic : undefined}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`Background Music is ${isUserAuthenticated && isMusicEnabled ? 'enabled' : 'disabled'}. Click to ${isUserAuthenticated && isMusicEnabled ? 'disable' : 'enable'}`}
+                  aria-pressed={isUserAuthenticated && isMusicEnabled}
                 >
                   <div 
                     className={`bg-white h-4 w-4 rounded-full shadow-md transform transition-transform ${isUserAuthenticated && isMusicEnabled ? 'translate-x-6' : 'translate-x-0'}`} 
@@ -138,17 +149,28 @@ const Settings: React.FC = () => {
               <div className="flex justify-between items-center">
                 <div className="flex items-center">
                   {!isUserAuthenticated ? (
-                    <VolumeX className="h-5 w-5 mr-3 text-gray-400" />
+                    <VolumeX className="h-5 w-5 mr-3 text-gray-400" aria-hidden="true" />
                   ) : isSoundEffectsEnabled ? (
-                    <Volume2 className="h-5 w-5 mr-3 text-green-600" />
+                    <Volume2 className="h-5 w-5 mr-3 text-green-600" aria-hidden="true" />
                   ) : (
-                    <VolumeX className="h-5 w-5 mr-3 text-gray-700" />
+                    <VolumeX className="h-5 w-5 mr-3 text-gray-700" aria-hidden="true" />
                   )}
-                  <span>Question Audio</span>
+                  <span 
+                    className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                    aria-label="Question Audio setting"
+                  >
+                    Question Audio
+                  </span>
                 </div>
                 <div 
-                  className={`w-12 h-6 rounded-full p-1 transition-colors ${isUserAuthenticated && isSoundEffectsEnabled ? 'bg-primary' : 'bg-gray-300'} ${!isUserAuthenticated ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                  className={`w-12 h-6 rounded-full p-1 transition-colors ${isUserAuthenticated && isSoundEffectsEnabled ? 'bg-primary' : 'bg-gray-300'} ${!isUserAuthenticated ? 'cursor-not-allowed' : 'cursor-pointer'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded`}
                   onClick={isUserAuthenticated ? toggleSoundEffects : undefined}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`Question Audio is ${isUserAuthenticated && isSoundEffectsEnabled ? 'enabled' : 'disabled'}. Click to ${isUserAuthenticated && isSoundEffectsEnabled ? 'disable' : 'enable'}`}
+                  aria-pressed={isUserAuthenticated && isSoundEffectsEnabled}
                 >
                   <div 
                     className={`bg-white h-4 w-4 rounded-full shadow-md transform transition-transform ${isUserAuthenticated && isSoundEffectsEnabled ? 'translate-x-6' : 'translate-x-0'}`} 
@@ -171,12 +193,23 @@ const Settings: React.FC = () => {
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <div className="flex items-center">
-                  <Maximize className="h-5 w-5 mr-3 text-gray-700" />
-                  <span>Full Screen Mode</span>
+                  <Maximize className="h-5 w-5 mr-3 text-gray-700" aria-hidden="true" />
+                  <span 
+                    className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                    aria-label="Full Screen Mode setting"
+                  >
+                    Full Screen Mode
+                  </span>
                 </div>
                 <div 
-                  className={`w-12 h-6 rounded-full p-1 transition-colors ${settings.fullscreenMode ? 'bg-primary' : 'bg-gray-300'}`}
+                  className={`w-12 h-6 rounded-full p-1 transition-colors ${settings.fullscreenMode ? 'bg-primary' : 'bg-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded cursor-pointer`}
                   onClick={() => toggleSetting('fullscreenMode')}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`Full Screen Mode is ${settings.fullscreenMode ? 'enabled' : 'disabled'}. Click to ${settings.fullscreenMode ? 'disable' : 'enable'}`}
+                  aria-pressed={settings.fullscreenMode}
                 >
                   <div 
                     className={`bg-white h-4 w-4 rounded-full shadow-md transform transition-transform ${settings.fullscreenMode ? 'translate-x-6' : 'translate-x-0'}`} 
@@ -186,11 +219,18 @@ const Settings: React.FC = () => {
               
               <div>
                 <div className="flex items-center mb-2">
-                  <span className="mr-3">Text Size</span>
+                  <span 
+                    className="mr-3 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                    aria-label="Text Size setting"
+                  >
+                    Text Size
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <button 
-                    className="p-2 text-gray-600 hover:text-primary transition-colors"
+                    className="p-2 text-gray-600 hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
                     onClick={() => {
                       const sizes = ['small', 'medium', 'large'] as const;
                       const currentIndex = sizes.indexOf(settings.textSize);
@@ -198,13 +238,23 @@ const Settings: React.FC = () => {
                       toggleSetting('textSize', sizes[newIndex]);
                     }}
                     disabled={settings.textSize === 'small'}
+                    tabIndex={0}
+                    aria-label="Decrease text size"
                   >
-                    <MinusCircle className="h-5 w-5" />
+                    <MinusCircle className="h-5 w-5" aria-hidden="true" />
                   </button>
                   
                   <div className="flex-1 mx-4">
                     <div className="relative pt-1">
-                      <div className="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
+                      <div 
+                        className="overflow-hidden h-2 text-xs flex rounded bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        tabIndex={0}
+                        role="slider"
+                        aria-valuenow={settings.textSize === 'small' ? 1 : settings.textSize === 'medium' ? 2 : 3}
+                        aria-valuemin={1}
+                        aria-valuemax={3}
+                        aria-label="Text size slider"
+                      >
                         {['small', 'medium', 'large'].map((size) => (
                           <div
                             key={size}
@@ -214,15 +264,36 @@ const Settings: React.FC = () => {
                         ))}
                       </div>
                       <div className="flex justify-between text-xs px-1 mt-1">
-                        <span>Small</span>
-                        <span>Medium</span>
-                        <span>Large</span>
+                        <span 
+                          className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                          tabIndex={0}
+                          role="text"
+                          aria-label="Small text size"
+                        >
+                          Small
+                        </span>
+                        <span 
+                          className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                          tabIndex={0}
+                          role="text"
+                          aria-label="Medium text size"
+                        >
+                          Medium
+                        </span>
+                        <span 
+                          className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                          tabIndex={0}
+                          role="text"
+                          aria-label="Large text size"
+                        >
+                          Large
+                        </span>
                       </div>
                     </div>
                   </div>
                   
                   <button 
-                    className="p-2 text-gray-600 hover:text-primary transition-colors"
+                    className="p-2 text-gray-600 hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
                     onClick={() => {
                       const sizes = ['small', 'medium', 'large'] as const;
                       const currentIndex = sizes.indexOf(settings.textSize);
@@ -230,11 +301,18 @@ const Settings: React.FC = () => {
                       toggleSetting('textSize', sizes[newIndex]);
                     }}
                     disabled={settings.textSize === 'large'}
+                    tabIndex={0}
+                    aria-label="Increase text size"
                   >
-                    <PlusCircle className="h-5 w-5" />
+                    <PlusCircle className="h-5 w-5" aria-hidden="true" />
                   </button>
                 </div>
-                <div className="mt-4 p-4 bg-gray-100 rounded-lg">
+                <div 
+                  className="mt-4 p-4 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  tabIndex={0}
+                  role="region"
+                  aria-label="Text size preview"
+                >
                   <p className={`${settings.textSize === 'small' ? 'text-sm' : settings.textSize === 'large' ? 'text-lg' : 'text-base'}`}>
                     This is how your text will look with the {textSizeOptions[settings.textSize]} setting.
                   </p>
@@ -246,10 +324,12 @@ const Settings: React.FC = () => {
         
         <CardFooter className="flex justify-center">
           <Button
-            variant="outline"
+            variant="custom"
             icon={<ArrowLeft className="text-white" />}
             onClick={() => navigate('/topics')}
-            className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000]"
+            className="h-[40px] w-[225px] bg-blue-500 hover:bg-blue-600 text-white border-2 border-black"
+            tabIndex={0}
+            aria-label="Volver a la página de temas"
           >
             Back to topics
           </Button>

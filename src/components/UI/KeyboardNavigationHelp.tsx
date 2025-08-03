@@ -76,7 +76,13 @@ const KeyboardNavigationHelp: React.FC<KeyboardHelpProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
               <Keyboard className="h-6 w-6 text-blue-600" aria-hidden="true" />
-              <h2 id="keyboard-help-title" className="text-xl font-bold text-gray-900">
+              <h2 
+                id="keyboard-help-title" 
+                className="text-xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="heading"
+                aria-level={2}
+              >
                 Ayuda de Navegación por Teclado
               </h2>
             </div>
@@ -90,33 +96,68 @@ const KeyboardNavigationHelp: React.FC<KeyboardHelpProps> = ({
           </div>
 
           <div id="keyboard-help-description" className="space-y-6">
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <div className="flex items-start space-x-2">
-                <Info className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" aria-hidden="true" />
-                <p className="text-blue-800">
-                  Esta aplicación es completamente accesible por teclado. Todos los elementos pueden ser navegados sin usar el mouse.
-                </p>
+                          <div className="bg-blue-50 p-4 rounded-lg">
+                <div className="flex items-start space-x-2">
+                  <Info className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" aria-hidden="true" />
+                  <p 
+                    className="text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
+                    Esta aplicación es completamente accesible por teclado. Todos los elementos pueden ser navegados sin usar el mouse.
+                  </p>
+                </div>
               </div>
-            </div>
 
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Navegación General</h3>
+                <h3 
+                  className="font-semibold text-gray-900 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                  tabIndex={0}
+                  role="heading"
+                  aria-level={3}
+                >
+                  Navegación General
+                </h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Elemento siguiente:</span>
+                    <span 
+                      className="text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      tabIndex={0}
+                      role="text"
+                    >
+                      Elemento siguiente:
+                    </span>
                     <kbd className="px-2 py-1 bg-gray-100 rounded text-xs">Tab</kbd>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Elemento anterior:</span>
+                    <span 
+                      className="text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      tabIndex={0}
+                      role="text"
+                    >
+                      Elemento anterior:
+                    </span>
                     <kbd className="px-2 py-1 bg-gray-100 rounded text-xs">Shift + Tab</kbd>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Activar elemento:</span>
+                    <span 
+                      className="text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      tabIndex={0}
+                      role="text"
+                    >
+                      Activar elemento:
+                    </span>
                     <kbd className="px-2 py-1 bg-gray-100 rounded text-xs">Enter / Space</kbd>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Saltar al contenido:</span>
+                    <span 
+                      className="text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      tabIndex={0}
+                      role="text"
+                    >
+                      Saltar al contenido:
+                    </span>
                     <kbd className="px-2 py-1 bg-gray-100 rounded text-xs">Skip links</kbd>
                   </div>
                 </div>

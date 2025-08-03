@@ -98,8 +98,9 @@ const AchievementToast: React.FC<AchievementToastProps> = ({
         <div className={`bg-gradient-to-r ${style.gradient} px-4 py-2 text-white relative`}>
           <button
             onClick={handleClose}
-            className="absolute top-2 right-2 text-white hover:text-gray-200 transition-colors p-1"
+            className="absolute top-2 right-2 text-white hover:text-gray-200 transition-colors p-1 focus:outline-none focus:ring-2 focus:ring-white rounded"
             aria-label="Close achievement notification"
+            tabIndex={0}
           >
             <X className="w-4 h-4" />
           </button>
@@ -109,7 +110,12 @@ const AchievementToast: React.FC<AchievementToastProps> = ({
               <IconComponent className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-sm font-bold">
+              <h3 
+                className="text-sm font-bold focus:outline-none focus:ring-2 focus:ring-white rounded px-1"
+                tabIndex={0}
+                role="heading"
+                aria-level={3}
+              >
                 Achievement Unlocked!
               </h3>
             </div>
@@ -126,15 +132,29 @@ const AchievementToast: React.FC<AchievementToastProps> = ({
             
             {/* Achievement Details */}
             <div className="flex-1 min-w-0">
-              <h4 className="text-lg font-bold text-gray-900 truncate">
+              <h4 
+                className="text-lg font-bold text-gray-900 truncate focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="heading"
+                aria-level={4}
+              >
                 {achievement.name}
               </h4>
-              <p className="text-sm text-gray-600 mt-1">
+              <p 
+                className="text-sm text-gray-600 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="text"
+              >
                 {achievement.description}
               </p>
               
               {/* Category Badge */}
-              <div className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-white bg-opacity-60 text-gray-700 mt-2">
+              <div 
+                className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-white bg-opacity-60 text-gray-700 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                tabIndex={0}
+                role="text"
+                aria-label={`Achievement category: ${achievement.category === 'medal' ? 'Medal' : achievement.category.charAt(0).toUpperCase() + achievement.category.slice(1)}`}
+              >
                 {achievement.category === 'medal' ? 'Medal' : 
                  achievement.category.charAt(0).toUpperCase() + achievement.category.slice(1)}
               </div>

@@ -33,7 +33,11 @@ const QuestionNavigator: React.FC<QuestionNavigatorProps> = ({
   };
 
   return (
-    <div className={`flex items-center justify-center space-x-2 ${className}`}>
+    <div 
+      className={`flex items-center justify-center space-x-2 ${className}`}
+      role="navigation"
+      aria-label="Question navigation"
+    >
       {Array.from({ length: totalQuestions }, (_, i) => {
         const status = getQuestionStatus(topicId, i);
         
@@ -44,6 +48,7 @@ const QuestionNavigator: React.FC<QuestionNavigatorProps> = ({
             className={getStatusClasses(i)}
             aria-label={`Pregunta ${i + 1}: ${status}`}
             title={`Pregunta ${i + 1}`}
+            tabIndex={0}
           >
             {i + 1}
           </button>

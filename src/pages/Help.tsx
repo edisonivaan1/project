@@ -138,9 +138,11 @@ const Help: React.FC = () => {
                 setSubmitStatus('idle');
                 setSubmitMessage('');
               }}
-              className="text-gray-400 hover:text-gray-600 flex-shrink-0"
+              className="text-gray-400 hover:text-gray-600 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
+              tabIndex={0}
+              aria-label="Cerrar notificación"
             >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
@@ -173,19 +175,36 @@ const Help: React.FC = () => {
             {faqItems.map((item, index) => (
               <Card key={index} className="overflow-hidden">
                 <button
-                  className="w-full text-left p-4 flex justify-between items-center"
+                  className="w-full text-left p-4 flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   onClick={() => toggleFAQ(index)}
+                  tabIndex={0}
+                  aria-label={`${item.question} - ${expandedIndex === index ? 'Collapse' : 'Expand'} answer`}
+                  aria-expanded={expandedIndex === index}
                 >
-                  <h3 className="text-lg font-semibold">{item.question}</h3>
+                  <h3 
+                    className="text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="heading"
+                    aria-level={3}
+                  >
+                    {item.question}
+                  </h3>
                   {expandedIndex === index ? (
-                    <ChevronUp className="h-5 w-5 text-gray-500" />
+                    <ChevronUp className="h-5 w-5 text-gray-500" aria-hidden="true" />
                   ) : (
-                    <ChevronDown className="h-5 w-5 text-gray-500" />
+                    <ChevronDown className="h-5 w-5 text-gray-500" aria-hidden="true" />
                   )}
                 </button>
                 {expandedIndex === index && (
                   <CardBody className="border-t border-gray-100 bg-gray-50">
-                    <p>{item.answer}</p>
+                    <p 
+                      className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      tabIndex={0}
+                      role="text"
+                      aria-label={`Answer: ${item.answer}`}
+                    >
+                      {item.answer}
+                    </p>
                   </CardBody>
                 )}
               </Card>
@@ -194,39 +213,135 @@ const Help: React.FC = () => {
         </section>
         
         <section className="mb-8">
-          <h2 className="text-2xl font-bold mb-6">Game Navigation</h2>
+          <h2 
+            className="text-2xl font-bold mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+            tabIndex={0}
+            role="heading"
+            aria-level={2}
+          >
+            Game Navigation
+          </h2>
           <Card>
             <CardBody>
               <div className="space-y-4">
                 <div>
-                  <h3 className="font-bold mb-2">Home Screen</h3>
-                  <p>The home screen displays all available grammar topics. Click on a topic card to start learning.</p>
+                  <h3 
+                    className="font-bold mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="heading"
+                    aria-level={3}
+                  >
+                    Home Screen
+                  </h3>
+                  <p 
+                    className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
+                    The home screen displays all available grammar topics. Click on a topic card to start learning.
+                  </p>
                 </div>
                 
                 <div>
-                  <h3 className="font-bold mb-2">Tutorial Screen</h3>
-                  <p>Each topic has a tutorial that explains the game mechanics and provides examples. You can skip or replay the tutorial.</p>
+                  <h3 
+                    className="font-bold mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="heading"
+                    aria-level={3}
+                  >
+                    Tutorial Screen
+                  </h3>
+                  <p 
+                    className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
+                    Each topic has a tutorial that explains the game mechanics and provides examples. You can skip or replay the tutorial.
+                  </p>
                 </div>
                 
                 <div>
-                  <h3 className="font-bold mb-2">Game Screen</h3>
-                  <p>The game screen presents different types of grammar exercises:</p>
+                  <h3 
+                    className="font-bold mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="heading"
+                    aria-level={3}
+                  >
+                    Game Screen
+                  </h3>
+                  <p 
+                    className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
+                    The game screen presents different types of grammar exercises:
+                  </p>
                   <ul className="list-disc pl-5 mt-2 space-y-1">
-                    <li><strong>Multiple Choice:</strong> Select the correct answer from the given options</li>
-                    <li><strong>Fill in the Blank:</strong> Type complete sentences using proper grammar</li>
-                    <li><strong>Drag and Drop:</strong> Drag words from the available options into the correct blank spaces</li>
+                    <li 
+                      className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      tabIndex={0}
+                      role="listitem"
+                    >
+                      <strong>Multiple Choice:</strong> Select the correct answer from the given options
+                    </li>
+                    <li 
+                      className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      tabIndex={0}
+                      role="listitem"
+                    >
+                      <strong>Fill in the Blank:</strong> Type complete sentences using proper grammar
+                    </li>
+                    <li 
+                      className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      tabIndex={0}
+                      role="listitem"
+                    >
+                      <strong>Drag and Drop:</strong> Drag words from the available options into the correct blank spaces
+                    </li>
                   </ul>
-                  <p className="mt-2">Use the hint button if you need help, and navigate between questions using the arrow keys or the question navigator.</p>
+                  <p 
+                    className="mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
+                    Use the hint button if you need help, and navigate between questions using the arrow keys or the question navigator.
+                  </p>
                 </div>
                 
                 <div>
-                  <h3 className="font-bold mb-2">Results Screen</h3>
-                  <p>After completing all questions, you'll see your score and performance summary. You can retry the game or return to the home screen.</p>
+                  <h3 
+                    className="font-bold mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="heading"
+                    aria-level={3}
+                  >
+                    Results Screen
+                  </h3>
+                  <p 
+                    className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
+                    After completing all questions, you'll see your score and performance summary. You can retry the game or return to the home screen.
+                  </p>
                 </div>
                 
                 <div>
-                  <h3 className="font-bold mb-2">Settings Screen</h3>
-                  <p>Customize your experience by adjusting audio and visual settings. Changes are saved automatically.</p>
+                  <h3 
+                    className="font-bold mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="heading"
+                    aria-level={3}
+                  >
+                    Settings Screen
+                  </h3>
+                  <p 
+                    className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
+                    Customize your experience by adjusting audio and visual settings. Changes are saved automatically.
+                  </p>
                 </div>
               </div>
             </CardBody>
@@ -234,35 +349,129 @@ const Help: React.FC = () => {
         </section>
 
         <section className="mb-8">
-          <h2 className="text-2xl font-bold mb-6">Accessibility Features</h2>
+          <h2 
+            className="text-2xl font-bold mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+            tabIndex={0}
+            role="heading"
+            aria-level={2}
+          >
+            Accessibility Features
+          </h2>
           <Card>
             <CardBody>
               <div className="space-y-4">
                 <div>
-                  <h3 className="font-bold mb-2">Keyboard Navigation</h3>
-                  <p>The game is fully accessible via keyboard:</p>
+                  <h3 
+                    className="font-bold mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="heading"
+                    aria-level={3}
+                  >
+                    Keyboard Navigation
+                  </h3>
+                  <p 
+                    className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
+                    The game is fully accessible via keyboard:
+                  </p>
                   <ul className="list-disc pl-5 mt-2 space-y-1">
-                    <li><kbd className="px-2 py-1 bg-gray-100 rounded text-sm">←/→</kbd> Navigate between questions</li>
-                    <li><kbd className="px-2 py-1 bg-gray-100 rounded text-sm">Tab</kbd> Move through interactive elements</li>
-                    <li><kbd className="px-2 py-1 bg-gray-100 rounded text-sm">Enter/Space</kbd> Activate buttons and select options</li>
+                    <li 
+                      className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      tabIndex={0}
+                      role="listitem"
+                    >
+                      <kbd className="px-2 py-1 bg-gray-100 rounded text-sm">←/→</kbd> Navigate between questions
+                    </li>
+                    <li 
+                      className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      tabIndex={0}
+                      role="listitem"
+                    >
+                      <kbd className="px-2 py-1 bg-gray-100 rounded text-sm">Tab</kbd> Move through interactive elements
+                    </li>
+                    <li 
+                      className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      tabIndex={0}
+                      role="listitem"
+                    >
+                      <kbd className="px-2 py-1 bg-gray-100 rounded text-sm">Enter/Space</kbd> Activate buttons and select options
+                    </li>
                   </ul>
                 </div>
                 
                 <div>
-                  <h3 className="font-bold mb-2">Drag-and-Drop Keyboard Shortcuts</h3>
-                  <p>For users who prefer keyboard over mouse:</p>
+                  <h3 
+                    className="font-bold mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="heading"
+                    aria-level={3}
+                  >
+                    Drag-and-Drop Keyboard Shortcuts
+                  </h3>
+                  <p 
+                    className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
+                    For users who prefer keyboard over mouse:
+                  </p>
                   <ul className="list-disc pl-5 mt-2 space-y-1">
-                    <li><kbd className="px-2 py-1 bg-gray-100 rounded text-sm">Ctrl+1/2/3</kbd> Select word from available options</li>
-                    <li><kbd className="px-2 py-1 bg-gray-100 rounded text-sm">1/2</kbd> Place selected word in space 1 or 2</li>
-                    <li><kbd className="px-2 py-1 bg-gray-100 rounded text-sm">Shift+1/2</kbd> Select word from existing space</li>
-                    <li><kbd className="px-2 py-1 bg-gray-100 rounded text-sm">Escape</kbd> Cancel current selection</li>
-                    <li><kbd className="px-2 py-1 bg-gray-100 rounded text-sm">Delete</kbd> Remove word from selected space</li>
+                    <li 
+                      className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      tabIndex={0}
+                      role="listitem"
+                    >
+                      <kbd className="px-2 py-1 bg-gray-100 rounded text-sm">Ctrl+1/2/3</kbd> Select word from available options
+                    </li>
+                    <li 
+                      className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      tabIndex={0}
+                      role="listitem"
+                    >
+                      <kbd className="px-2 py-1 bg-gray-100 rounded text-sm">1/2</kbd> Place selected word in space 1 or 2
+                    </li>
+                    <li 
+                      className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      tabIndex={0}
+                      role="listitem"
+                    >
+                      <kbd className="px-2 py-1 bg-gray-100 rounded text-sm">Shift+1/2</kbd> Select word from existing space
+                    </li>
+                    <li 
+                      className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      tabIndex={0}
+                      role="listitem"
+                    >
+                      <kbd className="px-2 py-1 bg-gray-100 rounded text-sm">Escape</kbd> Cancel current selection
+                    </li>
+                    <li 
+                      className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                      tabIndex={0}
+                      role="listitem"
+                    >
+                      <kbd className="px-2 py-1 bg-gray-100 rounded text-sm">Delete</kbd> Remove word from selected space
+                    </li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="font-bold mb-2">Screen Reader Support</h3>
-                  <p>All interactive elements include proper ARIA labels and live regions to announce changes to screen readers.</p>
+                  <h3 
+                    className="font-bold mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="heading"
+                    aria-level={3}
+                  >
+                    Screen Reader Support
+                  </h3>
+                  <p 
+                    className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                    tabIndex={0}
+                    role="text"
+                  >
+                    All interactive elements include proper ARIA labels and live regions to announce changes to screen readers.
+                  </p>
                 </div>
               </div>
             </CardBody>
@@ -270,11 +479,31 @@ const Help: React.FC = () => {
         </section>
         
         <section>
-          <h2 className="text-2xl font-bold mb-6">Contact Support</h2>
+          <h2 
+            className="text-2xl font-bold mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+            tabIndex={0}
+            role="heading"
+            aria-level={2}
+          >
+            Contact Support
+          </h2>
           <Card>
             <CardHeader>
-              <h3 className="text-lg font-bold">Need more help?</h3>
-              <p className="text-gray-600 text-sm">Send us a message and we'll get back to you.</p>
+              <h3 
+                className="text-lg font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="heading"
+                aria-level={3}
+              >
+                Need more help?
+              </h3>
+              <p 
+                className="text-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+                tabIndex={0}
+                role="text"
+              >
+                Send us a message and we'll get back to you.
+              </p>
             </CardHeader>
             <CardBody>
               <form onSubmit={handleSubmitSupport} className="space-y-4">
@@ -310,7 +539,11 @@ const Help: React.FC = () => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="your-email@example.com"
                   />
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p 
+                    className="text-xs text-gray-500 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                    tabIndex={0}
+                    role="text"
+                  >
                     If you provide your email, we can respond to you directly
                   </p>
                 </div>
@@ -331,7 +564,12 @@ const Help: React.FC = () => {
                     maxLength={2000}
                     disabled={isSubmitting}
                   />
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p 
+                    className="text-xs text-gray-500 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                    tabIndex={0}
+                    role="text"
+                    aria-label={`Character count: ${supportMessage.length} out of 2000 characters`}
+                  >
                     {supportMessage.length}/2000 characters
                   </p>
                 </div>
@@ -339,17 +577,19 @@ const Help: React.FC = () => {
                 <div className="flex justify-end">
                   <Button
                     type="submit"
-                    variant="outline"
+                    variant="custom"
                     disabled={!supportMessage.trim() || isSubmitting}
                     className={`h-[40px] w-[150px] border-2 rounded-lg transition-all font-medium ${
                       isSubmitting 
                         ? 'bg-gray-400 border-gray-500 cursor-not-allowed text-gray-200' 
                         : 'bg-blue-600 hover:bg-blue-700 border-blue-600 hover:border-blue-700 text-white shadow-sm hover:shadow-md'
-                    }`}
+                    } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+                    tabIndex={0}
+                    aria-label="Enviar mensaje de soporte"
                   >
                     {isSubmitting ? (
                       <span className="flex items-center gap-2">
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-200"></div>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-200" aria-hidden="true"></div>
                         Sending...
                       </span>
                     ) : (
@@ -364,10 +604,12 @@ const Help: React.FC = () => {
 
         <div className="mt-8 flex justify-start">
           <Button
-            variant="outline"
+            variant="custom"
             icon={<ArrowLeft className="text-white" />}
             onClick={() => navigate('/')}
-            className="h-[40px] w-[225px] bg-[rgb(var(--color-button))] hover:bg-[rgb(var(--color-button))/0.8] text-white border-[2px] border-solid border-[#000000] rounded-[11.5px]"
+            className="h-[40px] w-[225px] bg-blue-500 hover:bg-blue-600 text-white border-2 border-black"
+            tabIndex={0}
+            aria-label="Volver a la página de temas"
           >
             Back to topics
           </Button>
