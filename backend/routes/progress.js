@@ -1,6 +1,6 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
-const auth = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 const User = require('../models/User');
 const Attempt = require('../models/Attempt');
 const Progress = require('../models/Progress');

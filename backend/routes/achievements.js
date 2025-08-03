@@ -1,6 +1,6 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
-const auth = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 const Achievement = require('../models/Achievement');
 const UserAchievement = require('../models/UserAchievement');
 const AchievementService = require('../services/achievementService');

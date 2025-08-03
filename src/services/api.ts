@@ -488,4 +488,45 @@ export const inProgressAttemptService = {
   }
 };
 
-export default { authService, progressService, achievementService, inProgressAttemptService, handleAuthError }; 
+// Support Service
+export const supportService = {
+  // Enviar mensaje de soporte
+  submitMessage: async (messageData: {
+    message: string;
+    category?: string;
+    userEmail?: string;
+  }) => {
+    return apiRequest('/support/message', {
+      method: 'POST',
+      body: JSON.stringify(messageData),
+    });
+  },
+
+  // Obtener mensajes de soporte (para administradores)
+  getMessages: async (params?: {
+    status?: string;
+    category?: string;
+    page?: number;
+    limit?: number;
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
+  }) => {
+    const queryString = params ? `?${new URLSearchParams(params as any).toString()}` : '';
+    return apiRequest(`/support/messages${queryString}`);
+  },
+
+  // Actualizar estado de mensaje (para administradores)
+  updateMessageStatus: async (messageId: string, status: string, adminNotes?: string) => {
+    return apiRequest(`/support/messages/${messageId}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status, adminNotes }),
+    });
+  },
+
+  // Obtener estadísticas de soporte (para administradores)
+  getStats: async () => {
+    return apiRequest('/support/stats');
+  }
+};
+
+export default { authService, progressService, achievementService, inProgressAttemptService, supportService, handleAuthError }; 
