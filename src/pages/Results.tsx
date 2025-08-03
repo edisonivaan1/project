@@ -9,7 +9,7 @@ import { useAttempt } from '../contexts/AttemptContext';
 import { useQuestionStatus } from '../contexts/QuestionStatusContext';
 import { useAchievements } from '../contexts/AchievementContext';
 import { useGame } from '../contexts/GameContext';
-import { useProgress } from '../contexts/ProgressContext';
+
 import { progressService } from '../services/api';
 
 interface BackendAttempt {
@@ -40,7 +40,7 @@ const Results: React.FC = () => {
   const { resetQuestionStatuses } = useQuestionStatus();
   const { checkForNewAchievements } = useAchievements();
   const { resetGame } = useGame();
-  const { resetLastQuestionIndex } = useProgress();
+
 
   const topic = grammarTopics.find(t => t.id === topicId);
 
@@ -126,7 +126,7 @@ const Results: React.FC = () => {
       // Limpiar solo el estado de la sesión actual (no localStorage)
       resetAttempt(topicId);
       resetQuestionStatuses(topicId);
-      resetLastQuestionIndex(topicId);
+      
       resetGame();
       
       // Navegar directamente al juego sin delay

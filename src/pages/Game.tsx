@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { 
-  ArrowLeft, Lightbulb, Volume2, VolumeX, RefreshCw, Home, 
+  ArrowLeft, Volume2, VolumeX, RefreshCw, Home, 
   ChevronRight, CheckCircle, XCircle, Play, Pause, Trophy
 } from 'lucide-react';
 import Button from '../components/UI/Button';
@@ -18,11 +18,10 @@ import {
   modalVerbsQuestions 
 } from '../data/sampleQuestions';
 import { QuestionType } from '../types';
-import { useProgress } from '../contexts/ProgressContext';
+import { useGameProgress } from '../contexts/GameProgressContext';
 import { useQuestionStatus } from '../contexts/QuestionStatusContext';
 import { useAttempt } from '../contexts/AttemptContext';
 import { useAudio } from '../contexts/AudioContext';
-import { useGameProgress } from '../contexts/GameProgressContext';
 import { useAchievements } from '../contexts/AchievementContext';
 import AchievementToastManager from '../components/UI/AchievementToastManager';
 import { toast } from 'react-toastify';
@@ -48,7 +47,7 @@ const Game: React.FC = () => {
   const [searchParams] = useSearchParams();
   const difficulty = (searchParams.get('difficulty') as 'easy' | 'medium' | 'hard') || 'easy';
   
-  const { setProgress, getLastQuestionIndex, setLastQuestionIndex } = useProgress();
+  const { completeLevel, canAccessDifficulty } = useGameProgress();
   const { updateQuestionStatus, getQuestionStatus, resetQuestionStatuses } = useQuestionStatus();
   const { 
     getCurrentAttempt, 
@@ -60,7 +59,6 @@ const Game: React.FC = () => {
     getUsedHints
   } = useAttempt();
   const { playBackgroundMusic, stopBackgroundMusic } = useAudio();
-  const { completeLevel, canAccessDifficulty } = useGameProgress();
   const { checkForNewAchievements } = useAchievements();
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -73,7 +71,7 @@ const Game: React.FC = () => {
   const [attempts, setAttempts] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [isGameCompleted, setIsGameCompleted] = useState(false);
-  const [showFeedback, setShowFeedback] = useState(false);
+
   const [isCorrect, setIsCorrect] = useState(false);
   const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -143,7 +141,6 @@ const Game: React.FC = () => {
         setHintsPerQuestion({});
         setQuestionStartTime(Date.now());
         setIsGameCompleted(false);
-        setShowFeedback(false);
         setIsCorrect(false);
 
         // Limpiar el parámetro fresh del URL si está presente
@@ -297,10 +294,9 @@ const Game: React.FC = () => {
       submitAnswer(topicId, currentQuestionIndex, answer);
 
       // Update progress with current score
-      const nextQuestionIndex = currentQuestionIndex + 1;
-      const newScore = score + (isAnswerCorrect ? 1 : 0);
-      setProgress(topicId, newScore, questions.length);
-      setLastQuestionIndex(topicId, nextQuestionIndex);
+
+
+      
 
       // Check for achievements after each answer
       checkForNewAchievements(undefined).catch(error => {
@@ -332,10 +328,9 @@ const Game: React.FC = () => {
       submitAnswer(topicId, currentQuestionIndex, writtenAnswer.trim());
 
       // Update progress with current score
-      const nextQuestionIndex = currentQuestionIndex + 1;
-      const newScore = score + (isAnswerCorrect ? 1 : 0);
-      setProgress(topicId, newScore, questions.length);
-      setLastQuestionIndex(topicId, nextQuestionIndex);
+
+
+      
 
       // Check for achievements after each answer
       checkForNewAchievements(undefined).catch(error => {
@@ -386,10 +381,9 @@ const Game: React.FC = () => {
       submitAnswer(topicId, currentQuestionIndex, draggedAnswers.join(', '));
 
       // Update progress with current score
-      const nextQuestionIndex = currentQuestionIndex + 1;
-      const newScore = score + (isAnswerCorrect ? 1 : 0);
-      setProgress(topicId, newScore, questions.length);
-      setLastQuestionIndex(topicId, nextQuestionIndex);
+
+
+      
 
       // Check for achievements after each answer
       checkForNewAchievements(undefined).catch(error => {
@@ -398,19 +392,7 @@ const Game: React.FC = () => {
     }
   };
   
-  const handleSubmitAnswer = () => {
-    if (!selectedAnswer || isAnswerSubmitted) return;
-    
-    setIsAnswerSubmitted(true);
-    
-    if (selectedAnswer === currentQuestion.correctAnswer) {
-      setScore(score + 1);
-      setIsCorrect(true);
-    } else {
-      setAttempts(attempts + 1);
-      setIsCorrect(false);
-    }
-  };
+
   
   const handleNextQuestion = async () => {
     const answeredQuestions = questions.filter((_, index) => getQuestionStatus(topicId!, index) !== 'unanswered').length;
@@ -849,7 +831,7 @@ const Game: React.FC = () => {
                         <div className="flex flex-wrap gap-2 justify-center">
                           {(() => {
                             const textParts = currentQuestion.text.split('______');
-                            const blanks = textParts.length - 1;
+
                             
                             return textParts.map((part, index) => (
                               <React.Fragment key={index}>

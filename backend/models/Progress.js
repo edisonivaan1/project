@@ -96,21 +96,46 @@ progressSchema.pre('save', async function(next) {
 
 // Método estático para verificar si una dificultad está desbloqueada
 progressSchema.statics.checkDifficultyUnlocked = async function(userId, difficulty) {
-  const topics = ['present-tenses', 'past-tenses', 'conditionals', 'prepositions', 'articles', 'modal-verbs'];
-  
   if (difficulty === 'easy') return true;
   
-  const requiredDifficulty = difficulty === 'medium' ? 'easy' : 'medium';
-  const completedCount = await this.countDocuments({
-    userId,
-    difficulty: requiredDifficulty,
-    isCompleted: true
-  });
+  // Definir los temas por dificultad según grammarTopics.ts
+  const topicsByDifficulty = {
+    easy: ['present-tenses', 'articles'],
+    medium: ['past-tenses', 'prepositions', 'modal-verbs'],
+    hard: ['conditionals']
+  };
   
-  // Para desbloquear medium: completar al menos 4 topics en easy
-  // Para desbloquear hard: completar al menos 4 topics en medium
-  const requiredCompletions = 4;
-  return completedCount >= requiredCompletions;
+  // Determinar qué dificultad se requiere completar
+  let requiredDifficulty;
+  let requiredTopics;
+  
+  if (difficulty === 'medium') {
+    requiredDifficulty = 'easy';
+    requiredTopics = topicsByDifficulty.easy;
+  } else if (difficulty === 'hard') {
+    requiredDifficulty = 'medium';
+    requiredTopics = topicsByDifficulty.medium;
+  } else {
+    return false; // Dificultad no válida
+  }
+  
+  // Verificar que TODOS los temas del nivel anterior estén completados
+  for (const topicId of requiredTopics) {
+    const progress = await this.findOne({
+      userId,
+      topicId,
+      difficulty: requiredDifficulty,
+      isCompleted: true
+    });
+    
+    if (!progress) {
+      console.log(`❌ Tema ${topicId} en dificultad ${requiredDifficulty} no completado para usuario ${userId}`);
+      return false; // Si falta algún tema, no se puede desbloquear
+    }
+  }
+  
+  console.log(`✅ Todos los temas de ${requiredDifficulty} completados. Desbloqueando ${difficulty} para usuario ${userId}`);
+  return true; // Todos los temas requeridos están completados
 };
 
 // Método estático para obtener dificultades desbloqueadas de un usuario

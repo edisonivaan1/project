@@ -17,7 +17,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/AuthContext';
 import { GameProgressProvider } from './contexts/GameProgressContext';
 import { GameProvider } from './contexts/GameContext';
-import { ProgressProvider } from './contexts/ProgressContext';
+
 import { QuestionStatusProvider } from './contexts/QuestionStatusContext';
 import { AttemptProvider } from './contexts/AttemptContext';
 import { AudioProvider } from './contexts/AudioContext';
@@ -28,62 +28,60 @@ function App() {
     <AuthProvider>
       <GameProgressProvider>
         <AchievementProvider>
-          <ProgressProvider>
             <GameProvider>
-              <QuestionStatusProvider>
-                <AttemptProvider>
-                  <AudioProvider>
-                    <Router>
-                      <MainLayout>
-                        <Routes>
-                        {/* Rutas públicas */}
-                        <Route path="/" element={<Home />} />
-                        <Route path="/login" element={<LoginPage />} />
-                        <Route path="/signup" element={<SignUpPage />} />
-                        <Route path="/help" element={<Help />} />
-                        
-                        {/* Rutas protegidas */}
-                        <Route path="/topics" element={
-                          <ProtectedRoute>
-                            <TopicsPage />
-                          </ProtectedRoute>
-                        } />
-                        <Route path="/tutorial/:topicId" element={
-                          <ProtectedRoute>
-                            <Tutorial />
-                          </ProtectedRoute>
-                        } />
-                        <Route path="/game/:topicId" element={
-                          <ProtectedRoute>
-                            <Game />
-                          </ProtectedRoute>
-                        } />
-                        <Route path="/results/:topicId" element={
-                          <ProtectedRoute>
-                            <Results />
-                          </ProtectedRoute>
-                        } />
-                        <Route path="/settings" element={
-                          <ProtectedRoute>
-                            <Settings />
-                          </ProtectedRoute>
-                        } />
-                        <Route path="/profile" element={
-                          <ProtectedRoute>
-                            <ProfilePage />
-                          </ProtectedRoute>
-                        } />
-                        
-                        {/* Redirección por defecto */}
-                        <Route path="*" element={<Navigate to="/" replace />} />
-                      </Routes>
-                    </MainLayout>
-                  </Router>
-                </AudioProvider>
-              </AttemptProvider>
-            </QuestionStatusProvider>
-          </GameProvider>
-        </ProgressProvider>
+            <QuestionStatusProvider>
+              <AttemptProvider>
+                <AudioProvider>
+                  <Router>
+                    <MainLayout>
+                      <Routes>
+                      {/* Rutas públicas */}
+                      <Route path="/" element={<Home />} />
+                      <Route path="/login" element={<LoginPage />} />
+                      <Route path="/signup" element={<SignUpPage />} />
+                      <Route path="/help" element={<Help />} />
+                      
+                      {/* Rutas protegidas */}
+                      <Route path="/topics" element={
+                        <ProtectedRoute>
+                          <TopicsPage />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/tutorial/:topicId" element={
+                        <ProtectedRoute>
+                          <Tutorial />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/game/:topicId" element={
+                        <ProtectedRoute>
+                          <Game />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/results/:topicId" element={
+                        <ProtectedRoute>
+                          <Results />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/settings" element={
+                        <ProtectedRoute>
+                          <Settings />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/profile" element={
+                        <ProtectedRoute>
+                          <ProfilePage />
+                        </ProtectedRoute>
+                      } />
+                      
+                      {/* Redirección por defecto */}
+                      <Route path="*" element={<Navigate to="/" replace />} />
+                    </Routes>
+                  </MainLayout>
+                </Router>
+              </AudioProvider>
+            </AttemptProvider>
+          </QuestionStatusProvider>
+        </GameProvider>
       </AchievementProvider>
     </GameProgressProvider>
   </AuthProvider>
