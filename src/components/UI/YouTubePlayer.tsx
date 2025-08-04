@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, SkipForward, RotateCcw } from 'lucide-react';
+import { SkipForward, RotateCcw } from 'lucide-react';
 import Button from './Button';
 
 interface YouTubePlayerProps {
@@ -13,20 +13,13 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   videoId, 
   onProgress, 
   onComplete, 
-  className = '' 
+  className = ''
 }) => {
   const [isWatched, setIsWatched] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const playerRef = useRef<HTMLIFrameElement>(null);
   const progressIntervalRef = useRef<number | null>(null);
-
-  // Función para extraer el ID del video de una URL de YouTube
-  const extractVideoId = (url: string): string => {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return match && match[2].length === 11 ? match[2] : '';
-  };
 
   // Función para simular el progreso del video
   const startProgressSimulation = () => {

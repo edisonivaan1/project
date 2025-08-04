@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PlayCircle, SkipForward, ArrowLeft, Rewind } from 'lucide-react';
 import Card, { CardBody, CardFooter } from '../components/UI/Card';
 import Button from '../components/UI/Button';
 import YouTubePlayer from '../components/UI/YouTubePlayer';
+import VideoTranscript from '../components/UI/VideoTranscript';
 import { grammarTopics } from '../data/grammarTopics';
 import { 
   presentTensesQuestions, 
@@ -38,10 +39,6 @@ const Tutorial: React.FC = () => {
   const handleVideoComplete = () => {
     setIsWatched(true);
     setProgress(100);
-  };
-  
-  const handleVideoError = () => {
-    setVideoError(true);
   };
   
   if (!topic) {
@@ -456,6 +453,14 @@ const Tutorial: React.FC = () => {
               />
             )}
           </div>
+          
+          {/* Video Transcript Section */}
+          {topic.transcript && (
+            <VideoTranscript 
+              transcript={topic.transcript}
+              className="mt-6"
+            />
+          )}
           
           <h3 
             className="text-xl font-bold mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
