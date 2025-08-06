@@ -76,6 +76,49 @@ function postBuildSetup() {
     console.log('✅ Rutas corregidas en index.html para Vercel');
   }
   
+  // 4. Corregir rutas en archivos CSS y verificar imágenes y audios
+  const cssFiles = fs.readdirSync(distDir).filter(file => file.endsWith('.css'));
+  cssFiles.forEach(cssFile => {
+    const cssPath = path.join(distDir, cssFile);
+    let cssContent = fs.readFileSync(cssPath, 'utf8');
+    
+    // Corregir rutas de imágenes y audios en CSS
+    cssContent = cssContent.replace(/\/project\//g, '/');
+    
+    fs.writeFileSync(cssPath, cssContent);
+    console.log(`✅ Rutas corregidas en ${cssFile}`);
+  });
+  
+  // 5. Verificar que las imágenes y audios estén en la carpeta assets
+  const assetsDir = path.join(distDir, 'assets');
+  if (fs.existsSync(assetsDir)) {
+    const assets = fs.readdirSync(assetsDir);
+    console.log('📸 Assets encontrados:', assets);
+    
+    // Verificar subcarpetas de audio
+    const audioDirs = ['audio', 'audio_questions'];
+    audioDirs.forEach(audioDir => {
+      const fullAudioPath = path.join(assetsDir, audioDir);
+      if (fs.existsSync(fullAudioPath)) {
+        const audioFiles = fs.readdirSync(fullAudioPath);
+        console.log(`🎵 Archivos de audio en ${audioDir}:`, audioFiles);
+      }
+    });
+  }
+  
+  // 6. Corregir rutas en archivos JavaScript si existen
+  const jsFiles = fs.readdirSync(distDir).filter(file => file.endsWith('.js'));
+  jsFiles.forEach(jsFile => {
+    const jsPath = path.join(distDir, jsFile);
+    let jsContent = fs.readFileSync(jsPath, 'utf8');
+    
+    // Corregir rutas de /project/ a /
+    jsContent = jsContent.replace(/\/project\//g, '/');
+    
+    fs.writeFileSync(jsPath, jsContent);
+    console.log(`✅ Rutas corregidas en ${jsFile}`);
+  });
+  
   console.log('✅ Configuración de Vercel completada');
 }
 

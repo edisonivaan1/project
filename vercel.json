@@ -31,6 +31,48 @@
       }
     },
     {
+      "src": "/assets/(.*\\.png)",
+      "headers": {
+        "Content-Type": "image/png"
+      }
+    },
+    {
+      "src": "/assets/(.*\\.jpg)",
+      "headers": {
+        "Content-Type": "image/jpeg"
+      }
+    },
+    {
+      "src": "/assets/(.*\\.jpeg)",
+      "headers": {
+        "Content-Type": "image/jpeg"
+      }
+    },
+    {
+      "src": "/assets/(.*\\.svg)",
+      "headers": {
+        "Content-Type": "image/svg+xml"
+      }
+    },
+    {
+      "src": "/assets/(.*\\.mp3)",
+      "headers": {
+        "Content-Type": "audio/mpeg"
+      }
+    },
+    {
+      "src": "/assets/(.*\\.wav)",
+      "headers": {
+        "Content-Type": "audio/wav"
+      }
+    },
+    {
+      "src": "/assets/(.*\\.ogg)",
+      "headers": {
+        "Content-Type": "audio/ogg"
+      }
+    },
+    {
       "src": "/(.*\\.css)",
       "headers": {
         "Content-Type": "text/css"
@@ -40,6 +82,48 @@
       "src": "/(.*\\.js)",
       "headers": {
         "Content-Type": "application/javascript"
+      }
+    },
+    {
+      "src": "/(.*\\.png)",
+      "headers": {
+        "Content-Type": "image/png"
+      }
+    },
+    {
+      "src": "/(.*\\.jpg)",
+      "headers": {
+        "Content-Type": "image/jpeg"
+      }
+    },
+    {
+      "src": "/(.*\\.jpeg)",
+      "headers": {
+        "Content-Type": "image/jpeg"
+      }
+    },
+    {
+      "src": "/(.*\\.svg)",
+      "headers": {
+        "Content-Type": "image/svg+xml"
+      }
+    },
+    {
+      "src": "/(.*\\.mp3)",
+      "headers": {
+        "Content-Type": "audio/mpeg"
+      }
+    },
+    {
+      "src": "/(.*\\.wav)",
+      "headers": {
+        "Content-Type": "audio/wav"
+      }
+    },
+    {
+      "src": "/(.*\\.ogg)",
+      "headers": {
+        "Content-Type": "audio/ogg"
       }
     },
     {
