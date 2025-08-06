@@ -5,7 +5,6 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Función para corregir rutas de audio en las preguntas
 function fixQuestionAudioPaths() {
   const srcDir = path.join(__dirname, '..', 'src');
   const sampleQuestionsPath = path.join(srcDir, 'data', 'sampleQuestions.ts');
@@ -15,14 +14,14 @@ function fixQuestionAudioPaths() {
   if (fs.existsSync(sampleQuestionsPath)) {
     let content = fs.readFileSync(sampleQuestionsPath, 'utf8');
     
-    // Buscar rutas de audio con /src/assets/
+    // Contar cuántas rutas hay que corregir
     const audioPathRegex = /\/src\/assets\/audio_questions\/([^"']*\.mp3)/g;
     const matches = content.match(audioPathRegex);
     
     if (matches) {
-      console.log('🎵 Encontradas rutas de audio en sampleQuestions.ts:', matches);
+      console.log(`🎵 Encontradas ${matches.length} rutas de audio para corregir`);
       
-      // Corregir rutas de /src/assets/audio_questions/ a /assets/audio_questions/
+      // Corregir todas las rutas de /src/assets/audio_questions/ a /assets/audio_questions/
       content = content.replace(/\/src\/assets\/audio_questions\//g, '/assets/audio_questions/');
       
       fs.writeFileSync(sampleQuestionsPath, content);
@@ -34,11 +33,10 @@ function fixQuestionAudioPaths() {
     console.log('⚠️ No se encontró sampleQuestions.ts');
   }
   
-  // Verificar que los archivos de audio existan
+  // Verificar que los archivos de audio existen
   const audioQuestionsDir = path.join(srcDir, 'assets', 'audio_questions');
   if (fs.existsSync(audioQuestionsDir)) {
     console.log('📁 Verificando archivos de audio_questions...');
-    
     const categories = fs.readdirSync(audioQuestionsDir);
     categories.forEach(category => {
       const categoryPath = path.join(audioQuestionsDir, category);
@@ -55,7 +53,7 @@ function fixQuestionAudioPaths() {
 }
 
 // Ejecutar si se llama directamente
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   fixQuestionAudioPaths();
 }
 

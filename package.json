@@ -14,6 +14,7 @@
     "vercel-build": "npm run build:vercel",
     "copy-assets": "node scripts/copy-assets.js",
     "fix-assets": "node scripts/fix-all-asset-paths.js",
+    "fix-audio": "node scripts/fix-question-audio-paths.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
