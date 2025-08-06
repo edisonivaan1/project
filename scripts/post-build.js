@@ -5,9 +5,30 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Función para copiar directorios recursivamente
+function copyDirectory(src, dest) {
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, { recursive: true });
+  }
+
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+
+    if (entry.isDirectory()) {
+      copyDirectory(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+}
+
 // Función para configurar archivos después del build
 function postBuildSetup() {
   const distDir = path.join(__dirname, '..', 'dist');
+  const srcDir = path.join(__dirname, '..', 'src');
   
   console.log('🔧 Configurando archivos para Vercel...');
   
@@ -37,7 +58,43 @@ function postBuildSetup() {
   fs.writeFileSync(html404Path, html404);
   console.log('✅ Archivo 404.html creado para Vercel');
   
-  // 3. Actualizar index.html para corregir rutas y agregar script SPA
+  // 3. Copiar todos los assets que faltan
+  const assetsDir = path.join(distDir, 'assets');
+  if (!fs.existsSync(assetsDir)) {
+    fs.mkdirSync(assetsDir, { recursive: true });
+  }
+  
+  // Copiar audio_questions completo
+  const audioQuestionsSrc = path.join(srcDir, 'assets', 'audio_questions');
+  const audioQuestionsDest = path.join(assetsDir, 'audio_questions');
+  
+  if (fs.existsSync(audioQuestionsSrc)) {
+    console.log('🎵 Copiando audio_questions...');
+    copyDirectory(audioQuestionsSrc, audioQuestionsDest);
+    console.log('✅ audio_questions copiado');
+  }
+  
+  // Copiar audio principal si no existe
+  const audioSrc = path.join(srcDir, 'assets', 'audio');
+  const audioDest = path.join(assetsDir, 'audio');
+  
+  if (fs.existsSync(audioSrc) && !fs.existsSync(audioDest)) {
+    console.log('🎵 Copiando audio principal...');
+    copyDirectory(audioSrc, audioDest);
+    console.log('✅ audio principal copiado');
+  }
+  
+  // Copiar img si no existe
+  const imgSrc = path.join(srcDir, 'assets', 'img');
+  const imgDest = path.join(assetsDir, 'img');
+  
+  if (fs.existsSync(imgSrc) && !fs.existsSync(imgDest)) {
+    console.log('🖼️ Copiando imágenes...');
+    copyDirectory(imgSrc, imgDest);
+    console.log('✅ imágenes copiadas');
+  }
+  
+  // 4. Actualizar index.html para corregir rutas y agregar script SPA
   const indexHtmlPath = path.join(distDir, 'index.html');
   if (fs.existsSync(indexHtmlPath)) {
     let indexHtml = fs.readFileSync(indexHtmlPath, 'utf8');
@@ -76,7 +133,7 @@ function postBuildSetup() {
     console.log('✅ Rutas corregidas en index.html para Vercel');
   }
   
-  // 4. Corregir rutas en archivos CSS y verificar imágenes y audios
+  // 5. Corregir rutas en archivos CSS y verificar imágenes y audios
   const cssFiles = fs.readdirSync(distDir).filter(file => file.endsWith('.css'));
   cssFiles.forEach(cssFile => {
     const cssPath = path.join(distDir, cssFile);
@@ -89,24 +146,7 @@ function postBuildSetup() {
     console.log(`✅ Rutas corregidas en ${cssFile}`);
   });
   
-  // 5. Verificar que las imágenes y audios estén en la carpeta assets
-  const assetsDir = path.join(distDir, 'assets');
-  if (fs.existsSync(assetsDir)) {
-    const assets = fs.readdirSync(assetsDir);
-    console.log('📸 Assets encontrados:', assets);
-    
-    // Verificar subcarpetas de audio
-    const audioDirs = ['audio', 'audio_questions'];
-    audioDirs.forEach(audioDir => {
-      const fullAudioPath = path.join(assetsDir, audioDir);
-      if (fs.existsSync(fullAudioPath)) {
-        const audioFiles = fs.readdirSync(fullAudioPath);
-        console.log(`🎵 Archivos de audio en ${audioDir}:`, audioFiles);
-      }
-    });
-  }
-  
-  // 6. Corregir rutas en archivos JavaScript si existen
+  // 6. Corregir rutas en archivos JavaScript
   const jsFiles = fs.readdirSync(distDir).filter(file => file.endsWith('.js'));
   jsFiles.forEach(jsFile => {
     const jsPath = path.join(distDir, jsFile);
@@ -115,9 +155,36 @@ function postBuildSetup() {
     // Corregir rutas de /project/ a /
     jsContent = jsContent.replace(/\/project\//g, '/');
     
+    // Corregir rutas de /src/assets/ a /assets/
+    jsContent = jsContent.replace(/\/src\/assets\//g, '/assets/');
+    
     fs.writeFileSync(jsPath, jsContent);
     console.log(`✅ Rutas corregidas en ${jsFile}`);
   });
+  
+  // 7. Verificar estructura final de assets
+  console.log('📋 Estructura final de assets:');
+  if (fs.existsSync(assetsDir)) {
+    const assets = fs.readdirSync(assetsDir);
+    assets.forEach(asset => {
+      const assetPath = path.join(assetsDir, asset);
+      if (fs.statSync(assetPath).isDirectory()) {
+        const subAssets = fs.readdirSync(assetPath);
+        console.log(`  📁 ${asset}/: ${subAssets.length} archivos`);
+        
+        // Mostrar subdirectorios si existen
+        subAssets.forEach(subAsset => {
+          const subAssetPath = path.join(assetPath, subAsset);
+          if (fs.statSync(subAssetPath).isDirectory()) {
+            const subSubAssets = fs.readdirSync(subAssetPath);
+            console.log(`    📁 ${asset}/${subAsset}/: ${subSubAssets.length} archivos`);
+          }
+        });
+      } else {
+        console.log(`  📄 ${asset}`);
+      }
+    });
+  }
   
   console.log('✅ Configuración de Vercel completada');
 }

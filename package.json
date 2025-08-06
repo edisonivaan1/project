@@ -12,6 +12,7 @@
     "build": "vite build && node scripts/post-build.js",
     "build:vercel": "npm run build && cd backend && npm install",
     "vercel-build": "npm run build:vercel",
+    "copy-assets": "node scripts/copy-assets.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },

@@ -20,4 +20,8 @@ export default defineConfig({
     target: 'esnext',
     minify: 'esbuild',
   },
+  // Copiar todos los assets estáticos
+  publicDir: 'public',
+  // Asegurar que se copien todos los assets
+  assetsInclude: ['**/*.mp3', '**/*.wav', '**/*.ogg', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.svg'],
 });
