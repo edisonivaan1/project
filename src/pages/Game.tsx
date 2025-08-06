@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   ArrowLeft, Volume2, VolumeX, RefreshCw, Home, 
-  ChevronRight, CheckCircle, XCircle, Trophy
+  ChevronRight, CheckCircle, XCircle, Play, Pause, Trophy,
+  AudioLines
 } from 'lucide-react';
 import Button from '../components/UI/Button';
 import IconButton from '../components/UI/IconButton';
@@ -109,7 +110,6 @@ const Game: React.FC = () => {
   const [selectedWordIndex, setSelectedWordIndex] = useState<number | null>(null); // Índice de palabra seleccionada de la lista de opciones
   const [selectedSpaceIndex, setSelectedSpaceIndex] = useState<number | null>(null); // Índice del espacio seleccionado en la oración
   const [accessibilityAnnouncement, setAccessibilityAnnouncement] = useState<string>(''); // Mensajes para lectores de pantalla
-  // @ts-ignore - isKeyboardMode is used for accessibility tracking
   const [isKeyboardMode, setIsKeyboardMode] = useState(false); // Indica si el usuario está usando navegación por teclado
   
   const topic = grammarTopics.find(t => t.id === topicId);
@@ -474,7 +474,6 @@ const Game: React.FC = () => {
       if (currentQuestion.isDragAndDrop && !isAnswerSubmitted) {
         // Ctrl + número: seleccionar palabra de la lista de opciones disponibles
         if (event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
-          // @ts-ignore - key is used in the condition below
           const key = event.key;
           if (key >= '1' && key <= '3') {
             const wordIndex = parseInt(key) - 1; // Convertir 1-3 a índices 0-2
@@ -501,7 +500,6 @@ const Game: React.FC = () => {
         
         // Shift + número: seleccionar palabra ya colocada en un espacio
         if (event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) {
-          // @ts-ignore - key is used in the condition below
           const key = event.key;
           // Para Shift+número, el key puede ser diferente (!, @, etc), usar event.code en su lugar
           if (event.code === 'Digit1' || event.code === 'Digit2') {
@@ -516,7 +514,6 @@ const Game: React.FC = () => {
         
         // Número solo: colocar palabra seleccionada en el espacio objetivo
         if (!event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey && (selectedWordIndex !== null || selectedSpaceIndex !== null)) {
-          // @ts-ignore - key is used in the condition below
           const key = event.key;
           if (key >= '1' && key <= '2') {
             const targetSpace = parseInt(key) - 1; // Convertir 1-2 a índices 0-1
