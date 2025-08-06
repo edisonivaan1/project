@@ -158,6 +158,9 @@ function postBuildSetup() {
     // Corregir rutas de /src/assets/ a /assets/
     jsContent = jsContent.replace(/\/src\/assets\//g, '/assets/');
     
+    // Corregir rutas de ../assets/ a /assets/
+    jsContent = jsContent.replace(/\.\.\/assets\//g, '/assets/');
+    
     fs.writeFileSync(jsPath, jsContent);
     console.log(`✅ Rutas corregidas en ${jsFile}`);
   });

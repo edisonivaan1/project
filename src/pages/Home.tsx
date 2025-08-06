@@ -92,7 +92,7 @@ const Home: React.FC = () => {
                   <div className="absolute bg-[#083DED] opacity-25 inset-0 rounded-full"></div>
                   <div className="relative w-full h-full">
                     <img 
-                      src="/src/assets/img/homeStudents.png" 
+                      src="../assets/img/homeStudents.png" 
                       alt="Students actively learning English grammar with interactive exercises and engaging study materials" 
                       className="w-full h-full object-cover rounded-full object-top"
                     />

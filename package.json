@@ -13,6 +13,7 @@
     "build:vercel": "npm run build && cd backend && npm install",
     "vercel-build": "npm run build:vercel",
     "copy-assets": "node scripts/copy-assets.js",
+    "fix-assets": "node scripts/fix-all-asset-paths.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
