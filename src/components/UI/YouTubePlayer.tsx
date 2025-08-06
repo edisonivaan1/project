@@ -19,7 +19,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   const [progress, setProgress] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const playerRef = useRef<HTMLIFrameElement>(null);
-  const progressIntervalRef = useRef<number | null>(null);
+  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Función para simular el progreso del video
   const startProgressSimulation = () => {
