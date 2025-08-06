@@ -5,7 +5,7 @@ const getApiBaseUrl = () => {
   // Si estamos en GitHub Pages (producción)
   if (window.location.hostname === 'edisonivaan1.github.io') {
     // Backend desplegado en Railway
-    return 'https://project-production-a67d.up.railway.app/api';
+    return 'https://glistening-adaptation-production.up.railway.app/api';
   }
   
   // Desarrollo local

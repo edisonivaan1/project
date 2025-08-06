@@ -1,0 +1,35 @@
+# Ignorar archivos de desarrollo
+node_modules/
+.env
+.env.local
+.env.development
+.env.test
+
+# Ignorar archivos de frontend
+src/
+public/
+dist/
+build/
+
+# Ignorar archivos de configuración de frontend
+vite.config.ts
+tailwind.config.js
+postcss.config.js
+tsconfig.json
+tsconfig.app.json
+tsconfig.node.json
+
+# Ignorar archivos de documentación
+*.md
+.git/
+.gitignore
+
+# Ignorar archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignorar archivos de sistema
+.DS_Store
+Thumbs.db 

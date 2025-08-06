@@ -9,6 +9,7 @@
     "setup": "node scripts/setup.js",
     "init-railway": "node scripts/init-railway.js",
     "generate-secret": "node scripts/generate-secret.js",
+    "verify-railway": "node scripts/verify-railway.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
