@@ -1,12 +1,11 @@
 import { CompleteLevelData } from '../types';
 
-// Detectar automáticamente la URL de la API basada en el entorno
+// Configuración de la API
 const getApiBaseUrl = () => {
   // Si estamos en GitHub Pages (producción)
   if (window.location.hostname === 'edisonivaan1.github.io') {
-    // Aquí deberías usar la URL de tu backend desplegado
-    // Por ahora, usaremos localhost para desarrollo
-    return 'http://localhost:5000/api';
+    // Backend desplegado en Railway
+    return 'https://project-production-a67d.up.railway.app/api';
   }
   
   // Desarrollo local
