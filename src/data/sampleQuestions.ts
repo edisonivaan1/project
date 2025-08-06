@@ -11,7 +11,7 @@ export const presentTensesQuestions: QuestionType[] = [
     hint: 'Is it "he" or "they"? Add "s" if it\'s "he", "she", or "it".',
     image: 'questions/presentTense/pt-1.png',
     alt: 'Una persona tomando café por la mañana',
-    audio: '/src/assets/audio_questions/presentTense/question1_audio.mp3'
+    audio: '/assets/audio_questions/presentTense/question1_audio.mp3'
   },
   {
     id: 'pt-2',
@@ -22,7 +22,7 @@ export const presentTensesQuestions: QuestionType[] = [
     hint: 'Is it a question about "you"? Use "do".',
     image: 'questions/presentTense/pt-2.png',
     alt: 'Una persona buscando sus llaves',
-    audio: '/src/assets/audio_questions/presentTense/question2_audio.mp3'
+    audio: '/assets/audio_questions/presentTense/question2_audio.mp3'
   },
   {
     id: 'pt-3',
@@ -33,7 +33,7 @@ export const presentTensesQuestions: QuestionType[] = [
     hint: 'It\'s "he" and the verb ends in "ch". Add "es".',
     image: 'questions/presentTense/pt-3.png',
     alt: 'London city',
-    audio: '/src/assets/audio_questions/presentTense/question3_audio.mp3'
+    audio: '/assets/audio_questions/presentTense/question3_audio.mp3'
   },
   {
     id: 'pt-4',
@@ -44,7 +44,7 @@ export const presentTensesQuestions: QuestionType[] = [
     hint: 'It\'s a question about "she". Use "does".',
     image: 'questions/presentTense/pt-4.png',
     alt: 'Unos pájaros cantando',
-    audio: '/src/assets/audio_questions/presentTense/question4_audio.mp3'
+    audio: '/assets/audio_questions/presentTense/question4_audio.mp3'
   },
   {
     id: 'pt-5',
@@ -55,7 +55,7 @@ export const presentTensesQuestions: QuestionType[] = [
     hint: 'Is it "they" or "he"? Don\'t add "s" for "they".',
     image: 'questions/presentTense/pt-5.png',
     alt: 'Agua hirviendo en una olla',
-    audio: '/src/assets/audio_questions/presentTense/question5_audio.mp3'
+    audio: '/assets/audio_questions/presentTense/question5_audio.mp3'
   },
   {
     id: 'pt-6',
@@ -66,7 +66,7 @@ export const presentTensesQuestions: QuestionType[] = [
     hint: 'It\'s "she" and the verb ends in "y". Change "y" to "i" and add "es".',
     image: 'questions/presentTense/pt-6.png',
     alt: 'Un hombre haciendo ejercicio en el gimnasio',
-    audio: '/src/assets/audio_questions/presentTense/question6_audio.mp3'
+    audio: '/assets/audio_questions/presentTense/question6_audio.mp3'
   },
   {
     id: 'pt-7',
@@ -77,7 +77,7 @@ export const presentTensesQuestions: QuestionType[] = [
     hint: 'Routine On Fixed Days. I study English every Monday and Wednesday.',
     image: 'questions/presentTense/pt-7.png',
     alt: 'Un hombre estudiando inglés',
-    audio: '/src/assets/audio_questions/presentTense/question7_audio.mp3'
+    audio: '/assets/audio_questions/presentTense/question7_audio.mp3'
   },
   {
     id: 'pt-8',
@@ -88,7 +88,7 @@ export const presentTensesQuestions: QuestionType[] = [
     hint: 'Use Have/Has + Past Participle. She has finished her homework.',
     image: 'questions/presentTense/pt-8.png',
     alt: 'Un estudiante terminando su tarea',
-    audio: '/src/assets/audio_questions/presentTense/question8_audio.mp3'
+    audio: '/assets/audio_questions/presentTense/question8_audio.mp3'
   },
   {
     id: 'pt-9',
@@ -99,7 +99,7 @@ export const presentTensesQuestions: QuestionType[] = [
     hint: 'General Truth. The sun rises in the east.',
     image: 'questions/presentTense/pt-9.png',
     alt: 'El sol saliendo en el horizonte',
-    audio: '/src/assets/audio_questions/presentTense/question9_audio.mp3'
+    audio: '/assets/audio_questions/presentTense/question9_audio.mp3'
   },
   {
     id: 'pt-10',
@@ -110,7 +110,7 @@ export const presentTensesQuestions: QuestionType[] = [
     hint: '"Look!" Signals Something In Progress. The children are playing.',
     image: 'questions/presentTense/pt-10.png',
     alt: 'Unos niños jugando en el parque',
-    audio: '/src/assets/audio_questions/presentTense/question10_audio.mp3'
+    audio: '/assets/audio_questions/presentTense/question10_audio.mp3'
   },
 ];
 
@@ -125,7 +125,7 @@ export const pastTensesQuestions: QuestionType[] = [
     image: 'questions/pastTense/pat-1.png',
     alt: 'Una fiesta vacía',
     isFillInTheBlank: true,
-    audio: '/src/assets/audio_questions/past_question1_audio.mp3'
+    audio: '/assets/audio_questions/past_question1_audio.mp3'
   },
   {
     id: 'past-2',
@@ -136,7 +136,7 @@ export const pastTensesQuestions: QuestionType[] = [
     image: 'questions/pastTense/pat-2.png',
     alt: 'Un hombre cocinando mientras el teléfono suena',
     isFillInTheBlank: true,
-    audio: '/src/assets/audio_questions/past_question2_audio.mp3'
+    audio: '/assets/audio_questions/past_question2_audio.mp3'
   },
   {
     id: 'past-3',
@@ -148,7 +148,7 @@ export const pastTensesQuestions: QuestionType[] = [
     image: 'questions/pastTense/pat-3.png',
     alt: 'Un niño jugando fútbol',
     isFillInTheBlank: true,
-    audio: '/src/assets/audio_questions/past_question3_audio.mp3'
+    audio: '/assets/audio_questions/past_question3_audio.mp3'
   },
   {
     id: 'past-4',
@@ -160,7 +160,7 @@ export const pastTensesQuestions: QuestionType[] = [
     image: 'questions/pastTense/pat-4.png',
     alt: 'Una persona escribiendo una carta',
     isFillInTheBlank: true,
-    audio: '/src/assets/audio_questions/past_question4_audio.mp3'
+    audio: '/assets/audio_questions/past_question4_audio.mp3'
   },
   {
     id: 'past-5',
@@ -172,7 +172,7 @@ export const pastTensesQuestions: QuestionType[] = [
     image: 'questions/pastTense/pat-5.png',
     alt: 'Unos adultos viendo televisión',
     isFillInTheBlank: true,
-    audio: '/src/assets/audio_questions/past_question5_audio.mp3'
+    audio: '/assets/audio_questions/past_question5_audio.mp3'
   },
   {
     id: 'past-6',
@@ -184,7 +184,7 @@ export const pastTensesQuestions: QuestionType[] = [
     image: 'questions/pastTense/pat-6.png',
     alt: 'Unos adultos buscando sus asientos en una sala de cine',
     isFillInTheBlank: true,
-    audio: '/src/assets/audio_questions/past_question6_audio.mp3'
+    audio: '/assets/audio_questions/past_question6_audio.mp3'
   },
   {
     id: 'past-7',
@@ -196,7 +196,7 @@ export const pastTensesQuestions: QuestionType[] = [
     image: 'questions/pastTense/pat-7.png',
     alt: 'Una ciudad con edificios y una torre',
     isFillInTheBlank: true,
-    audio: '/src/assets/audio_questions/past_question7_audio.mp3'
+    audio: '/assets/audio_questions/past_question7_audio.mp3'
   },
   {
     id: 'past-8',
@@ -208,7 +208,7 @@ export const pastTensesQuestions: QuestionType[] = [
     image: 'questions/pastTense/pat-8.png',
     alt: 'Un teléfono sonando',
     isFillInTheBlank: true,
-    audio: '/src/assets/audio_questions/past_question8_audio.mp3'
+    audio: '/assets/audio_questions/past_question8_audio.mp3'
   },
   {
     id: 'past-9',
@@ -220,7 +220,7 @@ export const pastTensesQuestions: QuestionType[] = [
     image: 'questions/pastTense/pat-9.png',
     alt: 'Un trabajador cansado',
     isFillInTheBlank: true,
-    audio: '/src/assets/audio_questions/past_question9_audio.mp3'
+    audio: '/assets/audio_questions/past_question9_audio.mp3'
   },
   {
     id: 'past-10',
@@ -232,7 +232,7 @@ export const pastTensesQuestions: QuestionType[] = [
     image: 'questions/pastTense/pat-10.png',
     alt: 'Unos adultos en la playa',
     isFillInTheBlank: true,
-    audio: '/src/assets/audio_questions/past_question10_audio.mp3'
+    audio: '/assets/audio_questions/past_question10_audio.mp3'
   },
 ];
 
@@ -247,7 +247,7 @@ export const conditionalsQuestions: QuestionType[] = [
     hint: 'Possible Future Condition. If it rains, we will cancel.',
     image: 'questions/conditional/con_1.png',
     alt: 'Un día lluvioso',
-    audio: '/src/assets/audio_questions/conditional/question1_audio.mp3'
+    audio: '/assets/audio_questions/conditional/question1_audio.mp3'
   },
   {
     id: 'cond-2',
@@ -258,7 +258,7 @@ export const conditionalsQuestions: QuestionType[] = [
     hint: 'Imaginary Situation → If I were rich, I would travel.',
     image: 'questions/conditional/con_2.png',
     alt: 'Un hombre viajando alrededor del mundo',
-    audio: '/src/assets/audio_questions/conditional/question2_audio.mp3'
+    audio: '/assets/audio_questions/conditional/question2_audio.mp3'
   },
   {
     id: 'cond-3',
@@ -269,7 +269,7 @@ export const conditionalsQuestions: QuestionType[] = [
     hint: 'Regret About The Past. She would have told me.',
     image: 'questions/conditional/con_3.png',
     alt: 'Una persona pensando',
-    audio: '/src/assets/audio_questions/conditional/question3_audio.mp3'
+    audio: '/assets/audio_questions/conditional/question3_audio.mp3'
   },
   {
     id: 'cond-4',
@@ -280,7 +280,7 @@ export const conditionalsQuestions: QuestionType[] = [
     hint: 'Real Possibility. You will pass.',
     image: 'questions/conditional/con_4.png',
     alt: 'Un estudiante estudiando para un examen',
-    audio: '/src/assets/audio_questions/conditional/question4_audio.mp3'
+    audio: '/assets/audio_questions/conditional/question4_audio.mp3'
   },
   {
     id: 'cond-5',
@@ -291,7 +291,7 @@ export const conditionalsQuestions: QuestionType[] = [
     hint: 'Past Regret. I would have caught the train.',
       image: 'questions/conditional/con_5.png',
     alt: 'Un hombre perdiendo un tren',
-    audio: '/src/assets/audio_questions/conditional/question5_audio.mp3'
+    audio: '/assets/audio_questions/conditional/question5_audio.mp3'
   },
   {
     id: 'cond-6',
@@ -302,7 +302,7 @@ export const conditionalsQuestions: QuestionType[] = [
     hint: 'They Are Not Here → Hypothetical. If they were here.',
     image: 'questions/conditional/con_6.png',
     alt: 'Unos adultos esperando',
-    audio: '/src/assets/audio_questions/conditional/question6_audio.mp3'
+    audio: '/assets/audio_questions/conditional/question6_audio.mp3'
   },
   {
     id: 'cond-7',
@@ -313,7 +313,7 @@ export const conditionalsQuestions: QuestionType[] = [
     hint: 'General Truth. It freezes.',
     image: 'questions/conditional/con_7.png',
     alt: 'Agua congelada',
-    audio: '/src/assets/audio_questions/conditional/question7_audio.mp3'
+    audio: '/assets/audio_questions/conditional/question7_audio.mp3'
   },
   {
     id: 'cond-8',
@@ -324,7 +324,7 @@ export const conditionalsQuestions: QuestionType[] = [
     hint: 'Hypothetical Question. What would you do?',
     image: 'questions/conditional/con_8.png',
     alt: 'Una persona perdiendo su billetera',
-    audio: '/src/assets/audio_questions/conditional/question8_audio.mp3'
+    audio: '/assets/audio_questions/conditional/question8_audio.mp3'
   },
   {
     id: 'cond-9',
@@ -335,7 +335,7 @@ export const conditionalsQuestions: QuestionType[] = [
     hint: 'Advice Formula → If I were you.',
     image: 'questions/conditional/con_9.png',
     alt: 'Un hombre dando consejos',
-    audio: '/src/assets/audio_questions/conditional/question9_audio.mp3'
+    audio: '/assets/audio_questions/conditional/question9_audio.mp3'
   },
   {
     id: 'cond-10',
@@ -346,7 +346,7 @@ export const conditionalsQuestions: QuestionType[] = [
     hint: 'Conditional Word Synonym For "If". Provided you help.',
     image: 'questions/conditional/con_10.png',
     alt: 'Unos adultos ayudando en la casa',
-    audio: '/src/assets/audio_questions/conditional/question10_audio.mp3'
+    audio: '/assets/audio_questions/conditional/question10_audio.mp3'
   },
 ];
 
@@ -362,7 +362,7 @@ export const prepositionsQuestions: QuestionType[] = [
     alt: 'Una persona viendo una película de aventuras',
     isDragAndDrop: true,
     dragOptions: ['exciting', 'excited', 'inspired', 'inspiring'],
-    audio: '/src/assets/audio_questions/prepositions/question1_audio.mp3'
+    audio: '/assets/audio_questions/prepositions/question1_audio.mp3'
   },
   {
     id: 'prep-2',
@@ -374,7 +374,7 @@ export const prepositionsQuestions: QuestionType[] = [
     alt: 'Un trabajador cansado',
     isDragAndDrop: true,
     dragOptions: ['tiring', 'tired'],
-    audio: '/src/assets/audio_questions/prepositions/question2_audio.mp3'
+    audio: '/assets/audio_questions/prepositions/question2_audio.mp3'
   },
   {
     id: 'prep-3',
@@ -386,7 +386,7 @@ export const prepositionsQuestions: QuestionType[] = [
     alt: 'Un perro ladrando',
     isDragAndDrop: true,
     dragOptions: ['annoying', 'annoyed'],
-    audio: '/src/assets/audio_questions/prepositions/question3_audio.mp3'
+    audio: '/assets/audio_questions/prepositions/question3_audio.mp3'
   },
   {
     id: 'prep-4',
@@ -398,7 +398,7 @@ export const prepositionsQuestions: QuestionType[] = [
     alt: 'Una montaña rusa',
     isDragAndDrop: true,
     dragOptions: ['excited', 'exciting'],
-    audio: '/src/assets/audio_questions/prepositions/question4_audio.mp3'
+    audio: '/assets/audio_questions/prepositions/question4_audio.mp3'
   },
   {
     id: 'prep-5',
@@ -410,7 +410,7 @@ export const prepositionsQuestions: QuestionType[] = [
     alt: 'Una persona sorprendida',
     isDragAndDrop: true,
     dragOptions: ['surprising', 'surprised'],
-    audio: '/src/assets/audio_questions/prepositions/question5_audio.mp3'
+    audio: '/assets/audio_questions/prepositions/question5_audio.mp3'
   },
   {
     id: 'prep-6',
@@ -422,7 +422,7 @@ export const prepositionsQuestions: QuestionType[] = [
     alt: 'Una persona aprendiendo idiomas',
     isDragAndDrop: true,
     dragOptions: ['frustrating', 'frustrated', 'rewarding', 'rewarded'],
-    audio: '/src/assets/audio_questions/prepositions/question6_audio.mp3'
+    audio: '/assets/audio_questions/prepositions/question6_audio.mp3'
   },
   {
     id: 'prep-7',
@@ -434,7 +434,7 @@ export const prepositionsQuestions: QuestionType[] = [
     alt: 'Libros de historia',
     isDragAndDrop: true,
     dragOptions: ['interested', 'interesting'],
-    audio: '/src/assets/audio_questions/prepositions/question7_audio.mp3'
+    audio: '/assets/audio_questions/prepositions/question7_audio.mp3'
   },
   {
     id: 'prep-8',
@@ -446,7 +446,7 @@ export const prepositionsQuestions: QuestionType[] = [
     alt: 'Un ruido fuerte',
     isDragAndDrop: true,
     dragOptions: ['alarming', 'alarmed'],
-    audio: '/src/assets/audio_questions/prepositions/question8_audio.mp3'
+    audio: '/assets/audio_questions/prepositions/question8_audio.mp3'
   },
   {
     id: 'prep-9',
@@ -458,7 +458,7 @@ export const prepositionsQuestions: QuestionType[] = [
     alt: 'Escalada de montaña',
     isDragAndDrop: true,
     dragOptions: ['amazing', 'amazed'],
-    audio: '/src/assets/audio_questions/prepositions/question9_audio.mp3'
+    audio: '/assets/audio_questions/prepositions/question9_audio.mp3'
   },
   {
     id: 'prep-10',
@@ -470,7 +470,7 @@ export const prepositionsQuestions: QuestionType[] = [
     alt: 'Resultados de examen',
     isDragAndDrop: true,
     dragOptions: ['disappointing', 'disappointed'],
-    audio: '/src/assets/audio_questions/prepositions/question10_audio.mp3'
+    audio: '/assets/audio_questions/prepositions/question10_audio.mp3'
   },
 ];
 
@@ -485,7 +485,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'Are you describing the specific action your phone helps you achieve, or the general activity it\'s designed for?',
     image: 'questions/gerundsInfinitives/gi-1.png',
     alt: 'Un hombre trabajando como ingeniero',
-    audio: '/src/assets/audio_questions/gerundsInfinitives/question1_audio.mp3'
+    audio: '/assets/audio_questions/gerundsInfinitives/question1_audio.mp3'
   },
   {
     id: 'art-2',
@@ -496,7 +496,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'Think about whether you\'re emphasizing the purposeful act they perform with the phone, or the function/activity the phone provides.',
     image: 'questions/gerundsInfinitives/gi-2.png',
     alt: 'Un shaker de sal',
-    audio: '/src/assets/audio_questions/gerundsInfinitives/question2_audio.mp3'
+    audio: '/assets/audio_questions/gerundsInfinitives/question2_audio.mp3'
   },
   {
     id: 'art-3',
@@ -507,7 +507,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'Is the emphasis on the action of capturing an image, or the role of the phone in the act of photography?',
     image: 'questions/gerundsInfinitives/gi-3.png',
     alt: 'Paris city',
-    audio: '/src/assets/audio_questions/gerundsInfinitives/question3_audio.mp3'
+    audio: '/assets/audio_questions/gerundsInfinitives/question3_audio.mp3'
   },
   {
     id: 'art-4',
@@ -518,7 +518,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'What was the action I intended?',
     image: 'questions/gerundsInfinitives/gi-4.png',
     alt: 'Un teléfono nuevo',
-    audio: '/src/assets/audio_questions/gerundsInfinitives/question4_audio.mp3'
+    audio: '/assets/audio_questions/gerundsInfinitives/question4_audio.mp3'
   },
   {
     id: 'art-5',
@@ -529,7 +529,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'What is its main function?',
     image: 'questions/gerundsInfinitives/gi-5.png',
     alt: 'El monte Everest',
-    audio: '/src/assets/audio_questions/gerundsInfinitives/question5_audio.mp3'
+    audio: '/assets/audio_questions/gerundsInfinitives/question5_audio.mp3'
   },
   {
     id: 'art-6',
@@ -540,7 +540,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'What activity does she do with it?',
     image: 'questions/gerundsInfinitives/gi-6.png',
     alt: 'Una persona tocando el piano',
-    audio: '/src/assets/audio_questions/gerundsInfinitives/question6_audio.mp3'
+    audio: '/assets/audio_questions/gerundsInfinitives/question6_audio.mp3'
   },
   {
     id: 'art-7',
@@ -551,7 +551,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'Is she buying it so that she can perform an action, or for a general type of cooking?',
     image: 'questions/gerundsInfinitives/gi-7.png',
     alt: 'Una taza de café',
-    audio: '/src/assets/audio_questions/gerundsInfinitives/question7_audio.mp3' 
+    audio: '/assets/audio_questions/gerundsInfinitives/question7_audio.mp3' 
   },
   {
     id: 'art-8',
@@ -562,7 +562,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'What was the reason for his trip? Was it to do something specific, or for a general activity that happens there?',
     image: 'questions/gerundsInfinitives/gi-8.png',
     alt: 'Una ciudad con edificios y una torre',
-    audio: '/src/assets/audio_questions/gerundsInfinitives/question8_audio.mp3'
+    audio: '/assets/audio_questions/gerundsInfinitives/question8_audio.mp3'
   },
   {
     id: 'art-9',
@@ -573,7 +573,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'Consider if the map helps you achieve a particular outcome, or if its use is related to a broader activity.',
     image: 'questions/gerundsInfinitives/gi-9.png',
     alt: 'Un cielo estrellado',
-    audio: '/src/assets/audio_questions/gerundsInfinitives/question9_audio.mp3'
+    audio: '/assets/audio_questions/gerundsInfinitives/question9_audio.mp3'
   },
   {
     id: 'art-10',
@@ -584,7 +584,7 @@ export const articlesQuestions: QuestionType[] = [
     hint: 'Are they wearing them in order to perform a certain action, or for a defensive purpose?',
     image: 'questions/gerundsInfinitives/gi-10.png',
     alt: 'Un edificio de escuela',
-    audio: '/src/assets/audio_questions/gerundsInfinitives/question10_audio.mp3'
+    audio: '/assets/audio_questions/gerundsInfinitives/question10_audio.mp3'
   },
 ];
 
@@ -599,7 +599,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     hint: 'Past Ability → could swim.',
     image: 'questions/modalVerbs/modal_question1_child_swimming.png',
     alt: 'Un niño nadando',
-    audio: '/src/assets/audio_questions/modalVerbs/question1_audio.mp3'
+    audio: '/assets/audio_questions/modalVerbs/question1_audio.mp3'
   },
   {
     id: 'mod-2',
@@ -610,7 +610,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     hint: 'Not Allowed At All. You mustn\'t park here.',
     image: 'questions/modalVerbs/modal_question2_no_parking.png',
     alt: 'Un letrero de no estacionar',
-    audio: '/src/assets/audio_questions/modalVerbs/question2_audio.mp3'
+    audio: '/assets/audio_questions/modalVerbs/question2_audio.mp3'
   },
   {
     id: 'mod-3',
@@ -621,7 +621,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     hint: 'Polite Permission. May I open the window?',
     image: 'questions/modalVerbs/modal_question3_window_open.png',
     alt: 'Una ventana abierta',
-    audio: '/src/assets/audio_questions/modalVerbs/question3_audio.mp3'
+    audio: '/assets/audio_questions/modalVerbs/question3_audio.mp3'
   },
   {
     id: 'mod-4',
@@ -632,7 +632,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     hint: 'Uncertain Forecast → might rain.',
     image: 'questions/modalVerbs/modal_question4_rain_umbrella.png',
     alt: 'Un paraguas',
-    audio: '/src/assets/audio_questions/modalVerbs/question4_audio.mp3'
+    audio: '/assets/audio_questions/modalVerbs/question4_audio.mp3'
   },
   {
     id: 'mod-5',
@@ -643,7 +643,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     hint: 'Strong Recommendation. Students should submit.',
     image: 'questions/modalVerbs/modal_question5_student_assignment.png',
     alt: 'Un estudiante entregando una tarea',
-    audio: '/src/assets/audio_questions/modalVerbs/question5_audio.mp3'
+    audio: '/assets/audio_questions/modalVerbs/question5_audio.mp3'
   },
   {
     id: 'mod-6',
@@ -654,7 +654,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     hint: 'Evidence-Based Conclusion. He must be at home.',
     image: 'questions/modalVerbs/modal_question6_house_lights.png',
     alt: 'Unas luces encendidas en una casa',
-    audio: '/src/assets/audio_questions/modalVerbs/question6_audio.mp3'
+    audio: '/assets/audio_questions/modalVerbs/question6_audio.mp3'
   },
   {
     id: 'mod-7',
@@ -665,7 +665,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     hint: 'Current Capability. I can speak three languages.',
     image: 'questions/modalVerbs/modal_question7_speak_languages.png',
     alt: 'Una persona hablando en tres idiomas',
-    audio: '/src/assets/audio_questions/modalVerbs/question7_audio.mp3'
+    audio: '/assets/audio_questions/modalVerbs/question7_audio.mp3'
   },
   {
     id: 'mod-8',
@@ -676,7 +676,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     hint: 'Outside Requirement. We have to leave early.',
     image: 'questions/modalVerbs/modal_question8_boss_meeting.png',
     alt: 'Unos jefes en una reunión',
-    audio: '/src/assets/audio_questions/modalVerbs/question8_audio.mp3'
+    audio: '/assets/audio_questions/modalVerbs/question8_audio.mp3'
   },
   {
     id: 'mod-9',
@@ -687,7 +687,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     hint: 'Recommendation → should see a doctor.',
     image: 'questions/modalVerbs/modal_question9_doctor_visit.png',
     alt: 'Un paciente visitando a un doctor',
-    audio: '/src/assets/audio_questions/modalVerbs/question9_audio.mp3'
+    audio: '/assets/audio_questions/modalVerbs/question9_audio.mp3'
   },
   {
     id: 'mod-10',
@@ -698,6 +698,6 @@ export const modalVerbsQuestions: QuestionType[] = [
     hint: 'Allowed Action. Visitors can smoke here.',
     image: 'questions/modalVerbs/modal_question10_smoking_area.png',
     alt: 'Un área de fumadores',
-    audio: '/src/assets/audio_questions/modalVerbs/question10_audio.mp3'
+    audio: '/assets/audio_questions/modalVerbs/question10_audio.mp3'
   },
 ];
