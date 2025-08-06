@@ -10,10 +10,8 @@
     "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "start:backend": "cd backend && npm start",
     "build": "tsc -b && vite build",
-    "build:prod": "NODE_ENV=production npm run build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "deploy": "npm run build:prod"
+    "preview": "vite preview"
   },
   "dependencies": {
     "axios": "^1.10.0",
