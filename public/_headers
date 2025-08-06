@@ -1,0 +1,17 @@
+# Configuración de tipos MIME para GitHub Pages
+*.js
+  Content-Type: application/javascript
+
+*.mjs
+  Content-Type: application/javascript
+
+*.css
+  Content-Type: text/css
+
+*.html
+  Content-Type: text/html
+
+# Configuración para SPA
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff 
