@@ -21,7 +21,23 @@ export default defineConfig({
         // Asegurar que los archivos JS tengan la extensión correcta
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]',
+        assetFileNames: (assetInfo) => {
+          if (!assetInfo.name) {
+            return `assets/[name]-[hash].[ext]`;
+          }
+          const info = assetInfo.name.split('.');
+          const ext = info[info.length - 1];
+          if (/\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/i.test(assetInfo.name)) {
+            return `assets/[name]-[hash].${ext}`;
+          }
+          if (/\.(png|jpe?g|gif|svg|ico|webp)(\?.*)?$/i.test(assetInfo.name)) {
+            return `assets/[name]-[hash].${ext}`;
+          }
+          if (/\.(woff2?|eot|ttf|otf)(\?.*)?$/i.test(assetInfo.name)) {
+            return `assets/[name]-[hash].${ext}`;
+          }
+          return `assets/[name]-[hash].[ext]`;
+        },
       },
     },
     // Configuración específica para GitHub Pages
@@ -30,6 +46,16 @@ export default defineConfig({
   },
   // Configuración del servidor de desarrollo
   server: {
+    headers: {
+      'Content-Type': 'application/javascript',
+    },
+    // Configuración adicional para tipos MIME
+    fs: {
+      strict: false,
+    },
+  },
+  // Configuración para preview
+  preview: {
     headers: {
       'Content-Type': 'application/javascript',
     },
