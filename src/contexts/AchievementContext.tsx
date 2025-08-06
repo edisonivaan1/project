@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useAuth } from './AuthContext';
-import { useGameProgress } from './GameProgressContext';
-import { progressService, achievementService } from '../services/api';
-import { grammarTopics } from '../data/grammarTopics';
+// import { useGameProgress } from './GameProgressContext';
+// import { progressService } from '../services/api';
+import { achievementService } from '../services/api';
+// import { grammarTopics } from '../data/grammarTopics';
 
 export interface Achievement {
   id: string;
@@ -28,7 +29,7 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [pendingNotifications, setPendingNotifications] = useState<Achievement[]>([]);
   const { user } = useAuth();
-  const { isLevelCompleted } = useGameProgress();
+  // const { isLevelCompleted } = useGameProgress();
 
   // Load shown achievements from localStorage
   const getShownAchievements = (): string[] => {
@@ -43,8 +44,9 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
     localStorage.setItem(`achievements_shown_${user._id}`, JSON.stringify(achievementIds));
   };
 
-  // Generate all possible achievements
-  const generateAllAchievements = (stats: any): Achievement[] => {
+  // Generate all possible achievements (commented out as not used)
+  /*
+  const _generateAllAchievements = (_stats: any): Achievement[] => {
     return [
       // Completion achievements
       {
@@ -52,7 +54,7 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
         name: 'First Steps',
         description: 'Complete your first lesson',
         icon: '🎯',
-        earned: stats.completedLessons >= 1,
+        earned: _stats.completedLessons >= 1,
         category: 'completion'
       },
       {
@@ -60,7 +62,7 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
         name: 'Getting Started',
         description: 'Complete 5 lessons',
         icon: '🚀',
-        earned: stats.completedLessons >= 5,
+        earned: _stats.completedLessons >= 5,
         category: 'completion'
       },
       {
@@ -68,7 +70,7 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
         name: 'Grammar Explorer',
         description: 'Complete 10 lessons',
         icon: '🗺️',
-        earned: stats.completedLessons >= 10,
+        earned: _stats.completedLessons >= 10,
         category: 'completion'
       },
       {
@@ -76,7 +78,7 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
         name: 'Dedicated Learner',
         description: 'Complete 15 lessons',
         icon: '📚',
-        earned: stats.completedLessons >= 15,
+        earned: _stats.completedLessons >= 15,
         category: 'completion'
       },
       {
@@ -84,7 +86,7 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
         name: 'Course Master',
         description: 'Complete all available topics',
         icon: '🎉',
-        earned: stats.completedTopics >= stats.totalTopics && stats.totalTopics > 0,
+        earned: _stats.completedTopics >= _stats.totalTopics && _stats.totalTopics > 0,
         category: 'completion'
       },
       // Performance achievements
@@ -93,7 +95,7 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
         name: 'Perfectionist',
         description: 'Achieve 100% on any lesson',
         icon: '⭐',
-        earned: stats.bestScore >= 100,
+        earned: _stats.bestScore >= 100,
         category: 'performance'
       },
       {
@@ -101,7 +103,7 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
         name: 'High Achiever',
         description: 'Maintain 85% average score',
         icon: '🏆',
-        earned: stats.averageScore >= 85,
+        earned: _stats.averageScore >= 85,
         category: 'performance'
       },
       {
@@ -109,7 +111,7 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
         name: 'Scholar',
         description: 'Maintain 90% average score',
         icon: '🎓',
-        earned: stats.averageScore >= 90,
+        earned: _stats.averageScore >= 90,
         category: 'performance'
       },
       // Medal achievements
@@ -118,7 +120,7 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
         name: 'Easy Master',
         description: 'Complete all Easy difficulty topics',
         icon: '🥉',
-        earned: stats.easyMedal,
+        earned: _stats.easyMedal,
         category: 'medal'
       },
       {
@@ -126,7 +128,7 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
         name: 'Medium Master',
         description: 'Complete all Medium difficulty topics',
         icon: '🥈',
-        earned: stats.mediumMedal,
+        earned: _stats.mediumMedal,
         category: 'medal'
       },
       {
@@ -134,7 +136,7 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
         name: 'Hard Master',
         description: 'Complete all Hard difficulty topics',
         icon: '🥇',
-        earned: stats.hardMedal,
+        earned: _stats.hardMedal,
         category: 'medal'
       },
       // Consistency achievements
@@ -143,7 +145,7 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
         name: 'Persistent',
         description: 'Make 10 attempts',
         icon: '💪',
-        earned: stats.totalAttempts >= 10,
+        earned: _stats.totalAttempts >= 10,
         category: 'consistency'
       },
       {
@@ -151,7 +153,7 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
         name: 'Determined',
         description: 'Make 25 attempts',
         icon: '🔥',
-        earned: stats.totalAttempts >= 25,
+        earned: _stats.totalAttempts >= 25,
         category: 'consistency'
       },
       // Exploration achievements
@@ -160,16 +162,18 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
         name: 'Help Seeker',
         description: 'Use hints wisely (5+ hints used)',
         icon: '💡',
-        earned: stats.totalHintsUsed >= 5,
+        earned: _stats.totalHintsUsed >= 5,
         category: 'exploration'
       }
     ];
   };
+  */
 
-  // Calculate current stats for achievement checking
-  const calculateCurrentStats = async () => {
+  // Calculate current stats for achievement checking (commented out as not used)
+  /*
+  const _calculateCurrentStats = async () => {
     try {
-      const [progressResponse, statsResponse] = await Promise.all([
+      const [_progressResponse, statsResponse] = await Promise.all([
         progressService.getProgress(),
         progressService.getStats()
       ]);
@@ -229,9 +233,10 @@ export const AchievementProvider: React.FC<{ children: ReactNode }> = ({ childre
       return null;
     }
   };
+  */
 
   // Check for new achievements using backend
-  const checkForNewAchievements = async (newStats?: any): Promise<Achievement[]> => {
+  const checkForNewAchievements = async (_newStats?: any): Promise<Achievement[]> => {
     try {
       console.log('🔍 Checking for new achievements...');
       
