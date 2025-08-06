@@ -19,13 +19,13 @@
       "dest": "backend/server.js"
     },
     {
-      "src": "/assets/(.*)",
+      "src": "/assets/(.*\\.css)",
       "headers": {
-        "Content-Type": "application/javascript"
+        "Content-Type": "text/css"
       }
     },
     {
-      "src": "/(.*\\.js)",
+      "src": "/assets/(.*\\.js)",
       "headers": {
         "Content-Type": "application/javascript"
       }
@@ -34,6 +34,12 @@
       "src": "/(.*\\.css)",
       "headers": {
         "Content-Type": "text/css"
+      }
+    },
+    {
+      "src": "/(.*\\.js)",
+      "headers": {
+        "Content-Type": "application/javascript"
       }
     },
     {

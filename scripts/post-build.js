@@ -37,10 +37,13 @@ function postBuildSetup() {
   fs.writeFileSync(html404Path, html404);
   console.log('✅ Archivo 404.html creado para Vercel');
   
-  // 3. Actualizar index.html para agregar script SPA si no existe
+  // 3. Actualizar index.html para corregir rutas y agregar script SPA
   const indexHtmlPath = path.join(distDir, 'index.html');
   if (fs.existsSync(indexHtmlPath)) {
     let indexHtml = fs.readFileSync(indexHtmlPath, 'utf8');
+    
+    // Corregir rutas de /project/ a /
+    indexHtml = indexHtml.replace(/\/project\//g, '/');
     
     // Verificar si ya tiene el script SPA
     if (!indexHtml.includes('Single Page Apps')) {
@@ -67,11 +70,10 @@ function postBuildSetup() {
       
       // Insertar el script antes del cierre de </head>
       indexHtml = indexHtml.replace('</head>', `${spaScript}\n  </head>`);
-      fs.writeFileSync(indexHtmlPath, indexHtml);
-      console.log('✅ Script SPA agregado a index.html');
-    } else {
-      console.log('ℹ️ Script SPA ya existe en index.html');
     }
+    
+    fs.writeFileSync(indexHtmlPath, indexHtml);
+    console.log('✅ Rutas corregidas en index.html para Vercel');
   }
   
   console.log('✅ Configuración de Vercel completada');
