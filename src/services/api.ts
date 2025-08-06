@@ -1,6 +1,19 @@
 import { CompleteLevelData } from '../types';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+// Detectar automáticamente la URL de la API basada en el entorno
+const getApiBaseUrl = () => {
+  // Si estamos en GitHub Pages (producción)
+  if (window.location.hostname === 'edisonivaan1.github.io') {
+    // Aquí deberías usar la URL de tu backend desplegado
+    // Por ahora, usaremos localhost para desarrollo
+    return 'http://localhost:5000/api';
+  }
+  
+  // Desarrollo local
+  return 'http://localhost:5000/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 // Interfaz para las respuestas de la API
 interface ApiResponse<T = any> {
