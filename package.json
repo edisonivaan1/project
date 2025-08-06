@@ -1,7 +1,7 @@
 {
-  "name": "vite-react-typescript-starter",
+  "name": "grammar-master-pro",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,6 +10,8 @@
     "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "start:backend": "cd backend && npm start",
     "build": "vite build && node scripts/post-build.js",
+    "build:vercel": "npm run build && cd backend && npm install",
+    "vercel-build": "npm run build:vercel",
     "lint": "eslint .",
     "preview": "vite preview"
   },

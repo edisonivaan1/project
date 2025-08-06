@@ -2,10 +2,16 @@ import { CompleteLevelData } from '../types';
 
 // Configuración de la API
 const getApiBaseUrl = () => {
-  // Si estamos en GitHub Pages (producción)
+  // Si estamos en Vercel (producción)
+  if (window.location.hostname.includes('vercel.app')) {
+    // Backend desplegado en Vercel (mismo dominio)
+    return '/api';
+  }
+  
+  // Si estamos en GitHub Pages (desarrollo)
   if (window.location.hostname === 'edisonivaan1.github.io') {
-    // Backend desplegado en Railway
-    return 'https://glistening-adaptation-production.up.railway.app/api';
+    // Backend desplegado en Railway (temporal)
+    return 'https://project-production-11fe.up.railway.app/api';
   }
   
   // Desarrollo local

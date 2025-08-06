@@ -19,7 +19,11 @@ app.use(cors({
     'http://127.0.0.1:3000',
     'http://127.0.0.1:5173',
     'https://edisonivaan1.github.io',
-    'https://edisonivaan1.github.io/project'
+    'https://edisonivaan1.github.io/project',
+    'https://*.vercel.app',
+    'https://grammar-master-pro.vercel.app',
+    'https://grammar-master-pro-git-main.vercel.app',
+    'https://grammar-master-pro-git-develop.vercel.app'
   ],
   credentials: true
 }));
