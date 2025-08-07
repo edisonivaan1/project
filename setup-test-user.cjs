@@ -55,8 +55,8 @@ async function unlockAllLevelsForUser(email) {
     const token = loginResponse.data.token;
     
     // Hacer una petición para desbloquear todos los niveles
-    // Esto actualizará todos los documentos de progreso del usuario
-    const unlockResponse = await axios.post(`${API_BASE}/progress/unlock-all-levels`, {}, {
+    // Usando el endpoint correcto en auth
+    const unlockResponse = await axios.post(`${API_BASE}/auth/unlock-all-levels`, {}, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

@@ -495,4 +495,41 @@ router.delete('/profile-image', auth, async (req, res) => {
   }
 });
 
+// @route   POST /api/auth/unlock-all-levels
+// @desc    Desbloquear todos los niveles para el usuario (solo para desarrollo/pruebas)
+// @access  Private
+router.post('/unlock-all-levels', auth, async (req, res) => {
+  try {
+    console.log('🔓 Desbloqueando todos los niveles para usuario:', req.user._id);
+    
+    // Importar el modelo Progress
+    const Progress = require('../models/Progress');
+    
+    // Actualizar todos los documentos de progreso del usuario
+    // estableciendo isLocked en false
+    const result = await Progress.updateMany(
+      { userId: req.user._id },
+      { 
+        $set: { 
+          isLocked: false 
+        } 
+      }
+    );
+    
+    console.log('✅ Niveles desbloqueados:', result.modifiedCount, 'documentos actualizados');
+    
+    res.json({
+      success: true,
+      message: `Todos los niveles han sido desbloqueados. ${result.modifiedCount} documentos actualizados.`
+    });
+    
+  } catch (error) {
+    console.error('Error unlocking all levels:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error del servidor al desbloquear niveles'
+    });
+  }
+});
+
 module.exports = router; 
