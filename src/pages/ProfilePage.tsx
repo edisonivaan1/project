@@ -974,7 +974,7 @@ const ProfilePage: React.FC = () => {
           </div>
 
           {/* Achievements Section */}
-          <div className="mt-12">
+          <div className="mt-8">
             <h3 
               className="text-lg font-semibold text-gray-900 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
               tabIndex={0}
@@ -984,7 +984,7 @@ const ProfilePage: React.FC = () => {
               Achievements
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {userStats.achievements.map((achievement) => (
+              {userStats.achievements.map((achievement, index) => (
                 <div 
                   key={achievement.id} 
                   className={`p-4 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 ${
@@ -994,8 +994,27 @@ const ProfilePage: React.FC = () => {
                   }`}
                   title={achievement.description}
                   tabIndex={0}
-                  role="region"
-                  aria-label={`Achievement: ${achievement.name} - ${achievement.description} ${achievement.earned ? 'Earned' : 'Not earned yet'}`}
+                  role="button"
+                  aria-pressed={achievement.earned}
+                  aria-label={`Achievement ${index + 1} of ${userStats.achievements.length}: ${achievement.name} - ${achievement.description}. ${achievement.earned ? 'Earned and unlocked' : 'Not earned yet, locked'}`}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      // Anunciar el estado del logro cuando se presiona Enter o Space
+                      const announcement = `${achievement.name}: ${achievement.description}. ${achievement.earned ? 'Earned and unlocked' : 'Not earned yet, locked'}`;
+                      
+                      // Crear anuncio temporal para screen readers
+                      const announcer = document.createElement('div');
+                      announcer.setAttribute('aria-live', 'polite');
+                      announcer.className = 'sr-only';
+                      announcer.textContent = announcement;
+                      document.body.appendChild(announcer);
+                      
+                      setTimeout(() => {
+                        document.body.removeChild(announcer);
+                      }, 1000);
+                    }
+                  }}
                 >
                   <div className="text-center">
                     <div className={`text-3xl mb-2 ${achievement.earned ? '' : 'grayscale'}`}>
@@ -1005,7 +1024,7 @@ const ProfilePage: React.FC = () => {
                       className={`font-semibold text-sm mb-1 ${
                         achievement.earned ? 'text-gray-900' : 'text-gray-500'
                       } focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1`}
-                      tabIndex={0}
+                      tabIndex={-1}
                       role="heading"
                       aria-level={4}
                     >
@@ -1015,7 +1034,7 @@ const ProfilePage: React.FC = () => {
                       className={`text-xs ${
                         achievement.earned ? 'text-gray-600' : 'text-gray-400'
                       } focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1`}
-                      tabIndex={0}
+                      tabIndex={-1}
                       role="text"
                     >
                       {achievement.description}
@@ -1023,10 +1042,21 @@ const ProfilePage: React.FC = () => {
                     {achievement.earned && (
                       <div 
                         className="mt-2 px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        tabIndex={0}
+                        tabIndex={-1}
                         role="text"
+                        aria-label="Earned status"
                       >
                         Earned
+                      </div>
+                    )}
+                    {!achievement.earned && (
+                      <div 
+                        className="mt-2 px-2 py-1 bg-gray-100 text-gray-500 rounded-full text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        tabIndex={-1}
+                        role="text"
+                        aria-label="Locked status"
+                      >
+                        Locked
                       </div>
                     )}
                   </div>
