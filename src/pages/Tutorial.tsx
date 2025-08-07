@@ -55,7 +55,7 @@ const Tutorial: React.FC = () => {
         <Button 
           onClick={() => navigate('/')}
           tabIndex={0}
-          aria-label="Volver a la página de inicio"
+          aria-label="Back to home page"
         >
           Return to Home
         </Button>
@@ -394,7 +394,7 @@ const Tutorial: React.FC = () => {
                     icon={<Rewind />}
                     onClick={handleReplayTutorial}
                     tabIndex={0}
-                    aria-label="Reintentar cargar el video de tutorial"
+                    aria-label="Retry loading tutorial video"
                   >
                     Reintentar
                   </Button>
@@ -431,7 +431,7 @@ const Tutorial: React.FC = () => {
                       icon={<SkipForward />}
                       onClick={handleSkipTutorial}
                       tabIndex={0}
-                      aria-label="Saltar tutorial y continuar al juego"
+                      aria-label="Skip tutorial and continue to game"
                     >
                       Skip Tutorial
                     </Button>
@@ -519,7 +519,7 @@ const Tutorial: React.FC = () => {
             onClick={() => navigate('/')}
             className="h-[40px] w-[225px] bg-blue-500 hover:bg-blue-600 text-white border-2 border-black"
             tabIndex={0}
-            aria-label="Volver a la página de temas"
+            aria-label="Back to topics page"
           >
             Back to Topics
           </Button>
@@ -534,7 +534,7 @@ const Tutorial: React.FC = () => {
                 : 'bg-gray-400 border-gray-500 cursor-not-allowed text-gray-200'
             }`}
             tabIndex={0}
-            aria-label={isWatched ? "Iniciar juego de práctica" : "Debes ver el tutorial primero"}
+            aria-label={isWatched ? "Start practice game" : "You must watch the tutorial first"}
           >
             {isWatched ? 'Start Game' : 'Watch Tutorial First'}
           </Button>

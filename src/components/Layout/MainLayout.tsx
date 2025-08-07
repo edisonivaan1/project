@@ -17,10 +17,10 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     enablePageUpDown: true,
     onNavigate: (direction) => {
       // Anunciar la dirección de navegación para usuarios de lectores de pantalla
-      const announcement = direction === 'next' ? 'Navegando al siguiente elemento' :
-                          direction === 'previous' ? 'Navegando al elemento anterior' :
-                          direction === 'first' ? 'Navegando al primer elemento' :
-                          'Navegando al último elemento';
+      const announcement = direction === 'next' ? 'Navigating to next element' :
+                          direction === 'previous' ? 'Navigating to previous element' :
+                          direction === 'first' ? 'Navigating to first element' :
+                          'Navigating to last element';
       
       // Crear anuncio temporal
       const announcer = document.createElement('div');
@@ -67,7 +67,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             }
           }}
         >
-          Saltar al contenido principal (Enter)
+          Skip to main content (Enter)
         </a>
         <a 
           href="#navigation" 
@@ -80,7 +80,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             }
           }}
         >
-          Saltar a la navegación (Enter)
+          Skip to navigation (Enter)
         </a>
       </div>
       
@@ -90,7 +90,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         className="flex-grow focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-inset" 
         tabIndex={-1}
         role="main"
-        aria-label="Contenido principal de la aplicación"
+        aria-label="Main application content"
       >
         {children}
       </main>

@@ -105,7 +105,7 @@ const SignUpPage: React.FC = () => {
           to="/" 
           className="flex items-center text-sm font-medium text-[#007AA2] hover:text-[#005f7a] transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2"
           tabIndex={0}
-          aria-label="Volver a la página de inicio"
+          aria-label="Back to home page"
         >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
@@ -132,7 +132,7 @@ const SignUpPage: React.FC = () => {
           className="absolute inset-0 w-full h-full object-cover"
           tabIndex={0}
           role="img"
-          aria-label="Imagen de fondo mostrando estudiantes aprendiendo gramática inglesa"
+          aria-label="Background image showing students learning English grammar"
         />
       </div>
       
@@ -146,7 +146,7 @@ const SignUpPage: React.FC = () => {
               className="h-36 w-auto mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
               tabIndex={0}
               role="img"
-              aria-label="Logo de Grammar Master Pro"
+              aria-label="Grammar Master Pro logo"
             />
             <h1 
               className="text-4xl font-bold text-[#007AA2E8] mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
@@ -160,7 +160,7 @@ const SignUpPage: React.FC = () => {
               className="text-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
               tabIndex={0}
               role="text"
-              aria-label="Mensaje de bienvenida: Create your account to get started"
+              aria-label="Welcome message: Create your account to get started"
             >
               Create your account to get started
             </p>
@@ -185,7 +185,7 @@ const SignUpPage: React.FC = () => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                   placeholder="Enter your first name"
                   tabIndex={0}
-                  aria-label="Campo de entrada para nombre"
+                  aria-label="First name input field"
                 />
               </div>
               
@@ -206,7 +206,7 @@ const SignUpPage: React.FC = () => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                   placeholder="Enter your last name"
                   tabIndex={0}
-                  aria-label="Campo de entrada para apellido"
+                  aria-label="Last name input field"
                 />
               </div>
             </div>
@@ -229,7 +229,7 @@ const SignUpPage: React.FC = () => {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                 placeholder="Enter your email"
                 tabIndex={0}
-                aria-label="Campo de entrada para email"
+                aria-label="Email input field"
               />
             </div>
             
@@ -252,14 +252,14 @@ const SignUpPage: React.FC = () => {
                   className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                   placeholder="Create a password"
                   tabIndex={0}
-                  aria-label="Campo de entrada para contraseña"
+                  aria-label="Password input field"
                 />
                 <button
                   type="button"
                   className="absolute inset-y-0 right-0 flex items-center pr-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
                   onClick={() => setShowPassword(!showPassword)}
                   tabIndex={0}
-                  aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
                     <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -294,14 +294,14 @@ const SignUpPage: React.FC = () => {
                   className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                   placeholder="Confirm your password"
                   tabIndex={0}
-                  aria-label="Campo de entrada para confirmar contraseña"
+                  aria-label="Confirm password input field"
                 />
                 <button
                   type="button"
                   className="absolute inset-y-0 right-0 flex items-center pr-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   tabIndex={0}
-                  aria-label={showConfirmPassword ? "Ocultar confirmación de contraseña" : "Mostrar confirmación de contraseña"}
+                  aria-label={showConfirmPassword ? "Hide password confirmation" : "Show password confirmation"}
                 >
                   {showConfirmPassword ? (
                     <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -332,7 +332,7 @@ const SignUpPage: React.FC = () => {
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                 tabIndex={0}
-                aria-label="Seleccionar pregunta de seguridad"
+                aria-label="Select security question"
               >
                 <option value="">Select a security question</option>
                 <option value="What is the name of your first pet?">What is the name of your first pet?</option>
@@ -359,7 +359,7 @@ const SignUpPage: React.FC = () => {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                 placeholder="Enter your answer"
                 tabIndex={0}
-                aria-label="Campo de entrada para respuesta de seguridad"
+                aria-label="Security answer input field"
               />
             </div>
             
@@ -367,7 +367,7 @@ const SignUpPage: React.FC = () => {
               type="submit"
               className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#000DFF] hover:bg-[#0000cc] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
               tabIndex={0}
-              aria-label="Crear cuenta en Grammar Master Pro"
+              aria-label="Create account in Grammar Master Pro"
             >
               {isLoading ? 'Creating Account...' : 'Create Account'}
             </button>
@@ -378,7 +378,7 @@ const SignUpPage: React.FC = () => {
               type="button"
               className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
               tabIndex={0}
-              aria-label="Registrarse con Google"
+              aria-label="Sign up with Google"
             >
               <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
@@ -398,7 +398,7 @@ const SignUpPage: React.FC = () => {
                 to="/login" 
                 className="font-medium text-[#007AA2] hover:text-[#005f7a] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-1"
                 tabIndex={0}
-                aria-label="Iniciar sesión en Grammar Master Pro"
+                aria-label="Sign in to Grammar Master Pro"
               >
                 Login
               </Link>

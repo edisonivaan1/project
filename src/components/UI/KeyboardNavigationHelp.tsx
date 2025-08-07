@@ -126,7 +126,7 @@ const KeyboardNavigationHelp: React.FC<KeyboardHelpProps> = ({
                       tabIndex={0}
                       role="text"
                     >
-                      Elemento siguiente:
+                      Next element:
                     </span>
                     <kbd className="px-2 py-1 bg-gray-100 rounded text-xs">Tab</kbd>
                   </div>
@@ -136,7 +136,7 @@ const KeyboardNavigationHelp: React.FC<KeyboardHelpProps> = ({
                       tabIndex={0}
                       role="text"
                     >
-                      Elemento anterior:
+                      Previous element:
                     </span>
                     <kbd className="px-2 py-1 bg-gray-100 rounded text-xs">Shift + Tab</kbd>
                   </div>
@@ -146,7 +146,7 @@ const KeyboardNavigationHelp: React.FC<KeyboardHelpProps> = ({
                       tabIndex={0}
                       role="text"
                     >
-                      Activar elemento:
+                      Activate element:
                     </span>
                     <kbd className="px-2 py-1 bg-gray-100 rounded text-xs">Enter / Space</kbd>
                   </div>
@@ -156,7 +156,7 @@ const KeyboardNavigationHelp: React.FC<KeyboardHelpProps> = ({
                       tabIndex={0}
                       role="text"
                     >
-                      Saltar al contenido:
+                      Skip to content:
                     </span>
                     <kbd className="px-2 py-1 bg-gray-100 rounded text-xs">Skip links</kbd>
                   </div>

@@ -10,7 +10,7 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: '"Ben" is a third-person singular subject (like "he"). In the simple present, we add "-s" to the verb "work."',
     hint: 'Is it "he" or "they"? Add "s" if it\'s "he", "she", or "it".',
     image: 'questions/presentTense/pt-1.png',
-    alt: 'Un doctor con bata en el hospital',
+    alt: 'Ben, a doctor, works in a hospital. A doctor in a white coat in a hospital setting.',
     audio: '/assets/audio_questions/presentTense/question1_audio.mp3'
   },
   {
@@ -21,7 +21,7 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'To form a simple present question with "you," we use the auxiliary verb "do" before the subject. The main verb "like" remains in its base form.',
     hint: 'Is it a question about "you"? Use "do".',
     image: 'questions/presentTense/pt-2.png',
-    alt: 'Una niña comiendo pescado',
+    alt: 'A girl eating fish, representing the question "Do you like fish?"',
     audio: '/assets/audio_questions/presentTense/question2_audio.mp3'
   },
   {
@@ -32,7 +32,7 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: '"Matthew" is a third-person singular subject (like "he"). Verbs ending in -ch (like "watch") add "-es" in the simple present for third-person singular subjects.',
     hint: 'It\'s "he" and the verb ends in "ch". Add "es".',
     image: 'questions/presentTense/pt-3.png',
-    alt: 'Una persona viendo television',
+    alt: 'Matthew sitting and watching television, illustrating the action of watching TV.',
     audio: '/assets/audio_questions/presentTense/question3_audio.mp3'
   },
   {
@@ -43,7 +43,7 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'To form a simple present question with "she," we use the auxiliary verb "does" before the subject. The main verb "play" remains in its base form.',
     hint: 'It\'s a question about "she". Use "does".',
     image: 'questions/presentTense/pt-4.png',
-    alt: 'Una chica pateando un balón',
+    alt: 'A girl kicking a soccer ball, representing the question about playing football.',
     audio: '/assets/audio_questions/presentTense/question4_audio.mp3'
   },
   {
@@ -54,7 +54,7 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: '"They" is a plural subject. For "I, you, we, they," the verb remains in its base form in the simple present.',
     hint: 'Is it "they" or "he"? Don\'t add "s" for "they".',
     image: 'questions/presentTense/pt-5.png',
-    alt: 'Agua hirviendo en una olla',
+    alt: 'Several people having dinner together at 7 o\'clock, showing a regular dinner routine.',
     audio: '/assets/audio_questions/presentTense/question5_audio.mp3'
   },
   {
@@ -65,7 +65,7 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: '"Valerie" is a third-person singular subject (like "she"). Verbs ending in a consonant + "y" (like "study") change "y" to "i" and add "-es" in the simple present for third-person singular.',
     hint: 'It\'s "she" and the verb ends in "y". Change "y" to "i" and add "es".',
     image: 'questions/presentTense/pt-6.png',
-    alt: 'Un hombre haciendo ejercicio en el gimnasio',
+    alt: 'Valerie studying English at university, sitting with books and notes.',
     audio: '/assets/audio_questions/presentTense/question6_audio.mp3'
   },
   {
@@ -76,7 +76,7 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'Regular Schedules Take Present Simple.',
     hint: 'Routine On Fixed Days. I study English every Monday and Wednesday.',
     image: 'questions/presentTense/pt-7.png',
-    alt: 'Un hombre estudiando inglés',
+    alt: 'A man studying English with books, representing a weekly study routine.',
     audio: '/assets/audio_questions/presentTense/question7_audio.mp3'
   },
   {
@@ -87,7 +87,7 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'Present Perfect Shows A Recently Completed Action Relevant Now.',
     hint: 'Use Have/Has + Past Participle. She has finished her homework.',
     image: 'questions/presentTense/pt-8.png',
-    alt: 'Un estudiante terminando su tarea',
+    alt: 'A student showing her completed homework, indicating she has already finished.',
     audio: '/assets/audio_questions/presentTense/question8_audio.mp3'
   },
   {
@@ -98,7 +98,7 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'Facts And Universal Truths Use Present Simple.',
     hint: 'General Truth. The sun rises in the east.',
     image: 'questions/presentTense/pt-9.png',
-    alt: 'El sol saliendo en el horizonte',
+    alt: 'The sun rising in the east over the horizon, representing a universal fact.',
     audio: '/assets/audio_questions/presentTense/question9_audio.mp3'
   },
   {
@@ -109,7 +109,7 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'Present Continuous For An Action Happening Right Now.',
     hint: '"Look!" Signals Something In Progress. The children are playing.',
     image: 'questions/presentTense/pt-10.png',
-    alt: 'Unos niños jugando en el parque',
+    alt: 'Several children actively playing in the park right now.',
     audio: '/assets/audio_questions/presentTense/question10_audio.mp3'
   },
 ];
@@ -123,7 +123,7 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'The first action was ongoing (Past Continuous), the second was a sudden interruption (Simple Past).',
     hint: 'Ongoing action interrupted.',
     image: 'questions/pastTense/pat-1.png',
-    alt: 'Una fiesta vacía',
+    alt: 'A person reading a book at home when the phone suddenly rings.',
     isFillInTheBlank: true,
     audio: '/assets/audio_questions/past_question1_audio.mp3'
   },
@@ -134,7 +134,7 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'The finishing of work happened before going to the store, so Past Perfect is used for the earlier action.',
     hint: 'What happened first of the two?',
     image: 'questions/pastTense/pat-2.png',
-    alt: 'Un hombre cocinando mientras el teléfono suena',
+    alt: 'A woman finishing her work at a desk and then going to the store.',
     isFillInTheBlank: true,
     audio: '/assets/audio_questions/past_question2_audio.mp3'
   },
@@ -146,7 +146,7 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Simple For Repeated Actions In The Past.',
     hint: 'Childhood Habit → Past Simple. I played soccer every Sunday.',
     image: 'questions/pastTense/pat-3.png',
-    alt: 'Un niño jugando fútbol',
+    alt: 'A child playing soccer on a field, representing a childhood habit.',
     isFillInTheBlank: true,
     audio: '/assets/audio_questions/past_question3_audio.mp3'
   },
@@ -158,7 +158,7 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Perfect Highlights The Earlier Past Action (Writing).',
     hint: 'First Write, Then Feel Relieved. She had written the letter.',
     image: 'questions/pastTense/pat-4.png',
-    alt: 'Una persona escribiendo una carta',
+    alt: 'A woman writing a letter and then showing relief.',
     isFillInTheBlank: true,
     audio: '/assets/audio_questions/past_question4_audio.mp3'
   },
@@ -170,7 +170,7 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Continuous For An Ongoing Past Action Interrupted.',
     hint: 'Action In Progress → Past Continuous. They were watching TV.',
     image: 'questions/pastTense/pat-5.png',
-    alt: 'Unos adultos viendo televisión',
+    alt: 'Several people watching TV when the lights suddenly go out.',
     isFillInTheBlank: true,
     audio: '/assets/audio_questions/past_question5_audio.mp3'
   },
@@ -182,7 +182,7 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Perfect Shows Completion Before Another Past Event.',
     hint: 'Seat Finding Happened Earlier. We had found our seats.',
     image: 'questions/pastTense/pat-6.png',
-    alt: 'Unos adultos buscando sus asientos en una sala de cine',
+    alt: 'A group of people finding and sitting in their seats in a movie theater before the movie starts.',
     isFillInTheBlank: true,
     audio: '/assets/audio_questions/past_question6_audio.mp3'
   },
@@ -194,7 +194,7 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Simple For A Finished Past Situation With A Specific Time ("Last Year").',
     hint: 'Specific Past Time → Past Simple. He lived in Berlin last year.',
     image: 'questions/pastTense/pat-7.png',
-    alt: 'Una ciudad con edificios y una torre',
+    alt: 'A man walking through the city of Berlin, with buildings and a recognizable tower.',
     isFillInTheBlank: true,
     audio: '/assets/audio_questions/past_question7_audio.mp3'
   },
@@ -206,7 +206,7 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Continuous Describes The Activity In Progress During The Interruption.',
     hint: 'Focus On Ongoing Action. What were you doing?',
     image: 'questions/pastTense/pat-8.png',
-    alt: 'Un teléfono sonando',
+    alt: 'A phone ringing while a person is doing another activity.',
     isFillInTheBlank: true,
     audio: '/assets/audio_questions/past_question8_audio.mp3'
   },
@@ -218,7 +218,7 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Perfect Explains The Reason For A Past State.',
     hint: 'Work Finished Before Feeling Tired. He had worked all day.',
     image: 'questions/pastTense/pat-9.png',
-    alt: 'Un trabajador cansado',
+    alt: 'A man exhausted sitting after working all day.',
     isFillInTheBlank: true,
     audio: '/assets/audio_questions/past_question9_audio.mp3'
   },
@@ -230,7 +230,7 @@ export const pastTensesQuestions: QuestionType[] = [
     explanation: 'Past Simple Is Used With Finished Time Adverbs Like "Yesterday".',
     hint: 'Completed Trip. We went to the beach yesterday.',
     image: 'questions/pastTense/pat-10.png',
-    alt: 'Unos adultos en la playa',
+    alt: 'A group of people enjoying at the beach during the day, representing a recent visit.',
     isFillInTheBlank: true,
     audio: '/assets/audio_questions/past_question10_audio.mp3'
   },
@@ -246,7 +246,7 @@ export const conditionalsQuestions: QuestionType[] = [
     explanation: 'First Conditional Uses Present Simple In The If-Clause And "Will" In The Result Clause.',
     hint: 'Possible Future Condition. If it rains, we will cancel.',
     image: 'questions/conditional/con_1.png',
-    alt: 'Un día lluvioso',
+    alt: 'A park with a picnic set up under dark clouds, suggesting it might rain tomorrow.',
     audio: '/assets/audio_questions/conditional/question1_audio.mp3'
   },
   {
@@ -257,7 +257,7 @@ export const conditionalsQuestions: QuestionType[] = [
     explanation: 'Second Conditional Uses "Were" For All Persons In Hypothetical Present Situations.',
     hint: 'Imaginary Situation → If I were rich, I would travel.',
     image: 'questions/conditional/con_2.png',
-    alt: 'Un hombre viajando alrededor del mundo',
+    alt: 'A person imagining traveling around the world with suitcases and famous landmarks.',
     audio: '/assets/audio_questions/conditional/question2_audio.mp3'
   },
   {
@@ -268,7 +268,7 @@ export const conditionalsQuestions: QuestionType[] = [
     explanation: 'Third Conditional For Past Hypotheticals: If + Past Perfect → Would Have + PP.',
     hint: 'Regret About The Past. She would have told me.',
     image: 'questions/conditional/con_3.png',
-    alt: 'Una persona pensando',
+    alt: 'A woman thinking and regretting not giving an answer in the past.',
     audio: '/assets/audio_questions/conditional/question3_audio.mp3'
   },
   {
@@ -279,7 +279,7 @@ export const conditionalsQuestions: QuestionType[] = [
     explanation: 'First Conditional Result Uses "Will" + Base Verb.',
     hint: 'Real Possibility. You will pass.',
     image: 'questions/conditional/con_4.png',
-    alt: 'Un estudiante estudiando para un examen',
+    alt: 'A student focused on studying for an exam with books and notes.',
     audio: '/assets/audio_questions/conditional/question4_audio.mp3'
   },
   {
@@ -289,8 +289,8 @@ export const conditionalsQuestions: QuestionType[] = [
     correctAnswer: 'would have caught',
     explanation: 'Third Conditional Describes A Missed Past Possibility.',
     hint: 'Past Regret. I would have caught the train.',
-      image: 'questions/conditional/con_5.png',
-    alt: 'Un hombre perdiendo un tren',
+    image: 'questions/conditional/con_5.png',
+    alt: 'A man running toward a train that is leaving, showing he missed the train by leaving late.',
     audio: '/assets/audio_questions/conditional/question5_audio.mp3'
   },
   {
@@ -301,7 +301,7 @@ export const conditionalsQuestions: QuestionType[] = [
     explanation: 'Second Conditional Uses Past Simple ("Were") For Hypothetical Present.',
     hint: 'They Are Not Here → Hypothetical. If they were here.',
     image: 'questions/conditional/con_6.png',
-    alt: 'Unos adultos esperando',
+    alt: 'A group of people waiting for others to arrive so they can start a meeting.',
     audio: '/assets/audio_questions/conditional/question6_audio.mp3'
   },
   {
@@ -312,7 +312,7 @@ export const conditionalsQuestions: QuestionType[] = [
     explanation: 'Zero Conditional Expresses Scientific Facts: If + Present Simple → Present Simple.',
     hint: 'General Truth. It freezes.',
     image: 'questions/conditional/con_7.png',
-    alt: 'Agua congelada',
+    alt: 'A glass of water freezing, illustrating the scientific fact that water freezes at 0 °C.',
     audio: '/assets/audio_questions/conditional/question7_audio.mp3'
   },
   {
@@ -323,7 +323,7 @@ export const conditionalsQuestions: QuestionType[] = [
     explanation: 'Second Conditional Question Uses "Would" + Base Verb.',
     hint: 'Hypothetical Question. What would you do?',
     image: 'questions/conditional/con_8.png',
-    alt: 'Una persona perdiendo su billetera',
+    alt: 'A person searching for a lost wallet on the street, representing a hypothetical situation.',
     audio: '/assets/audio_questions/conditional/question8_audio.mp3'
   },
   {
@@ -334,7 +334,7 @@ export const conditionalsQuestions: QuestionType[] = [
     explanation: 'Fixed Expression In Second Conditional: "If I Were You".',
     hint: 'Advice Formula → If I were you.',
     image: 'questions/conditional/con_9.png',
-    alt: 'Un hombre dando consejos',
+    alt: 'A person giving advice to another, representing the phrase "If I were you".',
     audio: '/assets/audio_questions/conditional/question9_audio.mp3'
   },
   {
@@ -345,7 +345,7 @@ export const conditionalsQuestions: QuestionType[] = [
     explanation: '"Provided (That)" Introduces A Conditional Meaning "Only If".',
     hint: 'Conditional Word Synonym For "If". Provided you help.',
     image: 'questions/conditional/con_10.png',
-    alt: 'Unos adultos ayudando en la casa',
+    alt: 'People doing household chores together, showing help at home as a condition.',
     audio: '/assets/audio_questions/conditional/question10_audio.mp3'
   },
 ];
@@ -359,7 +359,7 @@ export const prepositionsQuestions: QuestionType[] = [
     explanation: 'The movie creates excitement (exciting), and as a result, the person feels inspired (inspired).',
     hint: 'What quality does the movie have, and how does it make you feel afterwards?',
     image: 'questions/prepositions/pre_1.png',
-    alt: 'Una persona viendo una película de aventuras',
+    alt: 'A person watching an adventure movie in the cinema and then dreaming of traveling the world.',
     isDragAndDrop: true,
     dragOptions: ['exciting', 'excited', 'inspired', 'inspiring'],
     audio: '/assets/audio_questions/prepositions/question1_audio.mp3'
@@ -371,7 +371,7 @@ export const prepositionsQuestions: QuestionType[] = [
     explanation: 'The person experiences the feeling, so it takes the -ed form.',
     hint: 'How do you feel?',
     image: 'questions/prepositions/pre_2.png',
-    alt: 'Un trabajador cansado',
+    alt: 'A person with an extremely tired expression after working 10 hours straight.',
     isDragAndDrop: true,
     dragOptions: ['tiring', 'tired'],
     audio: '/assets/audio_questions/prepositions/question2_audio.mp3'
@@ -383,7 +383,7 @@ export const prepositionsQuestions: QuestionType[] = [
     explanation: 'The barking causes annoyance (annoying). The neighbors feel annoyed (annoyed).',
     hint: 'What makes the noise, and who feels it?',
     image: 'questions/prepositions/pre_3.png',
-    alt: 'Un perro ladrando',
+    alt: 'A dog barking loudly and neighbors showing annoyance at the noise.',
     isDragAndDrop: true,
     dragOptions: ['annoying', 'annoyed'],
     audio: '/assets/audio_questions/prepositions/question3_audio.mp3'
@@ -395,7 +395,7 @@ export const prepositionsQuestions: QuestionType[] = [
     explanation: 'The ride itself produces the feeling of excitement, so the -ing form is used.',
     hint: 'Is the ride feeling excited?',
     image: 'questions/prepositions/pre_4.png',
-    alt: 'Una montaña rusa',
+    alt: 'People screaming and raising their hands on a rollercoaster, showing excitement.',
     isDragAndDrop: true,
     dragOptions: ['excited', 'exciting'],
     audio: '/assets/audio_questions/prepositions/question4_audio.mp3'
@@ -407,7 +407,7 @@ export const prepositionsQuestions: QuestionType[] = [
     explanation: 'The person experienced the surprise from the news.',
     hint: 'How did she react?',
     image: 'questions/prepositions/pre_5.png',
-    alt: 'Una persona sorprendida',
+    alt: 'A woman with a surprised expression after receiving unexpected news.',
     isDragAndDrop: true,
     dragOptions: ['surprising', 'surprised'],
     audio: '/assets/audio_questions/prepositions/question5_audio.mp3'
@@ -419,7 +419,7 @@ export const prepositionsQuestions: QuestionType[] = [
     explanation: 'The process of learning causes frustration (frustrating) and provides rewards (rewarding).',
     hint: 'What kind of experience is it, and what kind of results does it give?',
     image: 'questions/prepositions/pre_6.png',
-    alt: 'Una persona aprendiendo idiomas',
+    alt: 'A person studying a language, showing frustration and then satisfaction from achievement.',
     isDragAndDrop: true,
     dragOptions: ['frustrating', 'frustrated', 'rewarding', 'rewarded'],
     audio: '/assets/audio_questions/prepositions/question6_audio.mp3'
@@ -431,7 +431,7 @@ export const prepositionsQuestions: QuestionType[] = [
     explanation: 'The books possess the quality that makes them interesting to read.',
     hint: 'Do the books feel interest?',
     image: 'questions/prepositions/pre_7.png',
-    alt: 'Libros de historia',
+    alt: 'A person reading history books with attention and curiosity.',
     isDragAndDrop: true,
     dragOptions: ['interested', 'interesting'],
     audio: '/assets/audio_questions/prepositions/question7_audio.mp3'
@@ -443,7 +443,7 @@ export const prepositionsQuestions: QuestionType[] = [
     explanation: 'The noise caused alarm (alarming), and the children felt alarm (alarmed).',
     hint: 'What was the nature of the noise, and how did they feel?',
     image: 'questions/prepositions/pre_8.png',
-    alt: 'Un ruido fuerte',
+    alt: 'A sudden loud noise startling several children in a room.',
     isDragAndDrop: true,
     dragOptions: ['alarming', 'alarmed'],
     audio: '/assets/audio_questions/prepositions/question8_audio.mp3'
@@ -455,7 +455,7 @@ export const prepositionsQuestions: QuestionType[] = [
     explanation: 'The experience caused amazement (amazing). The person felt amazement (amazed).',
     hint: 'What kind of experience is it, and how does it make you feel?',
     image: 'questions/prepositions/pre_9.png',
-    alt: 'Escalada de montaña',
+    alt: 'A person at the top of a mountain, amazed by the panoramic view.',
     isDragAndDrop: true,
     dragOptions: ['amazing', 'amazed'],
     audio: '/assets/audio_questions/prepositions/question9_audio.mp3'
@@ -467,7 +467,7 @@ export const prepositionsQuestions: QuestionType[] = [
     explanation: 'The results caused disappointment (disappointing). The students felt disappointment (disappointed).',
     hint: 'What kind of results were they, and how did the students feel about them?',
     image: 'questions/prepositions/pre_10.png',
-    alt: 'Resultados de examen',
+    alt: 'A group of students looking at their exam results with disappointed expressions.',
     isDragAndDrop: true,
     dragOptions: ['disappointing', 'disappointed'],
     audio: '/assets/audio_questions/prepositions/question10_audio.mp3'
@@ -484,7 +484,7 @@ export const articlesQuestions: QuestionType[] = [
     explanation: 'The infinitive "to send" clearly states the specific purpose for which the cell phone is used. The reason for using the phone is to perform the action of sending messages.',
     hint: 'Are you describing the specific action your phone helps you achieve, or the general activity it\'s designed for?',
     image: 'questions/gerundsInfinitives/gi-1.png',
-    alt: 'Un hombre trabajando como ingeniero',
+    alt: 'A person using their cell phone to send text messages.',
     audio: '/assets/audio_questions/gerundsInfinitives/question1_audio.mp3'
   },
   {
@@ -495,7 +495,7 @@ export const articlesQuestions: QuestionType[] = [
     explanation: 'Similarly, "to watch" explains the intention or objective behind using their phones. They use the phones for the purpose of watching videos.',
     hint: 'Think about whether you\'re emphasizing the purposeful act they perform with the phone, or the function/activity the phone provides.',
     image: 'questions/gerundsInfinitives/gi-2.png',
-    alt: 'Un shaker de sal',
+    alt: 'Several people watching videos on their mobile phones.',
     audio: '/assets/audio_questions/gerundsInfinitives/question2_audio.mp3'
   },
   {
@@ -506,7 +506,7 @@ export const articlesQuestions: QuestionType[] = [
     explanation: '"To take" indicates the direct purpose of using their phones. The phones are utilized for the action of taking photos.',
     hint: 'Is the emphasis on the action of capturing an image, or the role of the phone in the act of photography?',
     image: 'questions/gerundsInfinitives/gi-3.png',
-    alt: 'Paris city',
+    alt: 'A person taking a photo with their mobile phone.',
     audio: '/assets/audio_questions/gerundsInfinitives/question3_audio.mp3'
   },
   {
@@ -517,7 +517,7 @@ export const articlesQuestions: QuestionType[] = [
     explanation: '"To buy" explains the reason or purpose why I went to the shop. It answers the question "Why did I go to the shop?"',
     hint: 'What was the action I intended?',
     image: 'questions/gerundsInfinitives/gi-4.png',
-    alt: 'Un teléfono nuevo',
+    alt: 'A person entering a shop to buy bread.',
     audio: '/assets/audio_questions/gerundsInfinitives/question4_audio.mp3'
   },
   {
@@ -528,7 +528,7 @@ export const articlesQuestions: QuestionType[] = [
     explanation: '"For cutting" describes the function or general purpose of the machine. It tells us what the machine is designed for or used for as an activity.',
     hint: 'What is its main function?',
     image: 'questions/gerundsInfinitives/gi-5.png',
-    alt: 'El monte Everest',
+    alt: 'An industrial machine cutting metal in a factory.',
     audio: '/assets/audio_questions/gerundsInfinitives/question5_audio.mp3'
   },
   {
@@ -539,7 +539,7 @@ export const articlesQuestions: QuestionType[] = [
     explanation: '"For editing" describes the activity or specific use that she puts her computer to. It\'s the purpose it serves for her.',
     hint: 'What activity does she do with it?',
     image: 'questions/gerundsInfinitives/gi-6.png',
-    alt: 'Una persona tocando el piano',
+    alt: 'A woman editing videos on her laptop computer.',
     audio: '/assets/audio_questions/gerundsInfinitives/question6_audio.mp3'
   },
   {
@@ -550,7 +550,7 @@ export const articlesQuestions: QuestionType[] = [
     explanation: '"To bake" expresses the specific purpose for which she purchased the oven. The oven\'s utility is directly linked to the action of baking cakes.',
     hint: 'Is she buying it so that she can perform an action, or for a general type of cooking?',
     image: 'questions/gerundsInfinitives/gi-7.png',
-    alt: 'Una taza de café',
+    alt: 'A woman putting a cake into a new oven.',
     audio: '/assets/audio_questions/gerundsInfinitives/question7_audio.mp3' 
   },
   {
@@ -561,7 +561,7 @@ export const articlesQuestions: QuestionType[] = [
     explanation: '"To study" indicates the reason why he went to the library. His purpose in going there was to perform the action of studying.',
     hint: 'What was the reason for his trip? Was it to do something specific, or for a general activity that happens there?',
     image: 'questions/gerundsInfinitives/gi-8.png',
-    alt: 'Una ciudad con edificios y una torre',
+    alt: 'A young man studying for an exam in the library, surrounded by books.',
     audio: '/assets/audio_questions/gerundsInfinitives/question8_audio.mp3'
   },
   {
@@ -572,7 +572,7 @@ export const articlesQuestions: QuestionType[] = [
     explanation: 'To find" explains the direct purpose of using a map. The map is used to achieve the action of finding the way.',
     hint: 'Consider if the map helps you achieve a particular outcome, or if its use is related to a broader activity.',
     image: 'questions/gerundsInfinitives/gi-9.png',
-    alt: 'Un cielo estrellado',
+    alt: 'A group of people using a map to find the correct way.',
     audio: '/assets/audio_questions/gerundsInfinitives/question9_audio.mp3'
   },
   {
@@ -583,7 +583,7 @@ export const articlesQuestions: QuestionType[] = [
     explanation: '"To protect" clearly states the intention or purpose behind wearing helmets. The helmets are worn for the action of protecting.',
     hint: 'Are they wearing them in order to perform a certain action, or for a defensive purpose?',
     image: 'questions/gerundsInfinitives/gi-10.png',
-    alt: 'Un edificio de escuela',
+    alt: 'Several people wearing helmets to protect their heads at a construction site or while cycling.',
     audio: '/assets/audio_questions/gerundsInfinitives/question10_audio.mp3'
   },
 ];
@@ -598,7 +598,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     explanation: '"Could" Expresses Past Ability.',
     hint: 'Past Ability → could swim.',
     image: 'questions/modalVerbs/modal_question1_child_swimming.png',
-    alt: 'Un niño nadando',
+    alt: 'A five-year-old girl swimming in a pool, showing past ability.',
     audio: '/assets/audio_questions/modalVerbs/question1_audio.mp3'
   },
   {
@@ -609,7 +609,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     explanation: '"Mustn\'t" Expresses Prohibition.',
     hint: 'Not Allowed At All. You mustn\'t park here.',
     image: 'questions/modalVerbs/modal_question2_no_parking.png',
-    alt: 'Un letrero de no estacionar',
+    alt: 'A "No parking" sign on a street, indicating parking is forbidden.',
     audio: '/assets/audio_questions/modalVerbs/question2_audio.mp3'
   },
   {
@@ -620,7 +620,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     explanation: '"May" Or "Could" Are Polite Requests For Permission.',
     hint: 'Polite Permission. May I open the window?',
     image: 'questions/modalVerbs/modal_question3_window_open.png',
-    alt: 'Una ventana abierta',
+    alt: 'A person asking for permission to open a window in a room.',
     audio: '/assets/audio_questions/modalVerbs/question3_audio.mp3'
   },
   {
@@ -631,7 +631,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     explanation: '"Might" Expresses Weak Possibility.',
     hint: 'Uncertain Forecast → might rain.',
     image: 'questions/modalVerbs/modal_question4_rain_umbrella.png',
-    alt: 'Un paraguas',
+    alt: 'An open umbrella under a cloudy sky, suggesting a possibility of rain.',
     audio: '/assets/audio_questions/modalVerbs/question4_audio.mp3'
   },
   {
@@ -642,7 +642,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     explanation: '"Should" Gives Advice/Obligation That Is Not Strict.',
     hint: 'Strong Recommendation. Students should submit.',
     image: 'questions/modalVerbs/modal_question5_student_assignment.png',
-    alt: 'Un estudiante entregando una tarea',
+    alt: 'A student handing in an assignment before Friday, showing responsibility.',
     audio: '/assets/audio_questions/modalVerbs/question5_audio.mp3'
   },
   {
@@ -653,7 +653,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     explanation: '"Must" For Logical Deduction (High Certainty).',
     hint: 'Evidence-Based Conclusion. He must be at home.',
     image: 'questions/modalVerbs/modal_question6_house_lights.png',
-    alt: 'Unas luces encendidas en una casa',
+    alt: 'A house with lights on, suggesting someone is at home.',
     audio: '/assets/audio_questions/modalVerbs/question6_audio.mp3'
   },
   {
@@ -664,7 +664,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     explanation: '"Can" Shows Present Ability.',
     hint: 'Current Capability. I can speak three languages.',
     image: 'questions/modalVerbs/modal_question7_speak_languages.png',
-    alt: 'Una persona hablando en tres idiomas',
+    alt: 'A person speaking in three different languages, representing language ability.',
     audio: '/assets/audio_questions/modalVerbs/question7_audio.mp3'
   },
   {
@@ -675,7 +675,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     explanation: '"Have To" Expresses External Obligation.',
     hint: 'Outside Requirement. We have to leave early.',
     image: 'questions/modalVerbs/modal_question8_boss_meeting.png',
-    alt: 'Unos jefes en una reunión',
+    alt: 'A group of employees preparing to leave the office early as instructed by the boss.',
     audio: '/assets/audio_questions/modalVerbs/question8_audio.mp3'
   },
   {
@@ -686,7 +686,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     explanation: '"Should" Offers Advice.',
     hint: 'Recommendation → should see a doctor.',
     image: 'questions/modalVerbs/modal_question9_doctor_visit.png',
-    alt: 'Un paciente visitando a un doctor',
+    alt: 'A patient consulting a doctor for persistent pain.',
     audio: '/assets/audio_questions/modalVerbs/question9_audio.mp3'
   },
   {
@@ -697,7 +697,7 @@ export const modalVerbsQuestions: QuestionType[] = [
     explanation: '"Can" States General Permission.',
     hint: 'Allowed Action. Visitors can smoke here.',
     image: 'questions/modalVerbs/modal_question10_smoking_area.png',
-    alt: 'Un área de fumadores',
+    alt: 'A designated smoking area with people smoking legally.',
     audio: '/assets/audio_questions/modalVerbs/question10_audio.mp3'
   },
 ];
