@@ -10,7 +10,7 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: '"Ben" is a third-person singular subject (like "he"). In the simple present, we add "-s" to the verb "work."',
     hint: 'Is it "he" or "they"? Add "s" if it\'s "he", "she", or "it".',
     image: 'questions/presentTense/pt-1.png',
-    alt: 'Una persona tomando café por la mañana',
+    alt: 'Un doctor con bata en el hospital',
     audio: '/assets/audio_questions/presentTense/question1_audio.mp3'
   },
   {
@@ -21,7 +21,7 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'To form a simple present question with "you," we use the auxiliary verb "do" before the subject. The main verb "like" remains in its base form.',
     hint: 'Is it a question about "you"? Use "do".',
     image: 'questions/presentTense/pt-2.png',
-    alt: 'Una persona buscando sus llaves',
+    alt: 'Una niña comiendo pescado',
     audio: '/assets/audio_questions/presentTense/question2_audio.mp3'
   },
   {
@@ -32,7 +32,7 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: '"Matthew" is a third-person singular subject (like "he"). Verbs ending in -ch (like "watch") add "-es" in the simple present for third-person singular subjects.',
     hint: 'It\'s "he" and the verb ends in "ch". Add "es".',
     image: 'questions/presentTense/pt-3.png',
-    alt: 'London city',
+    alt: 'Una persona viendo television',
     audio: '/assets/audio_questions/presentTense/question3_audio.mp3'
   },
   {
@@ -43,7 +43,7 @@ export const presentTensesQuestions: QuestionType[] = [
     explanation: 'To form a simple present question with "she," we use the auxiliary verb "does" before the subject. The main verb "play" remains in its base form.',
     hint: 'It\'s a question about "she". Use "does".',
     image: 'questions/presentTense/pt-4.png',
-    alt: 'Unos pájaros cantando',
+    alt: 'Una chica pateando un balón',
     audio: '/assets/audio_questions/presentTense/question4_audio.mp3'
   },
   {
