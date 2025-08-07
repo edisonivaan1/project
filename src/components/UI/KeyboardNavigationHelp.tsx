@@ -16,16 +16,16 @@ const KeyboardNavigationHelp: React.FC<KeyboardHelpProps> = ({
     setShowHelp(isVisible);
   }, [isVisible]);
 
-  useEffect(() => {
-    // Mostrar ayuda automáticamente la primera vez
-    const hasSeenHelp = localStorage.getItem('keyboardHelpSeen');
-    if (!hasSeenHelp) {
-      const timer = setTimeout(() => {
-        setShowHelp(true);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, []);
+  // Eliminado: Mostrar ayuda automáticamente la primera vez
+  // useEffect(() => {
+  //   const hasSeenHelp = localStorage.getItem('keyboardHelpSeen');
+  //   if (!hasSeenHelp) {
+  //     const timer = setTimeout(() => {
+  //       setShowHelp(true);
+  //     }, 2000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, []);
 
   const handleClose = () => {
     setShowHelp(false);

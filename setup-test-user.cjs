@@ -35,6 +35,44 @@ async function setupTestUser() {
   }
 }
 
+async function unlockAllLevelsForUser(email) {
+  console.log('🔓 Unlocking all levels for test user...');
+  
+  try {
+    // Primero hacer login para obtener el token
+    const loginResponse = await axios.post(`${API_BASE}/auth/login`, {
+      email: email,
+      password: 'password123'
+    });
+    
+    if (!loginResponse.data.success) {
+      console.log('❌ Login failed:', loginResponse.data.message);
+      return false;
+    }
+    
+    const token = loginResponse.data.token;
+    
+    // Hacer una petición para desbloquear todos los niveles
+    // Esto actualizará todos los documentos de progreso del usuario
+    const unlockResponse = await axios.post(`${API_BASE}/progress/unlock-all-levels`, {}, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (unlockResponse.data.success) {
+      console.log('✅ All levels unlocked successfully');
+      return true;
+    } else {
+      console.log('❌ Failed to unlock levels:', unlockResponse.data.message);
+      return false;
+    }
+  } catch (error) {
+    console.log('❌ Error unlocking levels:', error.response?.data?.message || error.message);
+    return false;
+  }
+}
+
 async function testServerConnection() {
   console.log('🏥 Testing server connection...\n');
   
@@ -69,6 +107,12 @@ async function main() {
     return;
   }
   
+  // Desbloquear todos los niveles para el usuario de prueba
+  const unlockSuccess = await unlockAllLevelsForUser(testUser.email);
+  if (!unlockSuccess) {
+    console.log('\n⚠️  User created but failed to unlock all levels');
+  }
+  
   console.log('\n✅ Setup completed successfully!');
   console.log('\n📋 Test user credentials:');
   console.log(`   Email: ${testUser.email}`);
@@ -80,4 +124,4 @@ if (require.main === module) {
   main().catch(console.error);
 }
 
-module.exports = { setupTestUser, testServerConnection }; 
+module.exports = { setupTestUser, testServerConnection, unlockAllLevelsForUser }; 
