@@ -59,7 +59,7 @@ const Header: React.FC = () => {
     return (
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center">
+          <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg">
               <img src={logo} alt="Grammar Master Pro - Learn English Grammar" className="h-16 w-auto" />
             </Link>
