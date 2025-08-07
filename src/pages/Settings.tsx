@@ -329,7 +329,7 @@ const Settings: React.FC = () => {
             onClick={() => navigate('/topics')}
             className="h-[40px] w-[225px] bg-blue-500 hover:bg-blue-600 text-white border-2 border-black"
             tabIndex={0}
-            aria-label="Volver a la página de temas"
+            aria-label="Back to topics page"
           >
             Back to topics
           </Button>

@@ -140,7 +140,7 @@ const Help: React.FC = () => {
               }}
               className="text-gray-400 hover:text-gray-600 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
               tabIndex={0}
-              aria-label="Cerrar notificación"
+              aria-label="Close notification"
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -609,7 +609,7 @@ const Help: React.FC = () => {
             onClick={() => navigate('/')}
             className="h-[40px] w-[225px] bg-blue-500 hover:bg-blue-600 text-white border-2 border-black"
             tabIndex={0}
-            aria-label="Volver a la página de temas"
+            aria-label="Back to topics page"
           >
             Back to topics
           </Button>

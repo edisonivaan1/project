@@ -212,7 +212,7 @@ const LoginPage: React.FC = () => {
           to="/" 
           className="flex items-center text-sm font-medium text-[#007AA2] hover:text-[#005f7a] transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2"
           tabIndex={0}
-          aria-label="Volver a la página de inicio"
+          aria-label="Back to home page"
         >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
@@ -239,7 +239,7 @@ const LoginPage: React.FC = () => {
           className="absolute inset-0 w-full h-full object-cover"
           tabIndex={0}
           role="img"
-          aria-label="Imagen de fondo mostrando estudiantes aprendiendo gramática inglesa"
+          aria-label="Background image showing students learning English grammar"
         />
       </div>
       
@@ -267,7 +267,7 @@ const LoginPage: React.FC = () => {
               className="text-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
               tabIndex={0}
               role="text"
-              aria-label="Mensaje de bienvenida: Welcome back! Please login to your account"
+              aria-label="Welcome message: Welcome back! Please login to your account"
             >
               Welcome back! Please login to your account.
             </p>
@@ -292,7 +292,7 @@ const LoginPage: React.FC = () => {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                 placeholder="Enter your email"
                 tabIndex={0}
-                aria-label="Campo de entrada para email"
+                aria-label="Email input field"
               />
             </div>
             
@@ -318,14 +318,14 @@ const LoginPage: React.FC = () => {
                   className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                   placeholder="Enter your password"
                   tabIndex={0}
-                  aria-label="Campo de entrada para contraseña"
+                  aria-label="Password input field"
                 />
                 <button
                   type="button"
                   className="absolute inset-y-0 right-0 flex items-center pr-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
                   onClick={() => setShowPassword(!showPassword)}
                   tabIndex={0}
-                  aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
                     <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -347,7 +347,7 @@ const LoginPage: React.FC = () => {
                 onClick={() => setShowForgotModal(true)}
                 className="text-sm text-gray-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2"
                 tabIndex={0}
-                aria-label="¿Olvidaste tu contraseña? Abrir modal de recuperación"
+                aria-label="Forgot your password? Open recovery modal"
               >
                 Forgot password?
               </button>
@@ -357,7 +357,7 @@ const LoginPage: React.FC = () => {
               type="submit"
               className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#000DFF] hover:bg-[#0000cc] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
               tabIndex={0}
-              aria-label="Iniciar sesión en Grammar Master Pro"
+              aria-label="Sign in to Grammar Master Pro"
             >
               {isLoading ? 'Logging in...' : 'Login'}
             </button>
@@ -406,7 +406,7 @@ const LoginPage: React.FC = () => {
               onClick={resetForgotModal}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
               tabIndex={0}
-              aria-label="Cerrar modal de recuperación de contraseña"
+              aria-label="Close password recovery modal"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -423,7 +423,7 @@ const LoginPage: React.FC = () => {
                     } focus:outline-none focus:ring-2 focus:ring-blue-500`}
                     tabIndex={0}
                     role="text"
-                    aria-label={`Paso 1: Email ${forgotStep >= 1 ? 'completado' : 'pendiente'}`}
+                    aria-label={`Step 1: Email ${forgotStep >= 1 ? 'completed' : 'pending'}`}
                   >
                     1
                   </div>
@@ -441,7 +441,7 @@ const LoginPage: React.FC = () => {
                     } focus:outline-none focus:ring-2 focus:ring-blue-500`}
                     tabIndex={0}
                     role="text"
-                    aria-label={`Paso 2: Seguridad ${forgotStep >= 2 ? 'completado' : 'pendiente'}`}
+                    aria-label={`Step 2: Security ${forgotStep >= 2 ? 'completed' : 'pending'}`}
                   >
                     2
                   </div>
@@ -459,7 +459,7 @@ const LoginPage: React.FC = () => {
                     } focus:outline-none focus:ring-2 focus:ring-blue-500`}
                     tabIndex={0}
                     role="text"
-                    aria-label={`Paso 3: Contraseña ${forgotStep >= 3 ? 'completado' : 'pendiente'}`}
+                    aria-label={`Step 3: Password ${forgotStep >= 3 ? 'completed' : 'pending'}`}
                   >
                     3
                   </div>
@@ -481,7 +481,7 @@ const LoginPage: React.FC = () => {
                   aria-valuenow={forgotStep}
                   aria-valuemin={1}
                   aria-valuemax={3}
-                  aria-label={`Progreso del proceso de recuperación: paso ${forgotStep} de 3`}
+                  aria-label={`Recovery process progress: step ${forgotStep} of 3`}
                 ></div>
               </div>
             </div>
@@ -501,7 +501,7 @@ const LoginPage: React.FC = () => {
                   className="text-gray-600 text-sm mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
                   tabIndex={0}
                   role="text"
-                  aria-label="Instrucciones: Enter your email address and we'll help you reset your password"
+                  aria-label="Instructions: Enter your email address and we'll help you reset your password"
                 >
                   Enter your email address and we'll help you reset your password.
                 </p>
@@ -520,7 +520,7 @@ const LoginPage: React.FC = () => {
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                       placeholder="Enter your email"
                       tabIndex={0}
-                      aria-label="Campo de entrada para email de recuperación"
+                      aria-label="Recovery email input field"
                     />
                   </div>
                   
@@ -530,7 +530,7 @@ const LoginPage: React.FC = () => {
                       onClick={resetForgotModal}
                       className="flex-1 py-3 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                       tabIndex={0}
-                      aria-label="Cancelar proceso de recuperación de contraseña"
+                      aria-label="Cancel password recovery process"
                     >
                       Cancel
                     </button>
@@ -539,7 +539,7 @@ const LoginPage: React.FC = () => {
                       disabled={isLoadingForgot}
                       className="flex-1 py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-[#000DFF] hover:bg-[#0000cc] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
                       tabIndex={0}
-                      aria-label="Continuar con el proceso de recuperación de contraseña"
+                      aria-label="Continue with password recovery process"
                     >
                       {isLoadingForgot ? 'Loading...' : 'Continue'}
                     </button>
@@ -563,7 +563,7 @@ const LoginPage: React.FC = () => {
                   className="text-gray-600 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
                   tabIndex={0}
                   role="text"
-                  aria-label="Instrucciones: Please answer your security question to verify your identity"
+                  aria-label="Instructions: Please answer your security question to verify your identity"
                 >
                   Please answer your security question to verify your identity.
                 </p>
@@ -577,7 +577,7 @@ const LoginPage: React.FC = () => {
                       className="p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       tabIndex={0}
                       role="text"
-                      aria-label={`Pregunta de seguridad: ${securityQuestion}`}
+                      aria-label={`Security question: ${securityQuestion}`}
                     >
                       {securityQuestion}
                     </div>
@@ -596,7 +596,7 @@ const LoginPage: React.FC = () => {
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                       placeholder="Enter your answer"
                       tabIndex={0}
-                      aria-label="Campo de entrada para respuesta de seguridad"
+                      aria-label="Security answer input field"
                     />
                   </div>
                   
@@ -606,7 +606,7 @@ const LoginPage: React.FC = () => {
                       onClick={() => setForgotStep(1)}
                       className="flex-1 py-3 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                       tabIndex={0}
-                      aria-label="Volver al paso anterior"
+                      aria-label="Back to previous step"
                     >
                       Back
                     </button>
@@ -615,7 +615,7 @@ const LoginPage: React.FC = () => {
                       disabled={isLoadingForgot}
                       className="flex-1 py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-[#000DFF] hover:bg-[#0000cc] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
                       tabIndex={0}
-                      aria-label="Verificar respuesta de seguridad"
+                      aria-label="Verify security answer"
                     >
                       {isLoadingForgot ? 'Verifying...' : 'Continue'}
                     </button>
@@ -639,7 +639,7 @@ const LoginPage: React.FC = () => {
                   className="text-gray-600 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
                   tabIndex={0}
                   role="text"
-                  aria-label="Instrucciones: Create a new password for your account"
+                  aria-label="Instructions: Create a new password for your account"
                 >
                   Create a new password for your account.
                 </p>
@@ -659,14 +659,14 @@ const LoginPage: React.FC = () => {
                         className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                         placeholder="Enter new password"
                         tabIndex={0}
-                        aria-label="Campo de entrada para nueva contraseña"
+                        aria-label="New password input field"
                       />
                       <button
                         type="button"
                         className="absolute inset-y-0 right-0 flex items-center pr-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
                         onClick={() => setShowNewPassword(!showNewPassword)}
                         tabIndex={0}
-                        aria-label={showNewPassword ? "Ocultar nueva contraseña" : "Mostrar nueva contraseña"}
+                        aria-label={showNewPassword ? "Hide new password" : "Show new password"}
                       >
                         {showNewPassword ? (
                           <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -696,14 +696,14 @@ const LoginPage: React.FC = () => {
                         className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                         placeholder="Confirm new password"
                         tabIndex={0}
-                        aria-label="Campo de entrada para confirmación de nueva contraseña"
+                        aria-label="New password confirmation input field"
                       />
                       <button
                         type="button"
                         className="absolute inset-y-0 right-0 flex items-center pr-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
                         onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
                         tabIndex={0}
-                        aria-label={showConfirmNewPassword ? "Ocultar confirmación de contraseña" : "Mostrar confirmación de contraseña"}
+                        aria-label={showConfirmNewPassword ? "Hide password confirmation" : "Show password confirmation"}
                       >
                         {showConfirmNewPassword ? (
                           <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -725,7 +725,7 @@ const LoginPage: React.FC = () => {
                       onClick={() => setForgotStep(2)}
                       className="flex-1 py-3 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                       tabIndex={0}
-                      aria-label="Volver al paso anterior"
+                      aria-label="Back to previous step"
                     >
                       Back
                     </button>
@@ -734,7 +734,7 @@ const LoginPage: React.FC = () => {
                       disabled={isLoadingForgot}
                       className="flex-1 py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-[#000DFF] hover:bg-[#0000cc] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
                       tabIndex={0}
-                      aria-label="Restablecer contraseña"
+                      aria-label="Reset password"
                     >
                       {isLoadingForgot ? 'Resetting...' : 'Reset Password'}
                     </button>

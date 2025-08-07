@@ -534,7 +534,7 @@ const ProfilePage: React.FC = () => {
             onClick={() => navigate('/login')}
             className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             tabIndex={0}
-            aria-label="Ir a la página de inicio de sesión"
+            aria-label="Go to login page"
           >
             Go to Login
           </button>
@@ -1118,7 +1118,7 @@ const ProfilePage: React.FC = () => {
               onClick={handleLogout}
               className="px-6 py-2 bg-blue-600 text-white font-medium rounded-full hover:bg-blue-700 transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               tabIndex={0}
-              aria-label="Cerrar sesión de la aplicación"
+              aria-label="Logout from application"
             >
               Logout
             </button>

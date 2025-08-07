@@ -1189,7 +1189,7 @@ const Game: React.FC = () => {
                 aria-label="Progress saved successfully message"
               >
                 <p className="text-blue-800 font-medium">
-                  ✨ ¡Progreso guardado exitosamente!
+                  ✨ Progress saved successfully!
                 </p>
               </div>
             </div>
