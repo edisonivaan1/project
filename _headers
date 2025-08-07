@@ -1,0 +1,66 @@
+# Headers para Vercel
+/assets/*.css
+  Content-Type: text/css
+
+/assets/*.js
+  Content-Type: application/javascript
+
+/assets/*.png
+  Content-Type: image/png
+
+/assets/*.jpg
+  Content-Type: image/jpeg
+
+/assets/*.jpeg
+  Content-Type: image/jpeg
+
+/assets/*.svg
+  Content-Type: image/svg+xml
+
+/assets/*.mp3
+  Content-Type: audio/mpeg
+
+/assets/*.wav
+  Content-Type: audio/wav
+
+/assets/*.ogg
+  Content-Type: audio/ogg
+
+/*.css
+  Content-Type: text/css
+
+/*.js
+  Content-Type: application/javascript
+
+/*.png
+  Content-Type: image/png
+
+/*.jpg
+  Content-Type: image/jpeg
+
+/*.jpeg
+  Content-Type: image/jpeg
+
+/*.svg
+  Content-Type: image/svg+xml
+
+/*.mp3
+  Content-Type: audio/mpeg
+
+/*.wav
+  Content-Type: audio/wav
+
+/*.ogg
+  Content-Type: audio/ogg
+
+/*.html
+  Content-Type: text/html
+
+/*.json
+  Content-Type: application/json
+
+/*.woff
+  Content-Type: font/woff
+
+/*.woff2
+  Content-Type: font/woff2 
