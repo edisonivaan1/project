@@ -5,10 +5,12 @@ const API_BASE = 'http://localhost:5000/api';
 async function setupTestUser() {
   console.log('🔧 Setting up test user...\n');
   
+  // Generar email único usando timestamp para evitar conflictos
+  const timestamp = Date.now();
   const testUser = {
     firstName: 'Test',
     lastName: 'User',
-    email: 'test@example.com',
+    email: `test-${timestamp}@example.com`,
     password: 'password123',
     confirmPassword: 'password123',
     securityQuestion: 'What is the name of your first pet?',
